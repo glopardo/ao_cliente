@@ -285,7 +285,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "O"
       BeginProperty Font 
-         Name            =   "Wingdings 2"
+         Name            =   "Wingdings"
          Size            =   24
          Charset         =   2
          Weight          =   700
@@ -327,7 +327,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "O"
       BeginProperty Font 
-         Name            =   "Wingdings 2"
+         Name            =   "Wingdings"
          Size            =   24
          Charset         =   2
          Weight          =   700
@@ -347,7 +347,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "O"
       BeginProperty Font 
-         Name            =   "Wingdings 2"
+         Name            =   "Wingdings"
          Size            =   24
          Charset         =   2
          Weight          =   700
@@ -367,7 +367,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "O"
       BeginProperty Font 
-         Name            =   "Wingdings 2"
+         Name            =   "Wingdings"
          Size            =   24
          Charset         =   2
          Weight          =   700
@@ -1465,33 +1465,33 @@ If SkillPoints > 0 Then
     Exit Function
 End If
 
-Dim i As Integer
-For i = 1 To NUMATRIBUTOS
-    If UserAtributos(i) = 0 Then
+Dim I As Integer
+For I = 1 To NUMATRIBUTOS
+    If UserAtributos(I) = 0 Then
         MsgBox "Los atributos del personaje son invalidos."
         Exit Function
     End If
-Next i
+Next I
 
 CheckData = True
 
 End Function
 Private Sub boton_Click(Index As Integer)
-Dim i As Integer
+Dim I As Integer
 Dim k As Object
         
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 
 Select Case Index
     Case 0
         LlegoConfirmacion = False
         Confirmacion = 0
 
-        i = 1
+        I = 1
         
         For Each k In Skill
-            UserSkills(i) = k.Caption
-            i = i + 1
+            UserSkills(I) = k.Caption
+            I = I + 1
         Next
         
         UserName = txtNombre.Text
@@ -1563,23 +1563,15 @@ Select Case Index
                 Call Login(ValidarLoginMSG(CInt(bRK)))
             End If
             
-            If Musica = 0 Then
-                CurMidi = DirMidi & "2.mid"
-                LoopMidi = 1
-                Call CargarMIDI(CurMidi)
-                Call Play_Midi
-            End If
+                CurMidi = "2.mid"
+                Call Audio.PlayMIDI(CurMidi)
         
             frmConnect.Picture = LoadPicture(App.Path & "\Graficos\conectar.jpg")
         End If
 
     Case 1
-        If Musica = 0 Then
-            CurMidi = DirMidi & "2.mid"
-            LoopMidi = 1
-            Call CargarMIDI(CurMidi)
-            Call Play_Midi
-        End If
+            CurMidi = "2.mid"
+            Call Audio.PlayMIDI(CurMidi)
         
         frmConnect.Picture = LoadPicture(App.Path & "\Graficos\conectar.jpg")
         
@@ -1590,7 +1582,7 @@ End Select
 
 End Sub
 Private Sub command1_Click(Index As Integer)
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 
 Dim indice
 If Index Mod 2 = 0 Then
@@ -1610,12 +1602,12 @@ Else
     End If
 End If
 
-puntos.Caption = SkillPoints
+Puntos.Caption = SkillPoints
 End Sub
 Private Sub Form_Load()
 
 SkillPoints = 10
-puntos.Caption = SkillPoints
+Puntos.Caption = SkillPoints
 Me.Picture = LoadPicture(App.Path & "\graficos\CrearPersonajeConDados.gif")
 Me.MousePointer = vbDefault
 
@@ -1658,7 +1650,7 @@ Private Sub Pîcture4_Click()
 End Sub
 
 Private Sub Image1_Click()
-PlayWaveDS (SND_CLICK)
+Audio.PlayWave (SND_CLICK)
 Call SendData("TIRDAD")
 End Sub
 

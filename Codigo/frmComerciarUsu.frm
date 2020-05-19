@@ -262,30 +262,12 @@ Picture1.SetFocus
 
 End Sub
 Private Sub list1_Click()
-
-DibujaGrh UserInventory(List1.ListIndex + 1).GrhIndex
-
-End Sub
-Public Sub DibujaGrh(Grh As Integer)
-Dim SR As RECT, DR As RECT
-
-SR.Left = 0
-SR.Top = 0
-SR.Right = 32
-SR.Bottom = 32
-
-DR.Left = 0
-DR.Top = 0
-DR.Right = 32
-DR.Bottom = 32
-
-Call DrawGrhtoHdc(Picture1.hwnd, Picture1.Hdc, Grh, SR, DR)
-
+    Call DrawGrhtoHdc(Picture1.hdc, UserInventory(List1.ListIndex + 1).GrhIndex)
 End Sub
 Private Sub List2_Click()
 
 If List2.ListIndex >= 0 Then
-    DibujaGrh OtroInventario(List2.ListIndex + 1).GrhIndex
+    Call DrawGrhtoHdc(Picture1.hdc, OtroInventario(List2.ListIndex + 1).GrhIndex)
     Label3.Caption = List2.ItemData(List2.ListIndex)
     cmdAceptar.Enabled = True
     cmdRechazar.Enabled = True
@@ -326,7 +308,7 @@ End Sub
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 If bmoving = False And Button = vbLeftButton Then
-    DX = X
+    Dx3 = X
     dy = Y
     bmoving = True
 End If
@@ -334,7 +316,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> DX) Or (Y <> dy)) Then Call Move(Left + (X - DX), Top + (Y - dy))
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Call Move(Left + (X - Dx3), Top + (Y - dy))
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

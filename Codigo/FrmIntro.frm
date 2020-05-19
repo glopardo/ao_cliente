@@ -105,29 +105,6 @@ Private Sub Form_Load()
 
 Me.Picture = LoadPicture(App.Path & "\Graficos\MenuRapido.jpg")
 
-Dim corriendo As Integer
-Dim i As Long
-Dim proc As PROCESSENTRY32
-Dim snap As Long
-Dim pepe As String
-
-Dim exename As String
-snap = CreateToolhelpSnapshot(TH32CS_SNAPall, 0)
-proc.dwSize = Len(proc)
-theloop = ProcessFirst(snap, proc)
-i = 0
-While theloop <> 0
-    exename = proc.szExeFile
-    Text1.Text = proc.szExeFile
-    If Text1.Text = "FenixAONoDinamico.exe" Or Text1.Text = "FenixAO.exe" Then
-        corriendo = corriendo + 1
-        Text1.Text = ""
-    End If
-    i = i + 1
-    theloop = ProcessNext(snap, proc)
-Wend
-CloseHandle snap
-
 End Sub
 Private Sub Image2_Click()
 
@@ -136,16 +113,16 @@ Call Main
 End Sub
 
 Private Sub Image3_Click()
-ShellExecute Me.hwnd, "open", App.Path & "/aosetup.exe", "", "", 1
+ShellExecute Me.hWnd, "open", App.Path & "/aosetup.exe", "", "", 1
 End Sub
 
 Private Sub Image4_Click()
-ShellExecute Me.hwnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
+ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
 
 End Sub
 
 Private Sub Image5_Click()
-ShellExecute Me.hwnd, "open", "http://www.fenixao.com.ar", "", "", 1
+ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar", "", "", 1
 
 End Sub
 
@@ -156,7 +133,7 @@ Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y A
 
    If bmoving = False And Button = vbLeftButton Then
 
-      DX = X
+      Dx3 = X
 
       dy = Y
 
@@ -172,9 +149,9 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-   If bmoving And ((X <> DX) Or (Y <> dy)) Then
+   If bmoving And ((X <> Dx3) Or (Y <> dy)) Then
 
-      Move Left + (X - DX), Top + (Y - dy)
+      Move Left + (X - Dx3), Top + (Y - dy)
 
    End If
 

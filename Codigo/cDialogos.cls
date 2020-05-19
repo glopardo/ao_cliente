@@ -11,320 +11,421 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'FénixAO 1.0
-'
-'Based on Argentum Online 0.99z
-'Copyright (C) 2002 Márquez Pablo Ignacio
-'
-'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
-'
-'This program is distributed in the hope that it will be useful,
-'but WITHOUT ANY WARRANTY; without even the implied warranty of
-'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
-'
-'You should have received a copy of the Affero General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-'
-'You can contact the original creator of Argentum Online at:
-'morgolock@speedy.com.ar
-'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
-'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
-'
-'Argentum Online is based on Baronsoft's VB6 Online RPG
-'You can contact the original creator of ORE at aaron@baronsoft.com
-'for more information about ORE please visit http://www.baronsoft.com/
-'
-'You can contact me at:
-'elpresi@fenixao.com.ar
-'www.fenixao.com.ar
 Option Explicit
-
-Private Const MAX_DIALOGOS = 300
-Private Const MAXLONG = 15
-
-Private Type tDialogo
-    Formato()  As String
-    Formateado As Boolean
-    Texto     As String
-    Delay     As Integer
-    X         As Integer
-    Y         As Integer
-    Vida      As Integer
-    UserIndex As Integer
-    Color     As Long
-End Type
-
-
-Private Dialogos(1 To MAX_DIALOGOS) As tDialogo
-
-Private Delay As Integer
-
-Public UltimoDialogo As Integer
-
-Public CantidadDialogos As Integer
-
-
-Private Function PrimerIndiceVacio() As Integer
-On Error Resume Next
-Dim i As Integer, j As Integer
-Dim flag As Boolean
-
-i = 1
-j = 1
-
-Do While i <= MAX_DIALOGOS And Not flag
-     If (Dialogos(i).Vida < Dialogos(j).Vida) Then
-         j = i
-     End If
-    flag = (Dialogos(i).Vida = 0)
-    If Not flag Then i = i + 1
-Loop
-
-If flag Then
-    PrimerIndiceVacio = i
-Else
-    PrimerIndiceVacio = j
-End If
-
-End Function
-
-
-
-
-
-Private Function DarFormato(s As String, i As Integer, k As Integer, anti As Integer, Dialgi As Integer)
-On Error Resume Next
-If anti + i <= Len(s) + 1 Then
-    If ((i >= MAXLONG) And Mid$(s, anti + i, 1) = " ") Or (anti + i = Len(s)) Then
-        Dialogos(Dialgi).Formato(k) = Mid$(s, anti, i + 1)
-        k = k + 1
-        anti = anti + i + 1
-        i = 0
-    Else
-        i = i + 1
-    End If
-    Call DarFormato(s, i, k, anti, Dialgi)
-End If
-
-End Function
-
-Private Function HayEspacio(s As String) As Boolean
-On Error Resume Next
-If InStr(1, s, " ") <> 0 Then
-    HayEspacio = True
-Else
-    HayEspacio = False
-End If
-End Function
-
-Private Sub DarleFormatoTXT(Dialgi As Integer)
-On Error Resume Next
+Option Base 0
  
-  If (Len(Dialogos(Dialgi).Texto) > MAXLONG) And HayEspacio(Dialogos(Dialgi).Texto) Then
-                Dim j As Integer
-                ReDim Dialogos(Dialgi).Formato(0 To (Len(Dialogos(Dialgi).Texto) \ (MAXLONG \ 2)))
-                Dim i As Integer, k As Integer, anti As Integer
-                anti = 1
-                k = 0
-                i = 0
-                Call DarFormato(Dialogos(Dialgi).Texto, i, k, anti, Dialgi)
-                i = 0
-                Do While Dialogos(Dialgi).Formato(i) <> "" And i < UBound(Dialogos(Dialgi).Formato)
-                 i = i + 1
-                Loop
-                ReDim Preserve Dialogos(Dialgi).Formato(0 To i - 1)
-                Dialogos(Dialgi).Formateado = True
-  End If
-End Sub
-Public Sub CrearDialogo(txt As String, ByVal User As Integer, Color As Long)
-On Error Resume Next
-Dim MiUserIndex As Integer
-Dim IndiceLibre As Integer
+''
+' Maximum number of dialogs that can exist.
+Private Const MAX_DIALOGS  As Byte = 100
+ 
+''
+' Maximum length of any dialog line without having to split it.
+Private Const MAX_LENGTH   As Byte = 18
+ 
+''
+' Number of milliseconds to add to the lifetime per dialog character
+Private Const MS_PER_CHAR  As Byte = 100
+ 
+''
+' Number of extra milliseconds to add to the lifetime of a new dialog
+Private Const MS_ADD_EXTRA As Integer = 5000
+ 
+''
+' The dialog structure
+'
+' @param    textLine    Array of lines of a formated chat.
+' @param    x           X coord for rendering.
+' @param    y           Y coord for rendering.
+' @param    startTime   The time (in ms) at which the dialog was created.
+' @param    lifeTime    Time (in ms) this dialog should last.
+' @param    charIndex   The charIndex that created this dialog.
+' @param    color       The color to be used when rendering the text.
+' @param    renderable  Set to True if the chat should be rendered this frame, False otherwise
+'                           (used to skip dialogs from people outside render area).
+Private Type dialog
 
-If BuscarUserIndex(User, MiUserIndex) Then
-    Dialogos(MiUserIndex).Vida = 0
-    Dialogos(MiUserIndex).Color = Color
-    Dialogos(MiUserIndex).Formateado = False
-    Dialogos(MiUserIndex).Texto = txt
-    Dialogos(MiUserIndex).Delay = Delay
-    Dialogos(MiUserIndex).UserIndex = User
-    Dialogos(MiUserIndex).Vida = Delay
-    DarleFormatoTXT MiUserIndex
-Else
-    IndiceLibre = PrimerIndiceVacio
-    Dialogos(IndiceLibre).Color = Color
-    Dialogos(IndiceLibre).Formateado = False
-    Dialogos(IndiceLibre).Texto = txt
-    Dialogos(IndiceLibre).Delay = Delay
-    Dialogos(IndiceLibre).UserIndex = User
-    Dialogos(IndiceLibre).Vida = Delay
-    DarleFormatoTXT IndiceLibre
-    If UltimoDialogo > IndiceLibre Then
-        UltimoDialogo = IndiceLibre
-    End If
-End If
-    
-CantidadDialogos = CantidadDialogos + 1
-  
-End Sub
-Private Function BuscarUserIndex(User As Integer, MiUser As Integer) As Boolean
-On Error Resume Next
-If CantidadDialogos > 0 Then
-    Dim i As Integer
-    Dim flag As Boolean
-    i = 1
-    
-    Do While i <= MAX_DIALOGOS And Not flag
-           flag = (Dialogos(i).UserIndex = User)
-           If Not flag Then i = i + 1
-    Loop
-    
-    If flag Then
-            MiUser = i
-            BuscarUserIndex = True
-    Else
-            BuscarUserIndex = False
-    End If
-End If
+    textLine()  As String
+    x           As Integer
+    y           As Integer
+    startTime   As Long
+    lifeTime    As Long
+    CharIndex   As Integer
+    Color       As Long
+    renderable  As Boolean
 
-End Function
+End Type
+ 
+''
+' Array if dialogs, sorted by the charIndex.
+Private dialogs(MAX_DIALOGS - 1) As dialog
+ 
+''
+' The number of dialogs being used at the moment.
+Private dialogCount              As Byte
+ 
+''
+' the size of the font being used to render
+Private usedFont                 As StdFont
+ 
+''
+' A millisecond precision timer
+Private Declare Function GetTickCount Lib "kernel32" () As Long
+ 
+''
+' Retrieves the font being used to render dialogs.
+'
+' @return   The font being used to render dialogs.
+ 
+''
+' Sets the font being used to render dialogs.
+'
+' @param    nValue  The new font to be used to render dialogs.
+ 
+Public Property Let font(ByRef nValue As StdFont)
 
-Public Sub Update_Dialog_Pos(X As Integer, Y As Integer, Index As Integer)
-On Error Resume Next
-Dim MiUserIndex As Integer
-If BuscarUserIndex(Index, MiUserIndex) Then
-  If Dialogos(MiUserIndex).Vida > 0 Then
-        If Dialogos(MiUserIndex).Formateado Then
-            Dialogos(MiUserIndex).X = X - (MAXLONG \ 2) * 3
-            Dialogos(MiUserIndex).Y = Y - (UBound(Dialogos(MiUserIndex).Formato) * 3)
-        Else
-            Dialogos(MiUserIndex).X = X - (Len(Dialogos(MiUserIndex).Texto) \ 2) * 3
-            Dialogos(MiUserIndex).Y = Y
-        End If
-        If Dialogos(MiUserIndex).Vida > 0 Then
-           Dialogos(MiUserIndex).Vida = Dialogos(MiUserIndex).Vida - 1
-        End If
-        If Dialogos(MiUserIndex).Vida < 1 Then
-            If MiUserIndex = UltimoDialogo Then
-                
-                Do While Dialogos(UltimoDialogo).Vida = 0
-                    UltimoDialogo = UltimoDialogo - 1
-                    If UltimoDialogo < 1 Then
-                        UltimoDialogo = 0
-                        CantidadDialogos = 0
-                        Exit Sub
-                    End If
-                Loop
-                
-            End If
-             
-            CantidadDialogos = CantidadDialogos - 1
-        End If
-  End If
-End If
-End Sub
-Public Sub DrawText(lngXPos As Integer, lngYPos As Integer, strText As String, lngColor As Long)
-On Error Resume Next
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Sets the font being used to render dialogs.
+    '**************************************************************
+    On Error Resume Next
 
-   If strText <> "" Then
-        BackBufferSurface.SetFontTransparency True
-        BackBufferSurface.SetForeColor vbBlack
-        BackBufferSurface.SetFont frmMain.Font
-        BackBufferSurface.DrawText lngXPos - 2, lngYPos - 1, strText, False
-        
-        BackBufferSurface.SetFontTransparency True
-        BackBufferSurface.SetForeColor lngColor
-        BackBufferSurface.SetFont frmMain.Font
-        BackBufferSurface.DrawText lngXPos, lngYPos, strText, False
-   End If
+    Set usedFont = nValue
+End Property
+ 
+''
+' Creates a new dialog. If the user already had a dialog, then it's replaced,
+' otherwise a new slot is used.
+'
+' @param    chat        The text of the chat being spoken.
+' @param    charIndex   The character saying the chat.
+' @param    color       The color being used in the chat when rendered.
+'
+' @remarks  If there are no more free slots, and the char didn't have a previous dialog,
+'           the chat is ignored.
+ 
+Public Sub CreateDialog(ByRef chat As String, _
+                        ByVal CharIndex As Integer, _
+                        ByVal Color As Long)
+
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modification: 08/29/07 by Rapsodius
+    'Changed life time of the dialogs to a variable amount,
+    'depending on the number of chars
+    '**************************************************************
+    On Error Resume Next
+
+    Dim slot As Integer
+
+    Dim i    As Long
    
-End Sub
-
-Public Sub MostrarTexto()
-On Error Resume Next
-Dim i As Integer
-
-i = 1
-Do While i <= CantidadDialogos And i <= MAX_DIALOGOS
-    If Dialogos(i).Vida > 0 Then
-        If Dialogos(i).Formateado Then
-            Dim j As Integer, desp As Integer
-            desp = (-frmMain.Font.Size) * UBound(Dialogos(i).Formato) - 5
-            For j = 0 To UBound(Dialogos(i).Formato)
-             DrawText Dialogos(i).X, Dialogos(i).Y + desp, Dialogos(i).Formato(j), Dialogos(i).Color
-             desp = desp + (frmMain.Font.Size) + 5
-            Next
-         Else
-            DrawText Dialogos(i).X, Dialogos(i).Y, Dialogos(i).Texto, Dialogos(i).Color
-         End If
-    Else
-      Dialogos(i).Texto = ""
-      Dialogos(i).UserIndex = 0
-      Dialogos(i).Formateado = False
-      Dialogos(i).Delay = 0
+    slot = BinarySearch(CharIndex)
+   
+    If slot < 0 Then
+        If dialogCount = MAX_DIALOGS Then Exit Sub  'Out of space! Should never happen....
+       
+        'We need to add it. Get insertion index and move list backwards.
+        slot = Not slot
+       
+        For i = dialogCount To slot + 1 Step -1
+            dialogs(i) = dialogs(i - 1)
+        Next i
+       
+        dialogCount = dialogCount + 1
     End If
-    i = i + 1
-Loop
+   
+    With dialogs(slot)
+        .CharIndex = CharIndex
+        .Color = Color
+        .renderable = False
+        .startTime = GetTickCount()
+        .textLine = FormatChat(chat)
+        .lifeTime = MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
+    End With
 
 End Sub
+ 
+''
+' Removes all dialogs from all characters.
+ 
+Public Sub RemoveAllDialogs()
 
-Public Sub QuitarDialogo(ByVal CharIndex As Integer)
-On Error Resume Next
-Dim i As Integer
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Removes all dialogs from all chars.
+    '**************************************************************
+    On Error Resume Next
 
+    dialogCount = 0
+End Sub
+ 
+''
+' Removes the dialog from the requested char.
+'
+' @param    charIndex   The character whose dialog will be removed.
+ 
+Public Sub RemoveDialog(ByVal CharIndex As Integer)
 
-If BuscarUserIndex(CharIndex, i) Then
-      Dialogos(i).Vida = 0
-      Dialogos(i).Texto = ""
-      Dialogos(i).UserIndex = 0
-      Dialogos(i).Formateado = False
-      Dialogos(i).Delay = 0
-      CantidadDialogos = CantidadDialogos - 1
-      
-      If i = UltimoDialogo Then
-        Do While Dialogos(i).Vida = 0
-                i = i - 1
-                If i < 1 Then
-                    UltimoDialogo = 0
-                    CantidadDialogos = 0
-                    Exit Sub
-                End If
-        Loop
-      End If
-End If
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Removes the dialog from the requested char.
+    '**************************************************************
+    On Error Resume Next
 
+    Dim slot As Integer
 
+    Dim i    As Long
+   
+    slot = BinarySearch(CharIndex)
+   
+    If slot < 0 Then Exit Sub
+   
+    For i = slot To MAX_DIALOGS - 2
+        dialogs(i) = dialogs(i + 1)
+    Next i
+   
+    dialogCount = dialogCount - 1
+End Sub
+ 
+''
+' Displays all renderable dialogs on screen.
+ 
+Public Sub Render()
+
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modification: 08/29/07 by Rapsodius
+    'Changed the way it gets rid of older dialogs.
+    '**************************************************************
+    Dim i              As Long
+
+    Dim j              As Long
+
+    Dim offset         As Integer
+
+    Dim removedDialogs As Long
+   
+    For i = 0 To dialogCount - 1
+
+        'Decrease index to prevent jumping over a dialog
+        'Crappy VB will cache the limit of the For loop, so even if it changed, it won't matter
+        With dialogs(i - removedDialogs)
+
+            If (GetTickCount() - .startTime) >= .lifeTime Then
+                Call RemoveDialog(.CharIndex)
+               
+                removedDialogs = removedDialogs + 1
+            ElseIf .renderable Then
+                offset = -(frmMain.font.size + 2) * UBound(.textLine())
+               
+                'Render it
+                For j = 0 To UBound(.textLine())
+                    
+                    Call DrawText(1, .x, .y + offset, .textLine(j), RGBtoD3DColorARGB(255, .Color))
+                    offset = offset + frmMain.font.size + 5
+                Next j
+               
+                'Won't render it unless it's updated in next frmae
+                .renderable = False
+            End If
+
+        End With
+
+    Next i
 
 End Sub
+ 
+''
+' Updates the position where a given dialog will be rendered.
+'
+' @param    x           The X coord where to start rendering.
+' @param    y           The Y coord where to start rendering.
+' @param    charIndex   The character whose dialog's position is being updated.
+ 
+Public Sub UpdateDialogPos(ByVal x As Integer, _
+                           ByVal y As Integer, _
+                           ByVal CharIndex As Integer)
 
-Public Sub BorrarDialogos()
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Updates a dialog's position.
+    '**************************************************************
+    Dim slot As Integer
+   
+    slot = BinarySearch(CharIndex)
+   
+    If slot >= 0 Then
 
-On Error Resume Next
+        With dialogs(slot)
+            .x = x - (MAX_LENGTH \ 2) * 3
+            .y = y - (UBound(.textLine()) * 3)
+            .renderable = True
+        End With
 
-Dim i As Integer
-
-For i = 1 To MAX_DIALOGOS
-      Dialogos(i).Vida = 0
-      Dialogos(i).Texto = ""
-      Dialogos(i).UserIndex = 0
-      Dialogos(i).Formateado = False
-      Dialogos(i).Delay = 0
-Next i
+    End If
 
 End Sub
+ 
+Private Function BinarySearch(ByVal CharIndex As Integer) As Integer
 
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Returns the index of the dialog in the list, or the negation
+    'of the position were it should be if not found (for binary insertion)
+    '**************************************************************
+    On Error Resume Next
+
+    Dim min As Long
+
+    Dim max As Long
+
+    Dim mid As Long
+   
+    min = 0
+    max = dialogCount - 1
+   
+    Do While min <= max
+        mid = (min + max) \ 2
+       
+        If dialogs(mid).CharIndex < CharIndex Then
+            min = mid + 1
+        ElseIf dialogs(mid).CharIndex > CharIndex Then
+            max = mid - 1
+        Else
+            'We found it
+            BinarySearch = mid
+
+            Exit Function
+
+        End If
+
+    Loop
+   
+    'Not found, return the negation of the position where it should be
+    '(all higher values are to the right of the list and lower values are to the left)
+    BinarySearch = Not min
+End Function
+ 
+''
+' Splits a text into several lines to make it comply with the MAX_LENGTH unless it's impossible (a single word longer than MAX_LENGTH).
+'
+' @param    chat    The text to be formated.
+'
+' @return   The array of lines into which the text is splitted.
+'
+' @see      MAX_LENGTH
+ 
+Private Function FormatChat(ByRef chat As String) As String()
+
+    '**************************************************************
+    'Author: Juan Martín Sotuyo Dodero
+    'Last Modify Date: 07/28/07
+    'Formats a dialog into different text lines.
+    '**************************************************************
+    On Error Resume Next
+
+    Dim word        As String
+
+    Dim curPos      As Long
+
+    Dim length      As Long
+
+    Dim acumLength  As Long
+
+    Dim lineLength  As Long
+
+    Dim wordLength  As Long
+
+    Dim curLine     As Long
+
+    Dim chatLines() As String
+   
+    'Initialize variables
+    curLine = 0
+    curPos = 1
+    length = Len(chat)
+    acumLength = 0
+    lineLength = -1
+    ReDim chatLines(FieldCount(chat, 32)) As String
+   
+    'Start formating
+    Do While acumLength < length
+        word = ReadField(Val(curPos), chat, 32)
+       
+        wordLength = Len(word)
+       
+        ' Is the first word of the first line? (it's the only that can start at -1)
+        If lineLength = -1 Then
+            chatLines(curLine) = word
+           
+            lineLength = wordLength
+            acumLength = wordLength
+        Else
+
+            ' Is the word too long to fit in this line?
+            If lineLength + wordLength + 1 > MAX_LENGTH Then
+                'Put it in the next line
+                curLine = curLine + 1
+                chatLines(curLine) = word
+               
+                lineLength = wordLength
+            Else
+                'Add it to this line
+                chatLines(curLine) = chatLines(curLine) & " " & word
+               
+                lineLength = lineLength + wordLength + 1
+            End If
+           
+            acumLength = acumLength + wordLength + 1
+        End If
+       
+        'Increase to search for next word
+        curPos = curPos + 1
+    Loop
+   
+    ' If it's only one line, center text
+    If curLine = 0 And length < MAX_LENGTH Then
+        chatLines(curLine) = String$((MAX_LENGTH - length) \ 2 + 1, " ") & chatLines(curLine)
+    End If
+   
+    'Resize array to fit
+    ReDim Preserve chatLines(curLine) As String
+   
+    FormatChat = chatLines
+End Function
+ 
+''
+' Initializes the instance of the class.
+ 
 Private Sub Class_Initialize()
 
-Delay = 300
-UltimoDialogo = 0
-CantidadDialogos = 0
+    '***************************************************
+    'Author: Juan Martín Sotuyo Dodero (Maraxus)
+    'Last Modification: 07/28/07
+    'Initializes the dialog instance
+    '***************************************************
+    On Error Resume Next
+
+    dialogCount = 0
+End Sub
+ 
+''
+' Clean up and release resources
+ 
+Private Sub Class_Terminate()
+
+    '***************************************************
+    'Author: Juan Martín Sotuyo Dodero (Maraxus)
+    'Last Modification: 07/28/07
+    'Clean up
+    '***************************************************
+    On Error Resume Next
 
 End Sub
+
+

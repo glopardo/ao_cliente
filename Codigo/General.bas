@@ -1,4 +1,4 @@
-Attribute VB_Name = "Mod_General"
+Attribute VB_Name = "modGeneral"
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -37,6 +37,18 @@ Attribute VB_Name = "Mod_General"
 
 Option Explicit
 
+Public Audio As New clsAudio
+
+'Sound constants
+Public Const SND_CLICK = "click.Wav"
+Public Const SND_MONTANDO = "23.Wav"
+Public Const SND_PASOS1 = "23.Wav"
+Public Const SND_PASOS2 = "24.Wav"
+Public Const SND_NAVEGANDO = "50.wav"
+Public Const SND_OVER = "click2.Wav"
+Public Const SND_DICE = "cupdice.Wav"
+Public Const MIdi_Inicio = 6
+
 
 Public CartelOcultarse As Byte
 Public CartelMenosCansado As Byte
@@ -47,6 +59,7 @@ Public CartelSanado As Byte
 Public atacar As Integer
 Public IsClan As Byte
 Public NoRes As Boolean
+Public ResOriginal As Boolean
 Public Desplazar As Boolean
 Public vigilar As Boolean
 
@@ -56,7 +69,6 @@ Public RG(1 To 5, 1 To 3) As Byte
 Public bO As Integer
 Public bK As Long
 Public bRK As Long
-Public iplst As String
 Public banners As String
 
 Public bInvMod     As Boolean
@@ -65,59 +77,11 @@ Public bFogata As Boolean
 
 Public bLluvia() As Byte
 
-Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" (ByVal hwnd As Long, ByVal lpString As String, ByVal cch As Long) As Long
-Declare Function GetWindow Lib "user32" (ByVal hwnd As Long, ByVal wCmd As Long) As Long
-Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal wIndx As Long) As Long
-Declare Function GetWindowTextLength Lib "user32" Alias "GetWindowTextLengthA" (ByVal hwnd As Long) As Long
-
-Private lFrameLimiter As Long
-
-Public lFrameModLimiter As Long
-Public lFrameTimer As Long
-Public sHKeys() As String
-
-Public bFPS As Boolean
-Public Declare Function GetActiveWindow Lib "user32" () As Long
-Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
-Public Declare Function sndPlaySound Lib "winmm.dll" Alias "sndPlaySoundA" (ByVal lpszSoundName As String, ByVal uFlags As Long) As Long
-Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
-Private Declare Function OpenProcess Lib "kernel32" (ByVal _
-dwDesiredAccess As Long, ByVal bInheritHandle As Long, _
-ByVal dwProcessId As Long) As Long
-
-Private Declare Function GetExitCodeProcess Lib "kernel32" _
-(ByVal hProcess As Long, lpExitCode As Long) As Long
-
-Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject _
-As Long) As Long
-
-Private Declare Function GetWindowThreadProcessId Lib "user32" _
-   (ByVal hwnd As Long, lpdwProcessId As Long) As Long
-
-Private Declare Function FindWindow Lib "user32" Alias _
-"FindWindowA" (ByVal lpClassName As String, _
-ByVal lpWindowName As String) As Long
-
-Private Declare Function CloseWindow Lib "user32" (ByVal hwnd As Long) As Long
-
-Const PROCESS_TERMINATE = &H1
-Const PROCESS_QUERY_INFORMATION = &H400
-Const STILL_ACTIVE = &H103
-
 Type Recompensa
     Name As String
     Descripcion As String
 End Type
 
-Const GWL_STYLE = (-16)
-Const Win_VISIBLE = &H10000000
-Const Win_BORDER = &H800000
-Const SC_CLOSE = &HF060&
-Const WM_SYSCOMMAND = &H112
-
-Dim ObjetoWMI As Object
-Dim ProcesoACerrar As Object
-Dim Procesos As Object
 Public Recompensas(1 To 60, 1 To 3, 1 To 2) As Recompensa
 Public Sub EstablecerRecompensas()
 
@@ -416,15 +380,7 @@ Recompensas(LADRON, 3, 2).Descripcion = "Aumenta en 10% la probabilidad de robar
 End Sub
 
 Public Function DirGraficos() As String
-DirGraficos = App.Path & "\" & Config_Inicio.DirGraficos & "\"
-End Function
-
-Public Function DirSound() As String
-DirSound = App.Path & "\" & Config_Inicio.DirSonidos & "\"
-End Function
-
-Public Function DirMidi() As String
-DirMidi = App.Path & "\" & Config_Inicio.DirMusica & "\"
+DirGraficos = App.Path & "\Graficos\"
 End Function
 Public Function SD(ByVal n As Integer) As Integer
 
@@ -483,83 +439,6 @@ AuxInteger = SD(n)
 AuxInteger2 = SDM(n)
 ValidarLoginMSG = Complex(AuxInteger + AuxInteger2)
 End Function
-Sub PlayWaveAPI(File As String)
-
-On Error Resume Next
-Dim rc As Integer
-
-rc = sndPlaySound(File, SND_ASYNC)
-
-End Sub
-Sub CargarAnimArmas()
-
-On Error Resume Next
-
-Dim loopc As Integer
-Dim arch As String
-arch = App.Path & "\init\" & "armas.dat"
-DoEvents
-
-NumWeaponAnims = Val(GetVar(arch, "INIT", "NumArmas"))
-
-ReDim WeaponAnimData(1 To NumWeaponAnims) As WeaponAnimData
-
-For loopc = 1 To NumWeaponAnims
-    InitGrh WeaponAnimData(loopc).WeaponWalk(1), Val(GetVar(arch, "ARMA" & loopc, "Dir1")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(2), Val(GetVar(arch, "ARMA" & loopc, "Dir2")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(3), Val(GetVar(arch, "ARMA" & loopc, "Dir3")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(4), Val(GetVar(arch, "ARMA" & loopc, "Dir4")), 0
-Next loopc
-
-End Sub
-Sub CargarAnimEscudos()
-On Error Resume Next
-
-Dim loopc As Integer
-Dim arch As String
-arch = App.Path & "\init\" & "escudos.dat"
-DoEvents
-
-NumEscudosAnims = Val(GetVar(arch, "INIT", "NumEscudos"))
-
-ReDim ShieldAnimData(1 To NumEscudosAnims) As ShieldAnimData
-
-For loopc = 1 To NumEscudosAnims
-    InitGrh ShieldAnimData(loopc).ShieldWalk(1), Val(GetVar(arch, "ESC" & loopc, "Dir1")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(2), Val(GetVar(arch, "ESC" & loopc, "Dir2")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(3), Val(GetVar(arch, "ESC" & loopc, "Dir3")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(4), Val(GetVar(arch, "ESC" & loopc, "Dir4")), 0
-Next loopc
-
-End Sub
-
-Sub Addtostatus(RichTextBox As RichTextBox, Text As String, Red As Byte, Green As Byte, Blue As Byte, Bold As Byte, Italic As Byte)
-
-
-
-
-
-
-
-frmCargando.Status.SelStart = Len(RichTextBox.Text)
-frmCargando.Status.SelLength = 0
-frmCargando.Status.SelColor = RGB(Red, Green, Blue)
-
-If Bold Then
-    frmCargando.Status.SelBold = True
-Else
-    frmCargando.Status.SelBold = False
-End If
-
-If Italic Then
-    frmCargando.Status.SelItalic = True
-Else
-    frmCargando.Status.SelItalic = False
-End If
-
-frmCargando.Status.SelText = Chr(13) & Chr(10) & Text
-
-End Sub
 Sub AddtoRichTextBox(RichTextBox As RichTextBox, Text As String, Optional Red As Integer = -1, Optional Green As Integer, Optional Blue As Integer, Optional Bold As Boolean, Optional Italic As Boolean, Optional bCrLf As Boolean)
 
 With RichTextBox
@@ -586,25 +465,6 @@ TextBox.SelLength = 0
 TextBox.SelText = Chr(13) & Chr(10) & Text
 
 End Sub
-Sub RefreshAllChars()
-Dim loopc As Integer
-
-For loopc = 1 To LastChar
-    If CharList(loopc).Active = 1 Then
-        MapData(CharList(loopc).POS.X, CharList(loopc).POS.Y).CharIndex = loopc
-    End If
-Next loopc
-
-End Sub
-Sub SaveGameini()
-
-Config_Inicio.Name = "BetaTester"
-Config_Inicio.Password = "DammLamers"
-Config_Inicio.Puerto = UserPort
-
-Call EscribirGameIni(Config_Inicio)
-
-End Sub
 Function AsciiValidos(ByVal cad As String) As Boolean
 Dim car As Byte
 Dim i As Integer
@@ -612,7 +472,7 @@ Dim i As Integer
 cad = LCase$(cad)
 
 For i = 1 To Len(cad)
-    car = Asc(Mid$(cad, i, 1))
+    car = Asc(mid$(cad, i, 1))
     
     If ((car < 97 Or car > 122) Or car = Asc("º")) And (car <> 255) And (car <> 32) Then
         AsciiValidos = False
@@ -632,31 +492,6 @@ Function CheckUserData(checkemail As Boolean) As Boolean
 Dim loopc As Integer
 Dim CharAscii As Integer
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 If checkemail Then
  If UserEmail = "" Then
     MsgBox ("Direccion de email invalida")
@@ -670,7 +505,7 @@ If UserPassword = "" Then
 End If
 
 For loopc = 1 To Len(UserPassword)
-    CharAscii = Asc(Mid$(UserPassword, loopc, 1))
+    CharAscii = Asc(mid$(UserPassword, loopc, 1))
     If LegalCharacter(CharAscii) = False Then
         MsgBox "El password es inválido." & vbCrLf & vbCrLf & "Volvé a intentarlo otra vez." & vbCrLf & "Si el password es ese, verifica el estado del BloqMayús.", vbExclamation, "Password inválido"
         Exit Function
@@ -689,7 +524,7 @@ End If
 
 For loopc = 1 To Len(UserName)
 
-    CharAscii = Asc(Mid$(UserName, loopc, 1))
+    CharAscii = Asc(mid$(UserName, loopc, 1))
     If LegalCharacter(CharAscii) = False Then
         MsgBox "El Nombre del Personaje ingresado es inválido." & vbCrLf & vbCrLf & "Verifica que no halla errores en el tipeo del Nombre de tu Personaje.", vbExclamation, "Carácteres inválidos"
         Exit Function
@@ -712,10 +547,6 @@ Next
 End Sub
 
 Function LegalCharacter(KeyAscii As Integer) As Boolean
-
-
-
-
 
 If KeyAscii = 8 Then
     LegalCharacter = True
@@ -743,28 +574,6 @@ End If
 LegalCharacter = True
 
 End Function
-
-Sub SetConnected()
-
-
-
-
-
-Connected = True
-
-Call SaveGameini
-
-
-Unload frmConnect
-
-
-frmMain.Label8.Caption = UserName
-
-frmMain.Visible = True
-
-
-
-End Sub
 Public Function RandomNumber(ByVal LowerBound As Variant, ByVal UpperBound As Variant) As Single
 
 RandomNumber = Fix(Rnd * (UpperBound - LowerBound + 1)) + LowerBound
@@ -781,102 +590,20 @@ ElseIf TiempoTranscurrido < 0 Then
 End If
 
 End Function
-Sub MoveMe(Direction As Byte)
-
-If CONGELADO Then Exit Sub
-
-If Cartel Then Cartel = False
-
-If ProxLegalPos(Direction) And Not UserMeditar And Not UserParalizado Then
-    If TiempoTranscurrido(LastPaso) >= IntervaloPaso Then
-        Call SendData("M" & Direction)
-        LastPaso = Timer
-        If Not UserDescansar Then
-            Call EliminarChars(Direction)
-            Call MoveCharByHead(UserCharIndex, Direction)
-            Call MoveScreen(Direction)
-            Call DoFogataFx
-        End If
-    End If
-ElseIf CharList(UserCharIndex).Heading <> Direction Then Call SendData("CHEA" & Direction)
-End If
-
-frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.Y & "]"
-
-End Sub
-Function ProxLegalPos(Direction As Byte) As Boolean
-
-Select Case Direction
-    Case NORTH
-        ProxLegalPos = LegalPos(UserPos.X, UserPos.Y - 1)
-    Case SOUTH
-        ProxLegalPos = LegalPos(UserPos.X, UserPos.Y + 1)
-    Case WEST
-        ProxLegalPos = LegalPos(UserPos.X - 1, UserPos.Y)
-    Case EAST
-        ProxLegalPos = LegalPos(UserPos.X + 1, UserPos.Y)
-End Select
-
-End Function
-Sub EliminarChars(Direction As Byte)
-Dim X(2) As Integer
-Dim Y(2) As Integer
-
-Select Case Direction
-    Case NORTH, SOUTH
-        X(1) = UserPos.X - MinXBorder - 2
-        X(2) = UserPos.X + MinXBorder + 2
-    Case EAST, WEST
-        Y(1) = UserPos.Y - MinYBorder - 2
-        Y(2) = UserPos.Y + MinYBorder + 2
-End Select
-
-Select Case Direction
-    Case NORTH
-        Y(1) = UserPos.Y - MinYBorder - 3
-        If Y(1) < 1 Then Y(1) = 1
-        Y(2) = Y(1)
-    Case EAST
-        X(1) = UserPos.X + MinXBorder + 3
-        If X(1) > 99 Then X(1) = 99
-        X(2) = X(1)
-    Case SOUTH
-        Y(1) = UserPos.Y + MinYBorder + 3
-        If Y(1) > 99 Then Y(1) = 99
-        Y(2) = Y(1)
-    Case WEST
-        X(1) = UserPos.X - MinXBorder - 3
-        If X(1) < 1 Then X(1) = 1
-        X(2) = X(1)
-End Select
-
-For Y(0) = Y(1) To Y(2)
-    For X(0) = X(1) To X(2)
-        If X(0) > 6 And X(0) < 95 And Y(0) > 6 And Y(0) < 95 Then
-            If MapData(X(0), Y(0)).CharIndex > 0 Then
-                CharList(MapData(X(0), Y(0)).CharIndex).POS.X = 0
-                CharList(MapData(X(0), Y(0)).CharIndex).POS.Y = 0
-                MapData(X(0), Y(0)).CharIndex = 0
-            End If
-        End If
-    Next
-Next
-
-End Sub
 Public Sub ProcesaEntradaCmd(ByVal Datos As String)
 
 If Len(Datos) = 0 Then Exit Sub
 
-If UCase$(Left$(Datos, 3)) = "/GM" Then
+If UCase$(left$(Datos, 3)) = "/GM" Then
     frmMSG.Show
     Exit Sub
 End If
 
-Select Case Left$(Datos, 1)
+Select Case left$(Datos, 1)
     Case "\", "/"
     
     Case Else
-        Datos = ";" & Left$(frmMain.modo, 1) & Datos
+        Datos = ";" & left$(frmMain.modo, 1) & Datos
 
 End Select
 
@@ -946,345 +673,22 @@ If UserMoving = 0 Then
 End If
 
 End Sub
-Sub MoveScreen(Heading As Byte)
-Dim X As Integer
-Dim Y As Integer
-Dim tX As Integer
-Dim tY As Integer
-Dim bx As Integer
-Dim by As Integer
-
-Select Case Heading
-
-    Case NORTH
-        Y = -1
-
-    Case EAST
-        X = 1
-
-    Case SOUTH
-        Y = 1
-    
-    Case WEST
-        X = -1
-        
-End Select
-
-tX = UserPos.X + X
-tY = UserPos.Y + Y
-
-
-
-If Not (tX < MinXBorder Or tX > MaxXBorder Or tY < MinYBorder Or tY > MaxYBorder) Then
-    AddtoUserPos.X = X
-    UserPos.X = tX
-    AddtoUserPos.Y = Y
-    UserPos.Y = tY
-    UserMoving = 1
-
-    bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
-Exit Sub
-Stop
-    
-        
-        Select Case FramesPerSecCounter
-            Case Is >= 17
-                lFrameModLimiter = 60
-            Case 16
-                lFrameModLimiter = 120
-            Case 15
-                lFrameModLimiter = 240
-            Case 14
-                lFrameModLimiter = 480
-            Case 15
-                lFrameModLimiter = 960
-            Case 14
-                lFrameModLimiter = 1920
-            Case 13
-                lFrameModLimiter = 3840
-            Case 1
-                lFrameModLimiter = 60 * 256
-            Case 0
-            
-        End Select
-    
-
-    Call DoFogataFx
-End If
-
-End Sub
-Function NextOpenChar()
-Dim loopc As Integer
-
-loopc = 1
-
-Do While CharList(loopc).Active
-    loopc = loopc + 1
-Loop
-
-NextOpenChar = loopc
-
-End Function
-Public Function DirMapas() As String
-
-DirMapas = App.Path & "\maps\"
-
-End Function
-Sub SwitchMap(Map As Integer)
-Dim loopc As Integer
-Dim Y As Integer
-Dim X As Integer
-Dim tempint As Integer
-
-Open DirMapas & "Mapa" & Map & ".mcl" For Binary As #1
-Seek #1, 1
-        
-
-Get #1, , MapInfo.MapVersion
-Get #1, , MiCabecera
-Get #1, , tempint
-Get #1, , tempint
-Get #1, , tempint
-Get #1, , tempint
-        
-
-For Y = YMinMapSize To YMaxMapSize
-    For X = XMinMapSize To XMaxMapSize
-
-        
-        Get #1, , MapData(X, Y).Blocked
-        For loopc = 1 To 4
-            Get #1, , MapData(X, Y).Graphic(loopc).GrhIndex
-            If loopc = 3 And MapData(X, Y).Graphic(loopc).GrhIndex <> 0 And MapData(X, Y).Blocked = 1 Then
-                MapData(X, Y).ObjGrh = MapData(X, Y).Graphic(loopc)
-                MapData(X, Y).Graphic(loopc).GrhIndex = 0
-            End If
-            
-            If MapData(X, Y).Graphic(loopc).GrhIndex > 0 Then
-                If MapData(X, Y).Graphic(loopc).GrhIndex = 7000 Then MapData(X, Y).Graphic(loopc).GrhIndex = 700
-                InitGrh MapData(X, Y).Graphic(loopc), MapData(X, Y).Graphic(loopc).GrhIndex
-            End If
-            
-        Next loopc
-        
-        
-        Get #1, , MapData(X, Y).Trigger
-        
-        Get #1, , tempint
-        
-        
-        If MapData(X, Y).CharIndex > 0 Then
-            Call EraseChar(MapData(X, Y).CharIndex)
-        End If
-        
-        
-        MapData(X, Y).ObjGrh.GrhIndex = 0
-
-    Next X
-Next Y
-
-Close #1
-
-MapInfo.Name = ""
-MapInfo.Music = ""
-CurMap = Map
-
-End Sub
-Sub EliminarDatosMapa()
-Dim X As Integer
-Dim Y As Integer
-
-For Y = YMinMapSize To YMaxMapSize
-    For X = XMinMapSize To XMaxMapSize
-        If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
-        MapData(X, Y).ObjGrh.GrhIndex = 0
-    Next X
-Next Y
-
-End Sub
-Sub SwitchMapBaley(Map As Integer)
-On Error Resume Next
-Dim loopc As Integer
-Dim Y As Integer
-Dim X As Integer
-Dim tempint As Integer
-Dim InfoTile As Byte
-Dim i As Integer
-
-Open DirMapas & "Mapa" & Map & ".mcl" For Binary As #1
-Seek #1, 1
-        
-
-Get #1, , MapInfo.MapVersion
-Get #1, , MiCabecera
-
-For Y = YMinMapSize To YMaxMapSize
-    For X = XMinMapSize To XMaxMapSize
-
-        Get #1, , InfoTile
-        
-        MapData(X, Y).Blocked = (InfoTile And 1)
-        
-        Get #1, , MapData(X, Y).Graphic(1).GrhIndex
-        Call InitGrh(MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex)
-        
-        For i = 2 To 4
-            If InfoTile And (2 ^ (i - 1)) Then
-                Get #1, , MapData(X, Y).Graphic(i).GrhIndex
-                If i = 3 And MapData(X, Y).Graphic(3).GrhIndex <> 0 And MapData(X, Y).Blocked = 1 Then
-                    MapData(X, Y).ObjGrh = MapData(X, Y).Graphic(3)
-                    MapData(X, Y).Graphic(3).GrhIndex = 0
-                End If
-                    
-                Call InitGrh(MapData(X, Y).Graphic(i), MapData(X, Y).Graphic(i).GrhIndex)
-
-            Else
-                MapData(X, Y).Graphic(i).GrhIndex = 0
-            End If
-        Next
-        
-        If InfoTile And 16 Then Get #1, , MapData(X, Y).Trigger
-        
-        If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
-
-        MapData(X, Y).ObjGrh.GrhIndex = 0
-
-    Next X
-Next Y
-
-Close #1
-
-MapInfo.Name = ""
-
-MapInfo.Music = ""
-
-CurMap = Map
-
-End Sub
-Sub SwitchMapNew(Map As Integer)
-On Error Resume Next
-Dim loopc As Integer
-Dim Y As Integer
-Dim X As Integer
-Dim tempint As Integer
-Dim InfoTile As Byte
-Dim i As Integer
-
-Open DirMapas & "Mapa" & Map & ".mcl" For Binary As #1
-Seek #1, 1
-        
-
-Get #1, , MapInfo.MapVersion
-
-For Y = YMinMapSize To YMaxMapSize
-    For X = XMinMapSize To XMaxMapSize
-
-        Get #1, , InfoTile
-        
-        MapData(X, Y).Blocked = (InfoTile And 1)
-        
-        Get #1, , MapData(X, Y).Graphic(1).GrhIndex
-        
-        For i = 2 To 4
-            If InfoTile And (2 ^ (i - 1)) Then
-                Get #1, , MapData(X, Y).Graphic(i).GrhIndex
-                Call InitGrh(MapData(X, Y).Graphic(i), MapData(X, Y).Graphic(i).GrhIndex)
-            Else: MapData(X, Y).Graphic(i).GrhIndex = 0
-            End If
-        Next
-        
-        MapData(X, Y).Trigger = 0
-        
-        For i = 4 To 6
-            If (InfoTile And 2 ^ i) Then MapData(X, Y).Trigger = MapData(X, Y).Trigger Or 2 ^ (i - 4)
-        Next
-        
-        Call InitGrh(MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex)
-    
-        If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
-        MapData(X, Y).ObjGrh.GrhIndex = 0
-    Next X
-Next Y
-
-Close #1
-
-MapInfo.Name = ""
-
-MapInfo.Music = ""
-
-CurMap = Map
-
-End Sub
 Public Function ReadField(POS As Integer, Text As String, SepASCII As Integer) As String
 Dim i As Integer, LastPos As Integer, FieldNum As Integer
 
 For i = 1 To Len(Text)
-    If Mid(Text, i, 1) = Chr(SepASCII) Then
+    If mid(Text, i, 1) = Chr(SepASCII) Then
         FieldNum = FieldNum + 1
         If FieldNum = POS Then
-            ReadField = Mid(Text, LastPos + 1, (InStr(LastPos + 1, Text, Chr(SepASCII), vbTextCompare) - 1) - (LastPos))
+            ReadField = mid(Text, LastPos + 1, (InStr(LastPos + 1, Text, Chr(SepASCII), vbTextCompare) - 1) - (LastPos))
             Exit Function
         End If
         LastPos = i
     End If
 Next
 
-If FieldNum + 1 = POS Then ReadField = Mid(Text, LastPos + 1)
+If FieldNum + 1 = POS Then ReadField = mid(Text, LastPos + 1)
 
-End Function
-Public Function NumeroApuesta(Numero As Integer) As String
-Dim MiNum As Byte
-
-Select Case Numero
-    Case Is <= 36
-        NumeroApuesta = "l " & Numero & "."
-    Case 37
-        NumeroApuesta = " los primeros 12."
-    Case 38
-        NumeroApuesta = " los segundos 12."
-    Case 39
-        NumeroApuesta = " los últimos 12."
-    Case 40
-        NumeroApuesta = " los primeros 18."
-    Case 41
-        NumeroApuesta = " los pares."
-    Case 42
-        NumeroApuesta = " los rojos."
-    Case 43
-        NumeroApuesta = " los negros."
-    Case 44
-        NumeroApuesta = " los impares."
-    Case 45
-        NumeroApuesta = " los últimos 18."
-    Case Is <= 69
-        MiNum = 3 * Fix((Numero - 46) / 2) + 2
-        If Numero Mod 2 = 0 Then
-            NumeroApuesta = "l semipleno " & MiNum - 1 & "-" & MiNum & "."
-        Else
-            NumeroApuesta = "l semipleno " & MiNum & "-" & MiNum + 1 & "."
-        End If
-    Case Is <= 102
-        NumeroApuesta = "l semipleno " & Numero - 69 & "-" & Numero - 66 & "."
-    Case Is <= 124
-        MiNum = (3 * Fix((Numero - 101) / 2) - 1)
-        If Numero Mod 2 = 1 Then MiNum = MiNum - 1
-        NumeroApuesta = "l cuadro " & MiNum & "-" & MiNum + 1 & "-" & MiNum + 3 & "-" & MiNum + 4 & "."
-    Case Is <= 136
-        MiNum = 1 + 3 * (Numero - 125)
-        NumeroApuesta = " la fila del " & MiNum & " al " & MiNum + 2 & "."
-    Case Is <= 147
-        MiNum = 1 + 3 * (Numero - 137)
-        NumeroApuesta = " la calle del " & MiNum & " al " & MiNum + 5 & "."
-    Case 148
-        NumeroApuesta = " la primer columna."
-    Case 149
-        NumeroApuesta = " la segunda columna."
-    Case 150
-        NumeroApuesta = " la tercer columna."
-End Select
-        
 End Function
 Public Function PonerPuntos(Numero As Long) As String
 Dim i As Integer
@@ -1294,23 +698,23 @@ Cifra = Str(Numero)
 Cifra = Right$(Cifra, Len(Cifra) - 1)
 For i = 0 To 4
     If Len(Cifra) - 3 * i >= 3 Then
-        If Mid$(Cifra, Len(Cifra) - (2 + 3 * i), 3) <> "" Then
-            PonerPuntos = Mid$(Cifra, Len(Cifra) - (2 + 3 * i), 3) & "." & PonerPuntos
+        If mid$(Cifra, Len(Cifra) - (2 + 3 * i), 3) <> "" Then
+            PonerPuntos = mid$(Cifra, Len(Cifra) - (2 + 3 * i), 3) & "." & PonerPuntos
         End If
     Else
         If Len(Cifra) - 3 * i > 0 Then
-            PonerPuntos = Left$(Cifra, Len(Cifra) - 3 * i) & "." & PonerPuntos
+            PonerPuntos = left$(Cifra, Len(Cifra) - 3 * i) & "." & PonerPuntos
         End If
         Exit For
     End If
 Next
 
-PonerPuntos = Left$(PonerPuntos, Len(PonerPuntos) - 1)
+PonerPuntos = left$(PonerPuntos, Len(PonerPuntos) - 1)
 
 End Function
-Function FileExist(File As String, FileType As VbFileAttribute) As Boolean
+Function FileExist(file As String, FileType As VbFileAttribute) As Boolean
 
-FileExist = Len(Dir$(File, FileType)) > 0
+FileExist = Len(Dir$(file, FileType)) > 0
 
 End Function
 
@@ -1331,95 +735,11 @@ Put #hFile, , CInt(App.Revision)
 Close #hFile
 
 End Sub
-
-Sub ReNombrarAutoUpdate()
-
-If FileExist(App.Path & "\NuevoUpdater.exe", vbNormal) Then
-    If FileExist(App.Path & "\AutoUpdateClient.exe", vbNormal) Then Call Kill(App.Path & "\AutoUpdateClient.exe")
-    Name App.Path & "\NuevoUpdater.exe" As App.Path & "\AutoUpdateClient.exe"
-End If
-
-End Sub
-Public Function IsIp(ByVal Ip As String) As Boolean
-
-Dim i As Integer
-For i = 1 To UBound(ServersLst)
-    If ServersLst(i).Ip = Ip Then
-        IsIp = True
-        Exit Function
-    End If
-Next i
-
-End Function
-
-Public Sub InitServersList(ByVal Lst As String)
-
-Dim NumServers As Integer
-Dim i As Integer, Cont As Integer
-i = 1
-
-Do While (ReadField(i, RawServersList, Asc(";")) <> "")
-    i = i + 1
-    Cont = Cont + 1
-Loop
-
-ReDim ServersLst(1 To Cont) As tServerInfo
-
-For i = 1 To Cont
-    Dim cur$
-    cur$ = ReadField(i, RawServersList, Asc(";"))
-    ServersLst(i).Ip = ReadField(1, cur$, Asc(":"))
-    ServersLst(i).Puerto = ReadField(2, cur$, Asc(":"))
-    ServersLst(i).desc = ReadField(4, cur$, Asc(":"))
-    ServersLst(i).PassRecPort = ReadField(3, cur$, Asc(":"))
-Next i
-
-CurServer = 1
-
-End Sub
-Sub CargarMensajesV()
-Dim i As Integer
-Dim File As String
-Dim Formato As String
-Dim NumMensajes As Integer
-
-File = App.Path & "\Init\MensajesV.dat"
-
-NumMensajes = Val(GetVar(File, "INIT", "NumMensajes"))
-
-ReDim Mensajes(1 To NumMensajes) As Mensajito
-
-For i = 1 To NumMensajes
-    Mensajes(i).Code = GetVar(File, "Mensaje" & i, "C")
-    Mensajes(i).mensaje = GetVar(File, "Mensaje" & i, "M")
-    Formato = GetVar(File, "Mensaje" & i, "F")
-    Mensajes(i).Red = Val(ReadField(1, Formato, Asc("-")))
-    Mensajes(i).Green = Val(ReadField(2, Formato, Asc("-")))
-    Mensajes(i).Blue = Val(ReadField(3, Formato, Asc("-")))
-    Mensajes(i).Bold = Val(ReadField(4, Formato, Asc("-")))
-    Mensajes(i).Italic = Val(ReadField(5, Formato, Asc("-")))
-Next
-
-Call SaveMensajes
-
-End Sub
-Function Transcripcion(Original As String) As String
-Dim i As Integer, Char As Integer
-
-For i = 1 To Len(Original)
-    Char = Asc(Mid$(Original, i, 1)) + 232 + i ^ 2
-    Do Until Char < 255
-        Char = Char - 255
-    Loop
-    Transcripcion = Transcripcion & Chr$(Char)
-Next
-    
-End Function
 Function Traduccion(Original As String) As String
 Dim i As Integer, Char As Integer
 
 For i = 1 To Len(Original)
-    Char = Asc(Mid$(Original, i, 1)) - 232 - i ^ 2
+    Char = Asc(mid$(Original, i, 1)) - 232 - i ^ 2
     Do Until Char > 0
         Char = Char + 255
     Loop
@@ -1457,41 +777,7 @@ Next
 Close #1
 
 End Sub
-Sub SaveMensajes()
-Dim i As Integer, File As String
-
-File = App.Path & "\Init\Mensajes.dat"
-
-Open File For Binary As #1
-Seek #1, 1
-
-Put #1, , CInt(UBound(Mensajes))
-For i = 1 To UBound(Mensajes)
-    Put #1, , Transcripcion(Mensajes(i).Code)
-    Put #1, , CByte(Len(Mensajes(i).mensaje))
-    Put #1, , Transcripcion(Mensajes(i).mensaje)
-    Put #1, , Mensajes(i).Red
-    Put #1, , Mensajes(i).Green
-    Put #1, , Mensajes(i).Blue
-    Put #1, , Mensajes(i).Bold
-    Put #1, , Mensajes(i).Italic
-Next
-
-Close #1
-
-End Sub
 Public Sub ActualizarInformacionComercio(Index As Integer)
-
-Dim SR As RECT, DR As RECT
-SR.Left = 0
-SR.Top = 0
-SR.Right = 32
-SR.Bottom = 32
-
-DR.Left = 0
-DR.Top = 0
-DR.Right = 32
-DR.Bottom = 32
 
 Select Case Index
     Case 0
@@ -1590,7 +876,7 @@ Select Case Index
         End If
         
         If OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex > 0 Then
-            Call DrawGrhtoHdc(frmComerciar.Picture1.hwnd, frmComerciar.Picture1.Hdc, OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex, SR, DR)
+            Call DrawGrhtoHdc(frmComerciar.Picture1.hdc, OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex)
         Else
             frmComerciar.Picture1.Picture = LoadPicture()
         End If
@@ -1666,7 +952,7 @@ Select Case Index
         End Select
         
         If UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex > 0 Then
-            Call DrawGrhtoHdc(frmComerciar.Picture1.hwnd, frmComerciar.Picture1.Hdc, UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex, SR, DR)
+            Call DrawGrhtoHdc(frmComerciar.Picture1.hdc, UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex)
         Else
             frmComerciar.Picture1.Picture = LoadPicture()
         End If
@@ -1687,12 +973,12 @@ Call SendData("#$" & Columna & "," & Fila)
 End Sub
 
 Sub Main()
-On Error Resume Next
+'On Error Resume Next
 
 
 FrmIntro.Hide
 
-AddtoRichTextBox frmCargando.Status, "Cargando...", 255, 150, 50, 1, , False
+AddtoRichTextBox frmCargando.Status, "Cargando FenixAO...", 255, 150, 50, 1, , False
 
 Call WriteClientVer
 
@@ -1703,61 +989,25 @@ CartelNoHayNada = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHay
 CartelRecuMana = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana"))
 CartelSanado = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado"))
 NoRes = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana"))
+ResOriginal = NoRes
+Musica = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica"))
+FX = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX"))
+
+If ResOriginal <> True Then Call SetResolution
 
 If App.PrevInstance Then
-    Call MsgBox("¡Argentum Online ya esta corriendo! No es posible correr otra instancia del juego. Haga click en Aceptar para salir.", vbApplicationModal + vbInformation + vbOKOnly, "Error al ejecutar")
+    Call MsgBox("¡FénixAO ya esta corriendo! No es posible correr otra instancia del juego. Haga click en Aceptar para salir.", vbApplicationModal + vbInformation + vbOKOnly, "Error al ejecutar")
     End
 End If
 
-Dim f As Boolean
-Dim ulttick As Long, esttick As Long
-Dim timers(1 To 5) As Long
 ChDrive App.Path
 ChDir App.Path
-
-
-Dim fMD5HushYo As String * 32
-HushYo = GenHash(App.Path & "\" & App.exename & ".exe")
-
-
-If FileExist(App.Path & "\init\Inicio.con", vbNormal) Then
-    Config_Inicio = LeerGameIni()
-End If
-
-If FileExist(App.Path & "\init\ao.dat", vbNormal) Then
-    Open App.Path & "\init\ao.dat" For Binary As #53
-        Get #53, , RenderMod
-    Close #53
-
-    Musica = IIf(RenderMod.bNoMusic = 1, 1, 0)
-    FX = IIf(RenderMod.bNoSound = 1, 1, 0)
-    
-    
-    Select Case RenderMod.iImageSize
-        Case 4
-            RenderMod.iImageSize = 0
-        Case 3
-            RenderMod.iImageSize = 1
-        Case 2
-            RenderMod.iImageSize = 2
-        Case 1
-            RenderMod.iImageSize = 3
-        Case 0
-            RenderMod.iImageSize = 4
-    End Select
-End If
-
-
-tipf = Config_Inicio.tip
 
 frmCargando.Show
 frmCargando.Refresh
 
 UserParalizado = False
 
-AddtoRichTextBox frmCargando.Status, "Buscando servidores....", 255, 150, 50, , , True
-
-AddtoRichTextBox frmCargando.Status, "Encontrado", 255, 150, 50, 1, , False
 AddtoRichTextBox frmCargando.Status, "Iniciando constantes...", 255, 150, 50, 0, , True
 
 RG(1, 1) = 255
@@ -1850,40 +1100,29 @@ AtributosNames(5) = "Constitucion"
 
 AddtoRichTextBox frmCargando.Status, "Hecho", 255, 150, 50, 1, , False
 
-IniciarObjetosDirectX
+AddtoRichTextBox frmCargando.Status, "Cargando motor de sonido....", 255, 150, 50, , , True
 
-AddtoRichTextBox frmCargando.Status, "Cargando Sonidos....", 255, 150, 50, , , True
+'Inicializamos el sonido
+    Call Audio.Initialize(frmMain.hWnd, App.Path & "\Wav\", App.Path & "\Midi\")
+
 AddtoRichTextBox frmCargando.Status, "Hecho", 255, 150, 50, 1, , False
 
-Dim loopc As Integer
-
-LastTime = GetTickCount
-
-ENDL = Chr(13) & Chr(10)
 ENDC = Chr(1)
-
-
-Call InitTileEngine(frmMain.hwnd, frmMain.MainViewShp.Top, frmMain.MainViewShp.Left, 32, 32, 13, 17, 9)
-
-Call AddtoRichTextBox(frmCargando.Status, "Creando animaciones extras.", 255, 150, 50, 1, , True)
 
 UserMap = 1
 
-Call CargarAnimsExtra
-Call CargarArrayLluvia
-Call CargarAnimArmas
-Call CargarAnimEscudos
-Call CargarMensajes
-Call EstablecerRecompensas
+AddtoRichTextBox frmCargando.Status, "Cargando motor grafico....", 255, 150, 50, , , True
+
+Call InitTileEngine(frmMain.Renderer.hWnd, 32, 32, 12, 16)
+
+
+AddtoRichTextBox frmCargando.Status, "Hecho", 255, 150, 50, 1, , False
+
+Call AddtoRichTextBox(frmCargando.Status, "Creando animaciones extras.", 255, 150, 50, 1, , True)
 
 Unload frmCargando
 
-LoopMidi = True
-
-If Musica = 0 Then
-    Call CargarMIDI(DirMidi & MIdi_Inicio & ".mid")
-    Play_Midi
-End If
+Call Audio.PlayMIDI(MIdi_Inicio & ".mid")
 
 frmPres.Picture = LoadPicture(App.Path & "\Graficos\fenix.jpg")
 frmPres.WindowState = vbMaximized
@@ -1898,220 +1137,39 @@ Unload frmPres
 
 frmConnect.Visible = True
 
-MainViewRect.Left = (frmMain.Left / Screen.TwipsPerPixelX) + MainViewLeft + 32 * RenderMod.iImageSize
-MainViewRect.Top = (frmMain.Top / Screen.TwipsPerPixelY) + MainViewTop + 32 * RenderMod.iImageSize
-MainViewRect.Right = (MainViewRect.Left + MainViewWidth) - 32 * (RenderMod.iImageSize * 2)
-MainViewRect.Bottom = (MainViewRect.Top + MainViewHeight) - 32 * (RenderMod.iImageSize * 2)
-
-MainDestRect.Left = ((TilePixelWidth * TileBufferSize) - TilePixelWidth) + 32 * RenderMod.iImageSize
-MainDestRect.Top = ((TilePixelHeight * TileBufferSize) - TilePixelHeight) + 32 * RenderMod.iImageSize
-MainDestRect.Right = (MainDestRect.Left + MainViewWidth) - 32 * (RenderMod.iImageSize * 2)
-MainDestRect.Bottom = (MainDestRect.Top + MainViewHeight) - 32 * (RenderMod.iImageSize * 2)
-
-Dim OffsetCounterX As Integer
-Dim OffsetCounterY As Integer
-
 PrimeraVez = True
 prgRun = True
 Pausa = False
-lFrameLimiter = DirectX.TickCount
 
-
-Do While prgRun
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    If RequestPosTimer > 0 Then
-        RequestPosTimer = RequestPosTimer - 1
-        If RequestPosTimer = 0 Then
-            
-            Call SendData("RPU")
-        End If
-    End If
-
-    Call RefreshAllChars
-
-    
-    
-    
-    If EngineRun Then
-        
-        
-        
-        If frmMain.WindowState <> 1 Then
-        
-            
-            
-            If AddtoUserPos.X <> 0 Then
-                OffsetCounterX = (OffsetCounterX - (IIf(UserMontando, (32 / 3), 8) * Sgn(AddtoUserPos.X)))
-                If Abs(OffsetCounterX) >= Abs(TilePixelWidth * AddtoUserPos.X) Then
-                    OffsetCounterX = 0
-                    AddtoUserPos.X = 0
-                    UserMoving = 0
-                End If
-            ElseIf AddtoUserPos.Y <> 0 Then
-                OffsetCounterY = OffsetCounterY - (IIf(UserMontando, (32 / 3), 8) * Sgn(AddtoUserPos.Y))
-                If Abs(OffsetCounterY) >= Abs(TilePixelHeight * AddtoUserPos.Y) Then
-                    OffsetCounterY = 0
-                    AddtoUserPos.Y = 0
-                    UserMoving = 0
-                End If
-            End If
-    
-            
-            Call RenderScreen(UserPos.X - AddtoUserPos.X, UserPos.Y - AddtoUserPos.Y, OffsetCounterX, OffsetCounterY)
-            If ModoTrabajo Then Call Dialogos.DrawText(260, 260, "MODO TRABAJO", vbRed)
-                If TaInvi > 20 Then Call Dialogos.DrawText(260, 275, "TIEMPO INVISIBLE " & Int(TaInvi / 30), vbWhite)
-
-                If Cartel Then Call DibujarCartel
-                
-                If Dialogos.CantidadDialogos <> 0 Then Call Dialogos.MostrarTexto
-                Call DrawBackBufferSurface
-               
-                Call RenderSounds
-                
-                
-                
-                
-                
-                
-    
-            
-            
-            FramesPerSecCounter = FramesPerSecCounter + 1
-        End If
-    End If
-    
-    
-    
-    If (GetTickCount - LastTime > 20) Then
-        If Not Pausa And frmMain.Visible And Not frmForo.Visible Then
-            CheckKeys
-            LastTime = GetTickCount
-        End If
-    End If
-    
-    If Musica = 0 Then
-        If Not SegState Is Nothing Then
-            If Not Perf.IsPlaying(Seg, SegState) Then Play_Midi
-        End If
-    End If
-         
-    
-    
-    
-    
-    
-        
-        If DirectX.TickCount - lFrameTimer > 1000 Then
-            FramesPerSec = FramesPerSecCounter
-            If FPSFLAG Then frmMain.Caption = "Fenix AO" & " V " & App.Major & "." & App.Minor & "." & App.Revision
-            frmMain.fpstext.Caption = FramesPerSec
-            FramesPerSecCounter = 0
-            lFrameTimer = DirectX.TickCount
-        End If
-        
-        
-        
-        
-        
-            While DirectX.TickCount - lFrameLimiter < 55
-                Sleep 5
-            Wend
-        
-        
-        
-
-        lFrameLimiter = DirectX.TickCount
-    
-    
-    
-    
-    esttick = GetTickCount
-    For loopc = 1 To UBound(timers)
-   
-    
-        timers(loopc) = timers(loopc) + (esttick - ulttick)
-        
-        If timers(1) >= tUs Then
-            timers(1) = 0
-            NoPuedeUsar = False
-        End If
-        
-        
-    Next loopc
-    ulttick = GetTickCount
-    DoEvents
-Loop
+' Empieza el bucle
+Call ShowNextFrame
 
 EngineRun = False
 frmCargando.Show
 AddtoRichTextBox frmCargando.Status, "Liberando recursos...", 0, 0, 0, 0, 0, 1
-LiberarObjetosDX
 
-If bNoResChange = False Then
-    Dim typDevM As typDevMODE
-    Dim lRes As Long
-    
-    lRes = EnumDisplaySettings(0, 0, typDevM)
-    With typDevM
-        .dmFields = DM_PELSWIDTH Or DM_PELSHEIGHT
-        .dmPelsWidth = oldResWidth
-       .dmPelsHeight = oldResHeight
-    End With
-    lRes = ChangeDisplaySettings(typDevM, CDS_TEST)
-End If
+If ResOriginal <> True Then Call ResetResolution
 
 Call UnloadAllForms
-
-Config_Inicio.tip = tipf
-Call EscribirGameIni(Config_Inicio)
+Call DeInitTileEngine
 
 End
 
-ManejadorErrores:
-    LogError "Contexto:" & Err.HelpContext & " Desc:" & Err.Description & " Fuente:" & Err.source
-    End
+'ManejadorErrores:
+'    End
     
 End Sub
 
 
 
-Sub WriteVar(File As String, Main As String, Var As String, value As String)
+Sub WriteVar(file As String, Main As String, Var As String, value As String)
 
 
-
-
-writeprivateprofilestring Main, Var, value, File
+writeprivateprofilestring Main, Var, value, file
 
 End Sub
 
-Function GetVar(File As String, Main As String, Var As String) As String
-
-
-
-
+Function GetVar(file As String, Main As String, Var As String) As String
 Dim l As Integer
 Dim Char As String
 Dim sSpaces As String
@@ -2122,28 +1180,12 @@ szReturn = ""
 sSpaces = Space(5000)
 
 
-getprivateprofilestring Main, Var, szReturn, sSpaces, Len(sSpaces), File
+getprivateprofilestring Main, Var, szReturn, sSpaces, Len(sSpaces), file
 
 GetVar = RTrim(sSpaces)
-GetVar = Left$(GetVar, Len(GetVar) - 1)
+GetVar = left$(GetVar, Len(GetVar) - 1)
 
 End Function
-Public Sub BMPtoGIF(bmp_fname As String, gif_fname As String)
-Dim bdat As BITMAPINFOHEADER
-Dim tmpimage As imgdes
-Dim tmpimage2 As imgdes
-
-Call BMPInfo(bmp_fname, bdat)
-Call allocimage(tmpimage, bdat.biWidth, bdat.biHeight, 24)
-Call loadbmp(bmp_fname, tmpimage)
-
-Call allocimage(tmpimage2, bdat.biWidth, bdat.biHeight, 8)
-Call convertrgbtopalex(256, tmpimage, tmpimage2, 3)
-
-Call savegifex(gif_fname, tmpimage2, 8, 0)
-Call Kill(bmp_fname)
-
-End Sub
 Public Function CheckMailString(ByRef sString As String) As Boolean
 On Error GoTo errHnd:
 Dim lPos As Long, lX As Long
@@ -2153,7 +1195,7 @@ If (lPos <> 0) Then
     If Not InStr(lPos, sString, ".", vbBinaryCompare) > (lPos + 1) Then Exit Function
 
     For lX = 0 To Len(sString) - 1
-        If Not lX = (lPos - 1) And Not CMSValidateChar_(Asc(Mid$(sString, (lX + 1), 1))) Then Exit Function
+        If Not lX = (lPos - 1) And Not CMSValidateChar_(Asc(mid$(sString, (lX + 1), 1))) Then Exit Function
     Next lX
 
     CheckMailString = True
@@ -2170,25 +1212,36 @@ CMSValidateChar_ = iAsc = 46 Or (iAsc >= 48 And iAsc <= 57) Or _
                     (iAsc = 95) Or (iAsc = 45)
                     
 End Function
-Function HayAgua(X As Integer, Y As Integer) As Boolean
 
-If MapData(X, Y).Graphic(1).GrhIndex >= 1505 And _
-   MapData(X, Y).Graphic(1).GrhIndex <= 1520 And _
-   MapData(X, Y).Graphic(2).GrhIndex = 0 Then
-            HayAgua = True
-Else
-            HayAgua = False
-End If
+Sub ConvertCPtoTP(ByVal viewPortX As Integer, ByVal viewPortY As Integer, ByRef tX As Integer, ByRef tY As Integer)
+'******************************************
+'Converts where the mouse is in the main window to a tile position. MUST be called eveytime the mouse moves.
+'******************************************
+    tX = UserPos.X + viewPortX \ 32 - frmMain.Renderer.ScaleWidth \ 64
+    tY = UserPos.Y + viewPortY \ 32 - frmMain.Renderer.ScaleHeight \ 64
+    Debug.Print tX; tY
+End Sub
 
-End Function
-
-
-
-    Public Sub ShowSendTxt()
-        If Not frmCantidad.Visible Then
-            frmMain.SendTxt.Visible = True
-            frmMain.SendTxt.SetFocus
-        End If
-    End Sub
+Function FieldCount(ByRef Text As String, ByVal SepASCII As Byte) As Long
+'*****************************************************************
+'Gets the number of fields in a delimited string
+'Author: Juan Martín Sotuyo Dodero (Maraxus)
+'Last Modify Date: 07/29/2007
+'*****************************************************************
+    Dim count As Long
+    Dim curPos As Long
+    Dim delimiter As String * 1
     
-
+    If LenB(Text) = 0 Then Exit Function
+    
+    delimiter = Chr$(SepASCII)
+    
+    curPos = 0
+    
+    Do
+        curPos = InStr(curPos + 1, Text, delimiter)
+        count = count + 1
+    Loop While curPos <> 0
+    
+    FieldCount = count
+End Function

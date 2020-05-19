@@ -76,9 +76,9 @@ Attribute VB_Exposed = False
 Private Sub Aceptar_Click()
 
 Call SendData("/SALIR")
+If ResOriginal <> True Then Call ResetResolution
 Unload Me
 Unload frmMain
-
 End Sub
 
 Private Sub Cancelar_Click()

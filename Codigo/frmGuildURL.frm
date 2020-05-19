@@ -96,7 +96,7 @@ Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y A
 
    If bmoving = False And Button = vbLeftButton Then
 
-      DX = X
+      Dx3 = X
 
       dy = Y
 
@@ -104,7 +104,6 @@ Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y A
 
    End If
 
-   
 
 End Sub
 
@@ -112,9 +111,9 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-   If bmoving And ((X <> DX) Or (Y <> dy)) Then
+   If bmoving And ((X <> Dx3) Or (Y <> dy)) Then
 
-      Move Left + (X - DX), Top + (Y - dy)
+      Move Left + (X - Dx3), Top + (Y - dy)
 
    End If
 
