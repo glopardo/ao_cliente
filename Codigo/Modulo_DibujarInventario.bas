@@ -1,4 +1,4 @@
-Attribute VB_Name = "DibujarInventario"
+Attribute VB_Name = "modInventarioGrafico"
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -36,22 +36,15 @@ Attribute VB_Name = "DibujarInventario"
 
 Option Explicit
 
-
-
-
-
-
-
 Public Const XCantItems = 5
 
+
+Public ActualizarInv As Boolean
 Public OffsetDelInv As Integer
 Public ItemElegido As Integer
 Public mx As Integer
 Public my As Integer
 
-Private AuxSurface   As DirectDrawSurface7
-Private BoxSurface   As DirectDrawSurface7
-Private SelSurface   As DirectDrawSurface7
 Private bStaticInit  As Boolean
 Private r1           As RECT, r2 As RECT, auxr As RECT
 Private rBox         As RECT
@@ -72,29 +65,33 @@ Sub ActualizarInventario(Slot As Integer)
 Dim OBJIndex As Long
 Dim NameSize As Byte
 
+ActualizarInv = True
+
 If UserInventory(Slot).Amount = 0 Then
-    frmMain.imgObjeto(Slot).ToolTipText = "Nada"
-    frmMain.lblObjCant(Slot).ToolTipText = "Nada"
-    frmMain.lblObjCant(Slot).Caption = ""
-    If ItemElegido = Slot Then frmMain.Shape1.Visible = False
+    'frmMain.imgObjeto(Slot).ToolTipText = "Nada"
+    'frmMain.lblObjCant(Slot).ToolTipText = "Nada"
+    'frmMain.lblObjCant(Slot).Caption = ""
+    'If ItemElegido = Slot Then frmMain.Shape1.Visible = False
+    'frmMain.Inventario.ToolTipText = "Nada"
 Else
-    frmMain.imgObjeto(Slot).ToolTipText = UserInventory(Slot).Name
-    frmMain.lblObjCant(Slot).ToolTipText = UserInventory(Slot).Name
-    frmMain.lblObjCant(Slot).Caption = CStr(UserInventory(Slot).Amount)
-    If ItemElegido = Slot Then frmMain.Shape1.Visible = True
+    'frmMain.Inventario.ToolTipText = UserInventory(Slot).Name
+    'frmMain.imgObjeto(Slot).ToolTipText = UserInventory(Slot).Name
+    'frmMain.lblObjCant(Slot).ToolTipText = UserInventory(Slot).Name
+    'frmMain.lblObjCant(Slot).Caption = CStr(UserInventory(Slot).Amount)
+    'If ItemElegido = Slot Then frmMain.Shape1.Visible = True
 End If
 
-If UserInventory(Slot).GrhIndex > 0 Then
-    frmMain.imgObjeto(Slot).Picture = LoadPicture(DirGraficos & GrhData(UserInventory(Slot).GrhIndex).FileNum & ".bmp")
-Else
-    frmMain.imgObjeto(Slot).Picture = LoadPicture()
-End If
+'If UserInventory(Slot).GrhIndex > 0 Then
+    'frmMain.imgObjeto(Slot).Picture = LoadPicture(DirGraficos & GrhData(UserInventory(Slot).GrhIndex).FileNum & ".bmp")
+'Else
+    'frmMain.imgObjeto(Slot).Picture = LoadPicture()
+'End If
 
-If UserInventory(Slot).Equipped > 0 Then
-    frmMain.Label2(Slot).Visible = True
-Else
-    frmMain.Label2(Slot).Visible = False
-End If
+'If UserInventory(Slot).Equipped > 0 Then
+'    frmMain.Label2(Slot).Visible = True
+'Else
+'    frmMain.Label2(Slot).Visible = False
+'End If
 
 If frmComerciar.Visible Then
     If UserInventory(Slot).Amount = 0 Then
@@ -105,44 +102,4 @@ If frmComerciar.Visible Then
     If frmComerciar.List1(1).ListIndex = Slot - 1 And lista = 1 Then Call ActualizarInformacionComercio(1)
 End If
 
-End Sub
-Private Sub InitMem()
-    Dim ddck        As DDCOLORKEY
-    Dim SurfaceDesc As DDSURFACEDESC2
-    
-    
-    r1.Right = 32: r1.Bottom = 32
-    r2.Right = 32: r2.Bottom = 32
-    
-    With SurfaceDesc
-        .lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
-        .ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN Or DDSCAPS_SYSTEMMEMORY
-        .lHeight = r1.Bottom
-        .lWidth = r1.Right
-    End With
-
-    
-    Set AuxSurface = DirectDraw.CreateSurface(SurfaceDesc)
-    Set BoxSurface = DirectDraw.CreateSurface(SurfaceDesc)
-    Set SelSurface = DirectDraw.CreateSurface(SurfaceDesc)
-
-    
-    AuxSurface.SetColorKey DDCKEY_SRCBLT, ddck
-    BoxSurface.SetColorKey DDCKEY_SRCBLT, ddck
-    SelSurface.SetColorKey DDCKEY_SRCBLT, ddck
-
-    auxr.Right = 32: auxr.Bottom = 32
-
-    AuxSurface.SetFontTransparency True
-    AuxSurface.SetFont frmMain.Font
-    SelSurface.SetFontTransparency True
-    SelSurface.SetFont frmMain.Font
-
-    
-    With rBoxFrame(0): .Left = 0:  .Top = 0: .Right = 32: .Bottom = 32: End With
-    With rBoxFrame(1): .Left = 32: .Top = 0: .Right = 64: .Bottom = 32: End With
-    With rBoxFrame(2): .Left = 64: .Top = 0: .Right = 96: .Bottom = 32: End With
-    iFrameMod = 1
-
-    bStaticInit = True
 End Sub

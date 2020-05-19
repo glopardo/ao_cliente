@@ -1,4 +1,4 @@
-Attribute VB_Name = "Mod_TCP"
+Attribute VB_Name = "modTCP"
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -102,7 +102,7 @@ Dim rdata4
                       
 
 
-    If Left$(Rdata, 1) = "Ç" Then Rdata = (Right$(Rdata, Len(Rdata) - 1))
+    If left$(Rdata, 1) = "Ç" Then Rdata = (Right$(Rdata, Len(Rdata) - 1))
     Debug.Print "<< " & Rdata
     sdata = Rdata
     
@@ -120,7 +120,12 @@ Dim rdata4
                 Unload frmConnect
                 frmMain.Show
             End If
-            Call SetConnected
+            
+            Connected = True
+            Unload frmConnect
+            frmMain.Label8.Caption = UserName
+            frmMain.Visible = True
+            
             If tipf = "1" And PrimeraVez Then
                  frmtip.Visible = True
                  PrimeraVez = False
@@ -132,14 +137,14 @@ Dim rdata4
             bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
             MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
             MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
-            Call Dialogos.BorrarDialogos
+            Call Dialogos.RemoveAllDialogs
             Call DoFogataFx
             Exit Sub
         Case "MT"
             ModoTrabajo = Not ModoTrabajo
             Exit Sub
         Case "QTDL"
-            Call Dialogos.BorrarDialogos
+            Call Dialogos.RemoveAllDialogs
             Exit Sub
         Case "NAVEG"
             UserNavegando = Not UserNavegando
@@ -171,18 +176,15 @@ Dim rdata4
             CharList(UserCharIndex).Navegando = False
             frmConnect.Visible = True
             frmMain.NumOnline.Visible = False
-            LoopMidi = True
-            If Musica = 0 Then
-                Call CargarMIDI(DirMidi & MIdi_Inicio & ".mid")
-                Play_Midi
-            End If
-            Call frmMain.StopSound
+
+                Call Audio.PlayMIDI(MIdi_Inicio & ".mid")
+            Call Audio.StopWave
             frmMain.IsPlaying = plNone
             bRain = False
             bFogata = False
             SkillPoints = 0
             frmMain.Label1.Visible = False
-            Call Dialogos.BorrarDialogos
+            Call Dialogos.RemoveAllDialogs
             For i = 1 To LastChar
                 CharList(i).invisible = False
             Next i
@@ -201,8 +203,8 @@ Dim rdata4
             For i = 1 To UBound(UserInventory)
                 frmComerciar.List1(1).AddItem UserInventory(i).Name
             Next
-            frmComerciar.Image2(0).Left = 182
-            frmComerciar.cantidad.Left = 248
+            frmComerciar.Image2(0).left = 182
+            frmComerciar.cantidad.left = 248
             frmComerciar.Image2(1).Visible = False
             frmComerciar.precio.Visible = False
             frmComerciar.Image1(0).Picture = LoadPicture(DirGraficos & "\Comprar.gif")
@@ -215,8 +217,8 @@ Dim rdata4
             For i = 1 To UBound(UserInventory)
                 frmComerciar.List1(1).AddItem UserInventory(i).Name
             Next
-            frmComerciar.Image2(0).Left = 182
-            frmComerciar.cantidad.Left = 248
+            frmComerciar.Image2(0).left = 182
+            frmComerciar.cantidad.left = 248
             frmComerciar.Image2(1).Visible = False
             frmComerciar.precio.Visible = False
             frmComerciar.Image1(0).Picture = LoadPicture(DirGraficos & "\Retirar.gif")
@@ -230,8 +232,8 @@ Dim rdata4
             For i = 1 To UBound(UserInventory)
                 frmComerciar.List1(1).AddItem UserInventory(i).Name
             Next
-            frmComerciar.Image2(0).Left = 98
-            frmComerciar.cantidad.Left = 163
+            frmComerciar.Image2(0).left = 98
+            frmComerciar.cantidad.left = 163
             frmComerciar.Image2(1).Visible = True
             frmComerciar.precio.Visible = True
             frmComerciar.Image1(0).Picture = LoadPicture(DirGraficos & "\Quitar.gif")
@@ -287,28 +289,28 @@ Dim rdata4
             Exit Sub
     End Select
 
-Select Case Left$(sdata, 1)
+Select Case left$(sdata, 1)
         Case "-"
         Rdata = Right$(sdata, Len(sdata) - 1)
 
         
         
             If FX = 0 Then
-                 Call PlayWaveDS("2.wav")
+                 Call Audio.PlayWave("2.wav")
             End If
             CharList(Rdata).haciendoataque = 1
             Exit Sub
 End Select
-Select Case Left$(sdata, 1)
+Select Case left$(sdata, 1)
         Case "&"
             Rdata = Right$(sdata, Len(sdata) - 1)
             If FX = 0 Then
-                 Call PlayWaveDS("37.wav")
+                 Call Audio.PlayWave("37.wav")
             End If
             CharList(Rdata).haciendoataque = 1
             Exit Sub
 End Select
-Select Case Left$(sdata, 1)
+Select Case left$(sdata, 1)
         Case "\"
         Dim intte As Integer
         Rdata = Right$(sdata, Len(sdata) - 1)
@@ -316,28 +318,28 @@ intte = ReadField(1, Rdata, 44)
        
         
             If FX = 0 Then
-                 Call PlayWaveDS(ReadField(2, Rdata, 44) & ".wav")
+                 Call Audio.PlayWave(ReadField(2, Rdata, 44) & ".wav")
             End If
             CharList(intte).haciendoataque = 1
             Exit Sub
 End Select
-Select Case Left$(sdata, 1)
+Select Case left$(sdata, 1)
     Case "$"
         Rdata = Right$(sdata, Len(sdata) - 1)
         If FX = 0 Then
-             Call PlayWaveDS("10.wav")
+             Call Audio.PlayWave("10.wav")
         End If
         CharList(Rdata).haciendoataque = 1
         Exit Sub
         
     Case "?"
         Rdata = Right$(sdata, Len(sdata) - 1)
-        If FX = 0 Then Call PlayWaveDS("12.wav")
+        If FX = 0 Then Call Audio.PlayWave("12.wav")
         CharList(Rdata).haciendoataque = 1
         Exit Sub
 End Select
 
-    Select Case Left$(sdata, 3)
+    Select Case left$(sdata, 3)
         Case "NON"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
             frmMain.NumOnline = Rdata
@@ -345,7 +347,7 @@ End Select
             Exit Sub
         Case "INT"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
-            Select Case Left$(Rdata, 1)
+            Select Case left$(Rdata, 1)
                 Case "A"
                     IntervaloGolpe = Val(Right$(Rdata, Len(Rdata) - 1)) / 10
                 Case "S"
@@ -360,7 +362,6 @@ End Select
             bK = 0
             bO = 100
             bRK = ReadField(2, Rdata, Asc(","))
-            Codifico = ReadField(3, Rdata, 44)
             
             If EstadoLogin = Normal Or EstadoLogin = CrearNuevoPj Then
                 Call Login(ValidarLoginMSG(CInt(bRK)))
@@ -386,19 +387,19 @@ End Select
                If bLluvia(UserMap) <> 0 Then
                     If bTecho Then
                         
-                        
-                        
-                        Call frmMain.StopSound
-                        Call frmMain.Play("lluviainend.wav", False)
+                        If FX = 0 Then
+                        Call Audio.StopWave
+                        Call Audio.PlayWave("lluviainend.wav", 0, 0, Disabled)
                         frmMain.IsPlaying = plNone
+                        End If
                         
                    Else
                         
-                        
-                        
-                        Call frmMain.StopSound
-                        Call frmMain.Play("lluviaoutend.wav", False)
+                        If FX = 0 Then
+                        Call Audio.StopWave
+                        Call Audio.PlayWave("lluviaoutend.wav", 0, 0, Disabled)
                         frmMain.IsPlaying = plNone
+                        End If
                         
                     End If
                End If
@@ -408,7 +409,7 @@ End Select
             Exit Sub
         Case "QDL"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
-            Call Dialogos.QuitarDialogo(Val(Rdata))
+            Call Dialogos.RemoveDialog(Val(Rdata))
             Exit Sub
         Case "CFX"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
@@ -705,11 +706,9 @@ End Select
             Exit Sub
     End Select
     
-    Select Case Left$(sdata, 4)
+    Select Case left$(sdata, 4)
         Case "CEGU"
             UserCiego = True
-            Dim R As RECT
-            BackBufferSurface.BltColorFill R, 0
             Exit Sub
         Case "DUMB"
             UserEstupido = True
@@ -871,7 +870,7 @@ End Select
             Exit Sub
     End Select
     
-Select Case Left$(sdata, 5)
+Select Case left$(sdata, 5)
         Case "RECOM"
             MiClase = Val(Right$(Rdata, Len(Rdata) - 5))
             
@@ -933,7 +932,7 @@ Select Case Left$(sdata, 5)
             Exit Sub
     End Select
     
-    Select Case Left$(sdata, 6)
+    Select Case left$(sdata, 6)
         Case "NSEGUE"
             UserCiego = False
             Exit Sub
@@ -993,7 +992,7 @@ Select Case Left$(sdata, 5)
             Exit Sub
     End Select
     
-    Select Case Left$(sdata, 7)
+    Select Case left$(sdata, 7)
         Case "PEACEDE"
             Rdata = Right$(Rdata, Len(Rdata) - 7)
             Call frmUserRequest.recievePeticion(Rdata)
@@ -1047,7 +1046,7 @@ Select Case Left$(sdata, 5)
     End Select
     
     
-    Select Case UCase$(Left$(Rdata, 9))
+    Select Case UCase$(left$(Rdata, 9))
         Case "COMUSUINV"
             Rdata = Right$(Rdata, Len(Rdata) - 9)
             OtroInventario(1).OBJIndex = ReadField(2, Rdata, 44)
@@ -1081,7 +1080,7 @@ Sub InformacionEncriptada(ByVal Rdata As String)
 Dim i As Integer
 
 For i = 1 To UBound(Mensajes)
-    If UCase$(Left$(Rdata, 2)) = UCase$(Mensajes(i).Code) Then
+    If UCase$(left$(Rdata, 2)) = UCase$(Mensajes(i).Code) Then
         Rdata = Right$(Rdata, Len(Rdata) - 2)
         AddtoRichTextBox frmMain.rectxt, Reemplazo(Mensajes(i).mensaje, Rdata), CInt(Mensajes(i).Red), CInt(Mensajes(i).Green), CInt(Mensajes(i).Blue), Mensajes(i).Bold = 1, Mensajes(i).Italic = 1
         Exit Sub
@@ -1093,11 +1092,11 @@ Function Reemplazo(mensaje As String, Rdata As String) As String
 Dim i As Integer
 
 For i = 1 To Len(mensaje)
-    If Mid$(mensaje, i, 1) = "*" Then
-        Reemplazo = Reemplazo & ReadField(Val(Mid$(mensaje, i + 1, 1)), Rdata, 44)
+    If mid$(mensaje, i, 1) = "*" Then
+        Reemplazo = Reemplazo & ReadField(Val(mid$(mensaje, i + 1, 1)), Rdata, 44)
         i = i + 1
     Else
-        Reemplazo = Reemplazo & Mid$(mensaje, i, 1)
+        Reemplazo = Reemplazo & mid$(mensaje, i, 1)
     End If
 Next
 
@@ -1120,9 +1119,14 @@ Dim var2 As Integer
 Dim var1 As Integer
 Dim var4 As Integer
 
-Select Case Left$(Rdata, 2)
+Select Case left$(Rdata, 2)
         Case "ET"
-            Call EliminarDatosMapa
+            For Y = YMinMapSize To YMaxMapSize
+                For X = XMinMapSize To XMaxMapSize
+                    If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
+                    MapData(X, Y).ObjGrh.GrhIndex = 0
+                Next X
+            Next Y
             Exit Sub
         Case "°°"
             CONGELADO = True
@@ -1140,15 +1144,15 @@ Select Case Left$(Rdata, 2)
             TopMapa = 18 + Val(ReadField(4, Rdata, 44)) * 18
             IzquierdaMapa = 25 + Val(ReadField(5, Rdata, 44)) * 18
             
-            frmMapa.personaje.Left = IzquierdaMapa + (UserPos.X - 50) * 0.18
-            frmMapa.personaje.Top = TopMapa + (UserPos.Y - 50) * 0.18
+            frmMapa.personaje.left = IzquierdaMapa + (UserPos.X - 50) * 0.18
+            frmMapa.personaje.top = TopMapa + (UserPos.Y - 50) * 0.18
 
             frmMapa.personaje.Visible = (TopMapa > 18 Or IzquierdaMapa > 25)
             
             frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.Y & "]"
 
-            If FileExist(DirMapas & "Mapa" & UserMap & ".mcl", vbNormal) Then
-                Open DirMapas & "Mapa" & UserMap & ".mcl" For Binary As #1
+            If FileExist(App.Path & "\maps\Mapa" & UserMap & ".mcl", vbNormal) Then
+                Open App.Path & "\maps\Mapa" & UserMap & ".mcl" For Binary As #1
                 Seek #1, 1
                 Get #1, , tempint
                 Close #1
@@ -1156,22 +1160,19 @@ Select Case Left$(Rdata, 2)
                     Call SwitchMapNew(UserMap)
                     If bLluvia(UserMap) = 0 Then
                         If bRain Then
-                            frmMain.StopSound
+                            Audio.StopWave
                             frmMain.IsPlaying = plNone
                         End If
                     End If
                 Else
                     MsgBox "Error en los mapas, algun archivo ha sido modificado o esta dañado."
-                    Call LiberarObjetosDX
                     Call UnloadAllForms
                     End
                 End If
             Else
                 
                 MsgBox "No se encuentra el mapa instalado."
-                Call LiberarObjetosDX
                 Call UnloadAllForms
-                Call EscribirGameIni(Config_Inicio)
                 End
             End If
             Exit Sub
@@ -1182,6 +1183,7 @@ Select Case Left$(Rdata, 2)
             UserPos.Y = CInt(ReadField(2, Rdata, 44))
             MapData(UserPos.X, UserPos.Y).CharIndex = UserCharIndex
             CharList(UserCharIndex).POS = UserPos
+            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or MapData(UserPos.X, UserPos.Y).Trigger = 2 Or MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
             Exit Sub
         Case "4&"
             FrmElegirCamino.Show
@@ -1244,7 +1246,7 @@ Select Case Left$(Rdata, 2)
         Case "1I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             AddtoRichTextBox frmMain.rectxt, Rdata & " ha sido aceptado en el clan.", 255, 255, 255, 1, 0
-            If FX = 0 Then Call PlayWaveDS("43.wav")
+            If FX = 0 Then Call Audio.PlayWave("43.wav")
             Exit Sub
         Case "2I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -1307,7 +1309,7 @@ Select Case Left$(Rdata, 2)
 
             UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
             tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1357,7 +1359,7 @@ Select Case Left$(Rdata, 2)
             
             ActualizarInventario (Slot)
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "7I"
@@ -1374,7 +1376,7 @@ Select Case Left$(Rdata, 2)
             End If
             UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1428,7 +1430,7 @@ Select Case Left$(Rdata, 2)
             
             ActualizarInventario (Slot)
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "9I"
@@ -1440,7 +1442,7 @@ Select Case Left$(Rdata, 2)
             frmMain.cantidadhp.Caption = PonerPuntos(UserMinHP) & "/" & PonerPuntos(UserMaxHP)
             UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1489,7 +1491,7 @@ Select Case Left$(Rdata, 2)
             
             ActualizarInventario (Slot)
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "3J"
@@ -1497,7 +1499,7 @@ Select Case Left$(Rdata, 2)
 
             UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1533,7 +1535,7 @@ Select Case Left$(Rdata, 2)
             tempstr = ""
 
             If FX = 0 Then
-                 Call PlayWaveDS("46.wav")
+                 Call Audio.PlayWave("46.wav")
             End If
             tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1633,7 +1635,7 @@ Select Case Left$(Rdata, 2)
 
             UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
             If FX = 0 Then
-                 Call PlayWaveDS("7.wav")
+                 Call Audio.PlayWave("7.wav")
             End If
             tempstr = ""
             If UserInventory(Slot).Equipped = 1 Then
@@ -1683,7 +1685,7 @@ Select Case Left$(Rdata, 2)
             
             ActualizarInventario (Slot)
             If FX = 0 Then
-                 Call PlayWaveDS("7.wav")
+                 Call Audio.PlayWave("7.wav")
             End If
             Exit Sub
         Case "3Q"
@@ -1691,7 +1693,7 @@ Select Case Left$(Rdata, 2)
             Dim ibser As Integer
             ibser = Val(ReadField(3, Rdata, 176))
             If ibser > 0 Then
-                Dialogos.CrearDialogo ReadField(2, Rdata, 176), ibser, Val(ReadField(1, Rdata, 176))
+                Dialogos.CreateDialog ReadField(2, Rdata, 176), ibser, Val(ReadField(1, Rdata, 176))
               
                 
                 
@@ -1771,28 +1773,28 @@ Select Case Left$(Rdata, 2)
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             AddtoRichTextBox frmMain.rectxt, "Tu clan ha firmado una alianza con " & Rdata, 255, 255, 255, 1, 0
             If FX = 0 Then
-                 Call PlayWaveDS("45.wav")
+                 Call Audio.PlayWave("45.wav")
             End If
             Exit Sub
         Case "!S"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             AddtoRichTextBox frmMain.rectxt, Rdata & " firmó una alianza con tu clan.", 255, 255, 255, 1, 0
             If FX = 0 Then
-                 Call PlayWaveDS("45.wav")
+                 Call Audio.PlayWave("45.wav")
             End If
             Exit Sub
         Case "!U"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             AddtoRichTextBox frmMain.rectxt, "Tu clan le declaró la guerra a " & Rdata, 255, 255, 255, 1, 0
             If FX = 0 Then
-                 Call PlayWaveDS("45.wav")
+                 Call Audio.PlayWave("45.wav")
             End If
             Exit Sub
         Case "!V"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             AddtoRichTextBox frmMain.rectxt, Rdata & " le declaró la guerra a tu clan.", 255, 255, 255, 1, 0
             If FX = 0 Then
-                 Call PlayWaveDS("45.wav")
+                 Call Audio.PlayWave("45.wav")
             End If
             Exit Sub
         Case "!4"
@@ -1801,20 +1803,20 @@ Select Case Left$(Rdata, 2)
             Text2 = ReadField(2, Rdata, 44)
             AddtoRichTextBox frmMain.rectxt, "¡" & Text1 & " fundó el clan " & Text2 & "!", 255, 255, 255, 1, 0
             If FX = 0 Then
-                 Call PlayWaveDS("44.wav")
+                 Call Audio.PlayWave("44.wav")
             End If
             Exit Sub
         Case "/O"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Call Dialogos.CrearDialogo("El negocio va bien, ya he conseguido " & ReadField(1, Rdata, 44) & " monedas de oro en ventas. He enviado el dinero directamente a tu cuenta en el banco.", Val(ReadField(2, Rdata, 44)), vbWhite)
+            Call Dialogos.CreateDialog("El negocio va bien, ya he conseguido " & ReadField(1, Rdata, 44) & " monedas de oro en ventas. He enviado el dinero directamente a tu cuenta en el banco.", Val(ReadField(2, Rdata, 44)), vbWhite)
             Exit Sub
         Case "/P"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Call Dialogos.CrearDialogo("El negocio no va muy bien, todavía no he podido vender nada. Si consigo una venta, enviare el dinero directamente a tu cuenta en el banco.", Val(Rdata), vbWhite)
+            Call Dialogos.CreateDialog("El negocio no va muy bien, todavía no he podido vender nada. Si consigo una venta, enviare el dinero directamente a tu cuenta en el banco.", Val(Rdata), vbWhite)
             Exit Sub
         Case "/Q"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Call Dialogos.CrearDialogo("¡Buen día! Ahora estoy contratado por " & ReadField(1, Rdata, 44) & " para vender sus objetos, ¿quieres echar un vistazo?", Val(ReadField(2, Rdata, 44)), vbWhite)
+            Call Dialogos.CreateDialog("¡Buen día! Ahora estoy contratado por " & ReadField(1, Rdata, 44) & " para vender sus objetos, ¿quieres echar un vistazo?", Val(ReadField(2, Rdata, 44)), vbWhite)
             Exit Sub
         Case "/R"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -1823,7 +1825,7 @@ Select Case Left$(Rdata, 2)
             Exit Sub
         Case "/V"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Call Dialogos.CrearDialogo("Solo los trabajadores experimentados y los personajes mayores a nivel 25 con más de 65 en comercio pueden utilizar mis servicios de vendedor.", Val(Rdata), vbWhite)
+            Call Dialogos.CreateDialog("Solo los trabajadores experimentados y los personajes mayores a nivel 25 con más de 65 en comercio pueden utilizar mis servicios de vendedor.", Val(Rdata), vbWhite)
             Exit Sub
         Case "/X"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -1967,10 +1969,10 @@ Select Case Left$(Rdata, 2)
             iUser = Val(ReadField(3, Rdata, 176))
             If iUser > 0 Then
                 If Val(ReadField(1, Rdata, 176)) <> vbCyan And EstaIgnorado(iUser) Then
-                    Dialogos.CrearDialogo "", iUser, Val(ReadField(1, Rdata, 176))
+                    Dialogos.CreateDialog "", iUser, Val(ReadField(1, Rdata, 176))
                     Exit Sub
                 Else
-                    Dialogos.CrearDialogo ReadField(2, Rdata, 176), iUser, Val(ReadField(1, Rdata, 176))
+                    Dialogos.CreateDialog ReadField(2, Rdata, 176), iUser, Val(ReadField(1, Rdata, 176))
                 End If
             Else
                   If PuedoQuitarFoco Then _
@@ -1993,6 +1995,7 @@ Select Case Left$(Rdata, 2)
             UserCharIndex = Val(Rdata)
             UserPos = CharList(UserCharIndex).POS
             frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.Y & "]"
+            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or MapData(UserPos.X, UserPos.Y).Trigger = 2 Or MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
             Exit Sub
         Case "CC"
             Dim clanono As String
@@ -2005,7 +2008,7 @@ Select Case Left$(Rdata, 2)
             CharList(CharIndex).Nombre = ReadField(12, Rdata, 44)
             
             If Right$(CharList(CharIndex).Nombre, 2) = "<>" Then
-                CharList(CharIndex).Nombre = Left$(CharList(CharIndex).Nombre, Len(CharList(CharIndex).Nombre) - 2)
+                CharList(CharIndex).Nombre = left$(CharList(CharIndex).Nombre, Len(CharList(CharIndex).Nombre) - 2)
             End If
             
             CharList(CharIndex).Criminal = Val(ReadField(13, Rdata, 44))
@@ -2260,15 +2263,12 @@ Select Case Left$(Rdata, 2)
             MapData(Val(ReadField(1, Rdata, 44)), Val(ReadField(2, Rdata, 44))).Blocked = Val(ReadField(3, Rdata, 44))
             Exit Sub
         Case "TM"
-            If Musica = 0 Then
                 Rdata = Right$(Rdata, Len(Rdata) - 2)
                 If Val(ReadField(1, Rdata, 45)) <> 0 Then
                     CurMidi = Val(ReadField(1, Rdata, 45)) & ".mid"
-                    LoopMidi = Val(ReadField(2, Rdata, 45))
-                    Call CargarMIDI(DirMidi & CurMidi)
-                    Call Play_Midi
+                    'LoopMidi = Val(ReadField(2, Rdata, 45))
+                    Call Audio.PlayMIDI(CurMidi)
                 End If
-            End If
             Exit Sub
         Case "LH"
             LastHechizo = Timer
@@ -2282,13 +2282,13 @@ Select Case Left$(Rdata, 2)
         Case "TW"
             If FX = 0 Then
                 Rdata = Right$(Rdata, Len(Rdata) - 2)
-                 Call PlayWaveDS(Rdata & ".wav")
+                 Call Audio.PlayWave(Rdata & ".wav")
             End If
             Exit Sub
         Case "TX"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             If FX = 0 Then
-                 Call PlayWaveDS(ReadField(1, Rdata, 44) & ".wav")
+                 Call Audio.PlayWave(ReadField(1, Rdata, 44) & ".wav")
             End If
             CharIndex = Val(ReadField(2, Rdata, 44))
             CharList(CharIndex).FX = Val(ReadField(3, Rdata, 44))
@@ -2304,9 +2304,11 @@ Select Case Left$(Rdata, 2)
             bFogata = True
             
                 If frmMain.IsPlaying <> plFogata Then
-                    frmMain.StopSound
-                    Call frmMain.Play("fuego.wav", True)
-                    frmMain.IsPlaying = plFogata
+                    If FX = 0 Then
+                        Audio.StopWave
+                        Call Audio.PlayWave("fuego.wav", 0, 0, Enabled)
+                        frmMain.IsPlaying = plFogata
+                    End If
                 End If
             
             Exit Sub
@@ -2316,7 +2318,7 @@ End Sub
 Public Function ReplaceData(sdData As String) As String
 Dim Rdata As String
 
-If UCase$(Left$(sdData, 9)) = "/PASSWORD" Then
+If UCase$(left$(sdData, 9)) = "/PASSWORD" Then
     frmCambiarPasswd.Show
     ReplaceData = "NOPUDO"
     Exit Function
@@ -2379,7 +2381,7 @@ Select Case UCase$(sdData)
         ReplaceData = "#4"
 End Select
 
-Select Case UCase$(Left$(sdData, 6))
+Select Case UCase$(left$(sdData, 6))
     Case "/DESC "
         Rdata = Right$(sdData, Len(sdData) - 6)
         ReplaceData = "#5 " & Rdata
@@ -2391,7 +2393,7 @@ Select Case UCase$(Left$(sdData, 6))
         ReplaceData = "#7 " & Rdata
 End Select
         
-Select Case UCase$(Left$(sdData, 8))
+Select Case UCase$(left$(sdData, 8))
     Case "/PASSWD "
         Rdata = Right$(sdData, Len(sdData) - 8)
         ReplaceData = "#8 " & Rdata
@@ -2400,7 +2402,7 @@ Select Case UCase$(Left$(sdData, 8))
         ReplaceData = "#*" & Rdata
 End Select
 
-Select Case UCase$(Left$(sdData, 9))
+Select Case UCase$(left$(sdData, 9))
     Case "/APOSTAR "
         Rdata = Right$(sdData, Len(sdData) - 9)
         ReplaceData = "#9 " & Rdata
@@ -2420,7 +2422,7 @@ Select Case UCase$(Left$(sdData, 9))
         End Select
 End Select
 
-Select Case UCase$(Left$(sdData, 11))
+Select Case UCase$(left$(sdData, 11))
     Case "/DEPOSITAR "
         Rdata = Right$(sdData, Len(sdData) - 11)
         ReplaceData = "#Ñ " & Rdata
@@ -2559,7 +2561,7 @@ Function NameIndex(Name As String) As Integer
 Dim i As Integer
 
 For i = 1 To LastChar
-    If UCase$(Left$(CharList(i).Nombre, Len(Name))) = UCase$(Name) Then
+    If UCase$(left$(CharList(i).Nombre, Len(Name))) = UCase$(Name) Then
         NameIndex = i
         Exit Function
     End If
@@ -2575,11 +2577,11 @@ If Pausa Then Exit Sub
 If CONGELADO And UCase$(sdData) <> "/DESCONGELAR" Then Exit Sub
 If Not frmMain.Socket1.Connected Then Exit Sub
 
-AuxCmd = UCase$(Left$(sdData, 5))
+AuxCmd = UCase$(left$(sdData, 5))
 
 Debug.Print ">> " & sdData
 
-If Left$(sdData, 1) = "/" And Len(sdData) = 2 Then Exit Sub
+If left$(sdData, 1) = "/" And Len(sdData) = 2 Then Exit Sub
 
 sdData = ReplaceData(sdData)
 

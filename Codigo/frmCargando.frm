@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.ocx"
 Begin VB.Form frmCargando 
    AutoRedraw      =   -1  'True
    BackColor       =   &H00000000&
@@ -29,6 +29,7 @@ Begin VB.Form frmCargando
       _ExtentY        =   4128
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
@@ -98,7 +99,7 @@ Attribute VB_Exposed = False
 'elpresi@fenixao.com.ar
 'www.fenixao.com.ar
 
-Private Sub command1_Click()
+Private Sub Command1_Click()
 
 ddsd4.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
 ddsd4.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN

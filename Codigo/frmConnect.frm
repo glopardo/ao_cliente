@@ -154,8 +154,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub command1_Click()
-Password.Left = RandomNumber(1, 9150)
-Password.Top = RandomNumber(1, 7500)
+Password.left = RandomNumber(1, 9150)
+Password.top = RandomNumber(1, 7500)
 Password.Show
 Password.SetFocus
 
@@ -164,7 +164,7 @@ End Sub
 Private Sub Form_KeyPress(KeyAscii As Integer)
 
 If KeyAscii = vbKeyReturn Then
-    Call PlayWaveDS(SND_CLICK)
+    Call Audio.PlayWave(SND_CLICK)
             
     If frmMain.Socket1.Connected Then frmMain.Socket1.Disconnect
     
@@ -185,7 +185,9 @@ If KeyAscii = vbKeyReturn Then
         EstadoLogin = Normal
         Me.MousePointer = 11
         frmMain.Socket1.Connect
+        frmMain.SendTxt.Visible = False
     End If
+
 End If
 
 End Sub
@@ -196,14 +198,12 @@ If KeyCode = 27 Then
     frmCargando.Refresh
     AddtoRichTextBox frmCargando.Status, "Cerrando FenixAO.", 255, 150, 50, 1, 0, 1
     
-    Call SaveGameini
     frmConnect.MousePointer = 1
     frmMain.MousePointer = 1
     prgRun = False
     
     AddtoRichTextBox frmCargando.Status, "Liberando recursos..."
     frmCargando.Refresh
-    LiberarObjetosDX
     AddtoRichTextBox frmCargando.Status, "Hecho", 255, 150, 50, 1, 0, 1
     AddtoRichTextBox frmCargando.Status, "¡¡Gracias por jugar FenixAO!!", 255, 150, 50, 1, 0, 1
     frmCargando.Refresh
@@ -260,17 +260,13 @@ Private Sub Image1_Click(Index As Integer)
 CurServer = 0
 Unload Password
 
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 
 Select Case Index
     Case 0
 
-        If Musica = 0 Then
-            CurMidi = DirMidi & "7.mid"
-            LoopMidi = 1
-            Call CargarMIDI(CurMidi)
-            Call Play_Midi
-        End If
+            CurMidi = "7.mid"
+            Call Audio.PlayMIDI(CurMidi)
 
        
         EstadoLogin = dados
@@ -304,7 +300,7 @@ Select Case Index
         End If
         
     Case 2
-        Call ShellExecute(Me.hwnd, "open", "http://www.fenixao.com.ar/scripts/borrar.php", "", "", 1)
+        Call ShellExecute(Me.hWnd, "open", "http://www.fenixao.com.ar/scripts/borrar.php", "", "", 1)
 
 End Select
 
@@ -316,12 +312,12 @@ MsgBox "Created By Fenix AO Team." & vbCrLf & "Copyright © 2004. Todos los derec
 End Sub
 Private Sub imgGetPass_Click()
 
-Call ShellExecute(Me.hwnd, "open", "http://www.fenixao.com.ar/scripts/recovery.php", "", "", 1)
+Call ShellExecute(Me.hWnd, "open", "http://www.fenixao.com.ar/scripts/recovery.php", "", "", 1)
 
 End Sub
 Private Sub imgWeb_Click()
 
-Call ShellExecute(Me.hwnd, "open", "http://www.fenixao.com.ar", "", "", 1)
+Call ShellExecute(Me.hWnd, "open", "http://www.fenixao.com.ar", "", "", 1)
 
 End Sub
 

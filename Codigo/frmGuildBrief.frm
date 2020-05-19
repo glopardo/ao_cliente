@@ -291,11 +291,11 @@ Attribute VB_Exposed = False
 'elpresi@fenixao.com.ar
 'www.fenixao.com.ar
 Public EsLeader As Boolean
-Public Sub ParseGuildInfo(ByVal buffer As String)
+Public Sub ParseGuildInfo(ByVal Buffer As String)
 Dim BandoClan As Byte, BandoMio As Byte
 
-BandoClan = Val(ReadField(8, buffer, Asc("¬")))
-BandoMio = Val(ReadField(11, buffer, Asc("¬")))
+BandoClan = Val(ReadField(8, Buffer, Asc("¬")))
+BandoMio = Val(ReadField(11, Buffer, Asc("¬")))
 
 If Not EsLeader Then
     Me.Picture = LoadPicture(DirGraficos & "DetallesDeClan.gif")
@@ -320,26 +320,26 @@ Select Case BandoClan
         Nombre.ForeColor = &HE0E0E0
 End Select
 
-Nombre.Caption = ReadField(1, buffer, Asc("¬"))
-fundador.Caption = ReadField(2, buffer, Asc("¬"))
-creacion.Caption = ReadField(3, buffer, Asc("¬"))
-lider.Caption = ReadField(4, buffer, Asc("¬"))
-web.Caption = ReadField(5, buffer, Asc("¬"))
-Miembros.Caption = ReadField(6, buffer, Asc("¬"))
-Eleccion.Caption = ReadField(7, buffer, Asc("¬"))
-Enemigos.Caption = ReadField(9, buffer, Asc("¬"))
-Aliados.Caption = ReadField(10, buffer, Asc("¬"))
+Nombre.Caption = ReadField(1, Buffer, Asc("¬"))
+fundador.Caption = ReadField(2, Buffer, Asc("¬"))
+creacion.Caption = ReadField(3, Buffer, Asc("¬"))
+lider.Caption = ReadField(4, Buffer, Asc("¬"))
+web.Caption = ReadField(5, Buffer, Asc("¬"))
+Miembros.Caption = ReadField(6, Buffer, Asc("¬"))
+Eleccion.Caption = ReadField(7, Buffer, Asc("¬"))
+Enemigos.Caption = ReadField(9, Buffer, Asc("¬"))
+Aliados.Caption = ReadField(10, Buffer, Asc("¬"))
 
 Dim T%, k%
-k% = Val(ReadField(12, buffer, Asc("¬")))
+k% = Val(ReadField(12, Buffer, Asc("¬")))
 
 For T% = 1 To k%
-    Codex(T% - 1).Caption = ReadField(12 + T%, buffer, Asc("¬"))
+    Codex(T% - 1).Caption = ReadField(12 + T%, Buffer, Asc("¬"))
 Next T%
 Dim des$
 
 
-des$ = ReadField(12 + T%, buffer, Asc("¬"))
+des$ = ReadField(12 + T%, Buffer, Asc("¬"))
 
 desc = Replace(des$, "º", vbCrLf)
 
@@ -376,7 +376,7 @@ End Sub
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 If bmoving = False And Button = vbLeftButton Then
-    DX = X
+    Dx3 = X
     dy = Y
     bmoving = True
 End If
@@ -384,7 +384,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> DX) Or (Y <> dy)) Then Move Left + (X - DX), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

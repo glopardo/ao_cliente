@@ -1,4 +1,4 @@
-Attribute VB_Name = "Carteles"
+Attribute VB_Name = "modCarteles"
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -34,8 +34,8 @@ Attribute VB_Name = "Carteles"
 'elpresi@fenixao.com.ar
 'www.fenixao.com.ar
 Option Explicit
-Const XPosCartel = 360
-Const YPosCartel = 335
+Const XPosCartel = 100
+Const YPosCartel = 100
 Const MAXLONG = 40
 
 
@@ -43,8 +43,6 @@ Public Cartel As Boolean
 Public Leyenda As String
 Public LeyendaFormateada() As String
 Public textura As Integer
-
-
 Sub InitCartel(Ley As String, Grh As Integer)
 If Not Cartel Then
     Leyenda = Ley
@@ -71,8 +69,8 @@ End Sub
 
 Private Function DarFormato(s As String, i As Integer, k As Integer, anti As Integer)
 If anti + i <= Len(s) + 1 Then
-    If ((i >= MAXLONG) And Mid$(s, anti + i, 1) = " ") Or (anti + i = Len(s)) Then
-        LeyendaFormateada(k) = Mid$(s, anti, i + 1)
+    If ((i >= MAXLONG) And mid$(s, anti + i, 1) = " ") Or (anti + i = Len(s)) Then
+        LeyendaFormateada(k) = mid$(s, anti, i + 1)
         k = k + 1
         anti = anti + i + 1
         i = 0
@@ -86,15 +84,19 @@ End Function
 
 Sub DibujarCartel()
 If Not Cartel Then Exit Sub
-Dim X As Integer, Y As Integer
-X = XPosCartel + 20
-Y = YPosCartel + 60
-Call DDrawTransGrhIndextoSurface(BackBufferSurface, textura, XPosCartel, YPosCartel, 0, 0)
+
+Dim ColorCartel(3) As Long
+ColorCartel(0) = base_light
+ColorCartel(1) = base_light
+ColorCartel(2) = base_light
+ColorCartel(3) = base_light
+
+Call Device_Box_Textured_Render(textura, XPosCartel, YPosCartel, GrhData(textura).pixelWidth, GrhData(textura).pixelHeight, ColorCartel(), GrhData(textura).sX, GrhData(textura).sY)
 Dim j As Integer, desp As Integer
 
 For j = 0 To UBound(LeyendaFormateada)
-Dialogos.DrawText X, Y + desp, LeyendaFormateada(j), vbWhite
-  desp = desp + (frmMain.Font.Size) + 5
+DrawText 2, 120, 160 + desp, LeyendaFormateada(j), base_light
+  desp = desp + (frmMain.font.size) + 5
 Next
 End Sub
 

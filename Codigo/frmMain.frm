@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
 Object = "{33101C00-75C3-11CF-A8A0-444553540000}#1.0#0"; "CSWSK32.OCX"
 Object = "{B370EF78-425C-11D1-9A28-004033CA9316}#2.0#0"; "Captura.ocx"
 Begin VB.Form frmMain 
@@ -34,8 +33,8 @@ Begin VB.Form frmMain
    ScaleWidth      =   800
    Visible         =   0   'False
    Begin SocketWrenchCtrl.Socket Socket1 
-      Left            =   120
-      Top             =   2760
+      Left            =   11580
+      Top             =   0
       _Version        =   65536
       _ExtentX        =   741
       _ExtentY        =   741
@@ -65,10 +64,24 @@ Begin VB.Form frmMain
       Type            =   1
       Urgent          =   0   'False
    End
+   Begin VB.PictureBox Inventario 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00000000&
+      BorderStyle     =   0  'None
+      ForeColor       =   &H80000008&
+      Height          =   2640
+      Left            =   9000
+      ScaleHeight     =   176
+      ScaleMode       =   3  'Pixel
+      ScaleWidth      =   160
+      TabIndex        =   37
+      Top             =   2520
+      Width           =   2400
+   End
    Begin RichTextLib.RichTextBox rectxt 
       Height          =   1058
       Left            =   240
-      TabIndex        =   77
+      TabIndex        =   27
       TabStop         =   0   'False
       Top             =   805
       Width           =   7935
@@ -92,12 +105,6 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin Captura.wndCaptura Captura1 
-      Left            =   120
-      Top             =   2280
-      _ExtentX        =   688
-      _ExtentY        =   688
-   End
    Begin VB.Frame frInvent 
       BorderStyle     =   0  'None
       Height          =   4358
@@ -109,7 +116,7 @@ Begin VB.Form frmMain
          Height          =   195
          Index           =   3
          Left            =   1515
-         MouseIcon       =   "frmMain.frx":0948
+         MouseIcon       =   "frmMain.frx":0949
          MousePointer    =   99  'Custom
          Top             =   3920
          Width           =   255
@@ -118,7 +125,7 @@ Begin VB.Form frmMain
          Height          =   195
          Index           =   2
          Left            =   1515
-         MouseIcon       =   "frmMain.frx":0C52
+         MouseIcon       =   "frmMain.frx":0C53
          MousePointer    =   99  'Custom
          Top             =   3600
          Width           =   255
@@ -127,7 +134,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   1
          Left            =   1730
-         MouseIcon       =   "frmMain.frx":0F5C
+         MouseIcon       =   "frmMain.frx":0F5D
          MousePointer    =   99  'Custom
          Top             =   3700
          Width           =   200
@@ -136,7 +143,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   0
          Left            =   1380
-         MouseIcon       =   "frmMain.frx":1266
+         MouseIcon       =   "frmMain.frx":1267
          MousePointer    =   99  'Custom
          Top             =   3705
          Width           =   195
@@ -146,342 +153,6 @@ Begin VB.Form frmMain
          Height          =   480
          Left            =   3240
          Top             =   3480
-         Width           =   480
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   3
-         Left            =   1780
-         TabIndex        =   54
-         Top             =   1160
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   3
-         Left            =   1440
-         TabIndex        =   41
-         Top             =   850
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Height          =   480
-         Index           =   3
-         Left            =   1440
-         Top             =   870
-         Width           =   480
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   25
-         Left            =   2740
-         TabIndex        =   76
-         Top             =   3320
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   24
-         Left            =   2260
-         TabIndex        =   75
-         Top             =   3320
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   23
-         Left            =   1780
-         TabIndex        =   74
-         Top             =   3320
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   22
-         Left            =   1300
-         TabIndex        =   73
-         Top             =   3320
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   21
-         Left            =   820
-         TabIndex        =   72
-         Top             =   3320
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   16
-         Left            =   820
-         TabIndex        =   71
-         Top             =   2780
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   17
-         Left            =   1300
-         TabIndex        =   70
-         Top             =   2780
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   18
-         Left            =   1780
-         TabIndex        =   69
-         Top             =   2780
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   19
-         Left            =   2260
-         TabIndex        =   68
-         Top             =   2780
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   20
-         Left            =   2740
-         TabIndex        =   67
-         Top             =   2780
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   15
-         Left            =   2740
-         TabIndex        =   66
-         Top             =   2240
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   14
-         Left            =   2260
-         TabIndex        =   65
-         Top             =   2240
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   13
-         Left            =   1780
-         TabIndex        =   64
-         Top             =   2240
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   12
-         Left            =   1300
-         TabIndex        =   63
-         Top             =   2240
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   11
-         Left            =   820
-         TabIndex        =   62
-         Top             =   2240
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   10
-         Left            =   2740
-         TabIndex        =   61
-         Top             =   1700
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   9
-         Left            =   2260
-         TabIndex        =   60
-         Top             =   1700
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   8
-         Left            =   1780
-         TabIndex        =   59
-         Top             =   1700
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   7
-         Left            =   1300
-         TabIndex        =   58
-         Top             =   1700
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   6
-         Left            =   820
-         TabIndex        =   57
-         Top             =   1700
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   5
-         Left            =   2740
-         TabIndex        =   56
-         Top             =   1160
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   4
-         Left            =   2260
-         TabIndex        =   55
-         Top             =   1160
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   2
-         Left            =   1300
-         TabIndex        =   53
-         Top             =   1160
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label Label2 
-         BackStyle       =   0  'Transparent
-         Caption         =   "+"
-         ForeColor       =   &H0000FFFF&
-         Height          =   195
-         Index           =   1
-         Left            =   820
-         TabIndex        =   52
-         Top             =   1160
-         Visible         =   0   'False
-         Width           =   165
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   1
-         Left            =   480
-         TabIndex        =   43
-         Top             =   850
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   1
-         Left            =   480
-         Stretch         =   -1  'True
-         Top             =   870
          Width           =   480
       End
       Begin VB.Label lblHechizos 
@@ -497,448 +168,11 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   480
          Left            =   1800
-         MouseIcon       =   "frmMain.frx":1570
+         MouseIcon       =   "frmMain.frx":1571
          MousePointer    =   99  'Custom
-         TabIndex        =   44
+         TabIndex        =   19
          Top             =   0
          Width           =   1080
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   8
-         Left            =   1440
-         TabIndex        =   36
-         Top             =   1390
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   2
-         Left            =   960
-         TabIndex        =   42
-         Top             =   850
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   4
-         Left            =   1920
-         TabIndex        =   40
-         Top             =   850
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   5
-         Left            =   2400
-         TabIndex        =   39
-         Top             =   850
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   6
-         Left            =   480
-         TabIndex        =   38
-         Top             =   1390
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   7
-         Left            =   960
-         TabIndex        =   37
-         Top             =   1390
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   11
-         Left            =   480
-         TabIndex        =   33
-         Top             =   1940
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   12
-         Left            =   960
-         TabIndex        =   32
-         Top             =   1940
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   13
-         Left            =   1440
-         TabIndex        =   31
-         Top             =   1940
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   14
-         Left            =   1920
-         TabIndex        =   30
-         Top             =   1940
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   15
-         Left            =   2400
-         TabIndex        =   29
-         Top             =   1940
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   16
-         Left            =   480
-         TabIndex        =   28
-         Top             =   2470
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   17
-         Left            =   960
-         TabIndex        =   27
-         Top             =   2470
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   18
-         Left            =   1440
-         TabIndex        =   26
-         Top             =   2470
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   19
-         Left            =   1920
-         TabIndex        =   25
-         Top             =   2470
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   20
-         Left            =   2400
-         TabIndex        =   24
-         Top             =   2470
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   21
-         Left            =   480
-         TabIndex        =   23
-         Top             =   3020
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   22
-         Left            =   960
-         TabIndex        =   22
-         Top             =   3020
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   23
-         Left            =   1440
-         TabIndex        =   21
-         Top             =   3020
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   24
-         Left            =   1920
-         TabIndex        =   20
-         Top             =   3020
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   25
-         Left            =   2400
-         TabIndex        =   19
-         Top             =   3020
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   9
-         Left            =   1920
-         TabIndex        =   35
-         Top             =   1390
-         Width           =   480
-      End
-      Begin VB.Label lblObjCant 
-         BackStyle       =   0  'Transparent
-         ForeColor       =   &H00FFFFFF&
-         Height          =   180
-         Index           =   10
-         Left            =   2400
-         TabIndex        =   34
-         Top             =   1390
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   2
-         Left            =   960
-         Stretch         =   -1  'True
-         Top             =   870
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   4
-         Left            =   1920
-         Stretch         =   -1  'True
-         Top             =   870
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   5
-         Left            =   2400
-         Stretch         =   -1  'True
-         Top             =   870
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   6
-         Left            =   480
-         Stretch         =   -1  'True
-         Top             =   1410
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   7
-         Left            =   960
-         Stretch         =   -1  'True
-         Top             =   1410
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   8
-         Left            =   1440
-         Stretch         =   -1  'True
-         Top             =   1410
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   9
-         Left            =   1920
-         Stretch         =   -1  'True
-         Top             =   1410
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   10
-         Left            =   2400
-         Stretch         =   -1  'True
-         Top             =   1410
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   11
-         Left            =   480
-         Stretch         =   -1  'True
-         Top             =   1950
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   12
-         Left            =   960
-         Stretch         =   -1  'True
-         Top             =   1950
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   13
-         Left            =   1440
-         Stretch         =   -1  'True
-         Top             =   1950
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   14
-         Left            =   1920
-         Stretch         =   -1  'True
-         Top             =   1950
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   15
-         Left            =   2400
-         Stretch         =   -1  'True
-         Top             =   1950
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   16
-         Left            =   480
-         Stretch         =   -1  'True
-         Top             =   2490
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   17
-         Left            =   960
-         Stretch         =   -1  'True
-         Top             =   2490
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   18
-         Left            =   1440
-         Stretch         =   -1  'True
-         Top             =   2490
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   19
-         Left            =   1920
-         Stretch         =   -1  'True
-         Top             =   2490
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   20
-         Left            =   2400
-         Stretch         =   -1  'True
-         Top             =   2490
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   21
-         Left            =   480
-         Stretch         =   -1  'True
-         Top             =   3030
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   22
-         Left            =   960
-         Stretch         =   -1  'True
-         Top             =   3030
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   23
-         Left            =   1440
-         Stretch         =   -1  'True
-         Top             =   3030
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   24
-         Left            =   1920
-         Stretch         =   -1  'True
-         Top             =   3030
-         Width           =   480
-      End
-      Begin VB.Image imgObjeto 
-         Appearance      =   0  'Flat
-         Height          =   480
-         Index           =   25
-         Left            =   2400
-         Stretch         =   -1  'True
-         Top             =   3030
-         Width           =   480
       End
       Begin VB.Image imgFondoInvent 
          Height          =   4395
@@ -946,46 +180,6 @@ Begin VB.Form frmMain
          Top             =   0
          Width           =   3240
       End
-   End
-   Begin VB.Timer tmrBmp 
-      Left            =   1560
-      Top             =   2280
-   End
-   Begin VB.Timer trabajo 
-      Enabled         =   0   'False
-      Left            =   600
-      Top             =   2760
-   End
-   Begin VB.Timer Second 
-      Enabled         =   0   'False
-      Interval        =   1050
-      Left            =   1080
-      Top             =   2760
-   End
-   Begin VB.Timer SpoofCheck 
-      Enabled         =   0   'False
-      Interval        =   60000
-      Left            =   600
-      Top             =   2280
-   End
-   Begin VB.Timer FPS 
-      Enabled         =   0   'False
-      Interval        =   1000
-      Left            =   1080
-      Top             =   2280
-   End
-   Begin InetCtlsObjects.Inet Inet1 
-      Left            =   2040
-      Top             =   2280
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      _Version        =   393216
-      RequestTimeout  =   30
-   End
-   Begin VB.Timer Attack 
-      Enabled         =   0   'False
-      Left            =   1560
-      Top             =   2760
    End
    Begin VB.TextBox SendTxt 
       BackColor       =   &H00000000&
@@ -1015,7 +209,7 @@ Begin VB.Form frmMain
       BorderStyle     =   0  'None
       Height          =   4395
       Left            =   8520
-      TabIndex        =   45
+      TabIndex        =   20
       Top             =   1680
       Width           =   3240
       Begin VB.ListBox lstHechizos 
@@ -1024,7 +218,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   2565
          Left            =   420
-         TabIndex        =   46
+         TabIndex        =   21
          Top             =   1095
          Width           =   2595
       End
@@ -1041,9 +235,9 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   390
          Left            =   405
-         MouseIcon       =   "frmMain.frx":187A
+         MouseIcon       =   "frmMain.frx":187B
          MousePointer    =   99  'Custom
-         TabIndex        =   51
+         TabIndex        =   26
          Top             =   15
          Width           =   1350
       End
@@ -1051,9 +245,9 @@ Begin VB.Form frmMain
          BackStyle       =   0  'Transparent
          Height          =   360
          Left            =   390
-         MouseIcon       =   "frmMain.frx":1B84
+         MouseIcon       =   "frmMain.frx":1B85
          MousePointer    =   99  'Custom
-         TabIndex        =   50
+         TabIndex        =   25
          Top             =   3840
          Width           =   1305
       End
@@ -1061,9 +255,9 @@ Begin VB.Form frmMain
          BackStyle       =   0  'Transparent
          Height          =   360
          Left            =   1965
-         MouseIcon       =   "frmMain.frx":1E8E
+         MouseIcon       =   "frmMain.frx":1E8F
          MousePointer    =   99  'Custom
-         TabIndex        =   49
+         TabIndex        =   24
          Top             =   3840
          Width           =   1050
       End
@@ -1081,9 +275,9 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   285
          Left            =   2760
-         MouseIcon       =   "frmMain.frx":2198
+         MouseIcon       =   "frmMain.frx":2199
          MousePointer    =   99  'Custom
-         TabIndex        =   48
+         TabIndex        =   23
          Top             =   780
          Width           =   300
       End
@@ -1101,9 +295,9 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   285
          Left            =   2415
-         MouseIcon       =   "frmMain.frx":24A2
+         MouseIcon       =   "frmMain.frx":24A3
          MousePointer    =   99  'Custom
-         TabIndex        =   47
+         TabIndex        =   22
          Top             =   780
          Width           =   300
       End
@@ -1114,23 +308,31 @@ Begin VB.Form frmMain
          Width           =   3240
       End
    End
-   Begin VB.PictureBox Picture1 
+   Begin VB.PictureBox Renderer 
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
-      Height          =   255
-      Left            =   6360
-      ScaleHeight     =   225
-      ScaleWidth      =   345
-      TabIndex        =   86
-      Top             =   8640
-      Width           =   375
+      Height          =   6240
+      Left            =   180
+      ScaleHeight     =   416
+      ScaleMode       =   3  'Pixel
+      ScaleWidth      =   541
+      TabIndex        =   36
+      Top             =   2295
+      Width           =   8115
+      Begin Captura.wndCaptura Captura1 
+         Left            =   0
+         Top             =   0
+         _ExtentX        =   688
+         _ExtentY        =   688
+      End
    End
    Begin VB.Image Image1 
       Height          =   420
       Index           =   3
       Left            =   8640
-      MouseIcon       =   "frmMain.frx":27AC
+      MouseIcon       =   "frmMain.frx":27AD
       MousePointer    =   99  'Custom
       Top             =   8520
       Width           =   3285
@@ -1138,18 +340,10 @@ Begin VB.Form frmMain
    Begin VB.Image Party 
       Height          =   300
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":2AB6
+      MouseIcon       =   "frmMain.frx":2AB7
       MousePointer    =   99  'Custom
       Top             =   7860
       Width           =   1170
-   End
-   Begin VB.Shape MainViewShp 
-      BackColor       =   &H8000000C&
-      BorderColor     =   &H00000000&
-      Height          =   6255
-      Left            =   120
-      Top             =   2280
-      Width           =   8175
    End
    Begin VB.Label NumOnline 
       BackColor       =   &H00000000&
@@ -1166,7 +360,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H0000C000&
       Height          =   210
       Left            =   5909
-      TabIndex        =   85
+      TabIndex        =   35
       Top             =   8625
       Visible         =   0   'False
       Width           =   270
@@ -1187,7 +381,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFFFFF&
       Height          =   240
       Left            =   10920
-      TabIndex        =   84
+      TabIndex        =   34
       Top             =   900
       Visible         =   0   'False
       Width           =   120
@@ -1208,7 +402,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFFFFF&
       Height          =   240
       Left            =   11160
-      TabIndex        =   83
+      TabIndex        =   33
       Top             =   900
       Visible         =   0   'False
       Width           =   105
@@ -1229,7 +423,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   6720
-      TabIndex        =   82
+      TabIndex        =   32
       Top             =   1200
       Visible         =   0   'False
       Width           =   120
@@ -1250,7 +444,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFFFFF&
       Height          =   240
       Left            =   10680
-      TabIndex        =   81
+      TabIndex        =   31
       Top             =   900
       Visible         =   0   'False
       Width           =   105
@@ -1262,7 +456,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   240
-      TabIndex        =   80
+      TabIndex        =   30
       Top             =   1980
       Width           =   750
    End
@@ -1294,7 +488,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H0000C000&
       Height          =   255
       Left            =   7920
-      TabIndex        =   79
+      TabIndex        =   29
       Top             =   8625
       Width           =   225
    End
@@ -1314,15 +508,9 @@ Begin VB.Form frmMain
       ForeColor       =   &H0000C000&
       Height          =   255
       Left            =   7320
-      TabIndex        =   78
+      TabIndex        =   28
       Top             =   8625
       Width           =   300
-   End
-   Begin VB.Image Image6 
-      Height          =   495
-      Left            =   1080
-      Top             =   0
-      Width           =   7455
    End
    Begin VB.Label casco 
       BackColor       =   &H00000000&
@@ -1524,7 +712,7 @@ Begin VB.Form frmMain
    Begin VB.Image Image2 
       Height          =   405
       Left            =   8760
-      MouseIcon       =   "frmMain.frx":2DC0
+      MouseIcon       =   "frmMain.frx":2DC1
       MousePointer    =   99  'Custom
       Top             =   0
       Width           =   1815
@@ -1539,24 +727,25 @@ Begin VB.Form frmMain
    Begin VB.Image Image3 
       Height          =   405
       Left            =   10680
-      MouseIcon       =   "frmMain.frx":30CA
+      MouseIcon       =   "frmMain.frx":30CB
       MousePointer    =   99  'Custom
       Top             =   0
       Width           =   1335
    End
    Begin VB.Label fpstext 
+      AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
       ForeColor       =   &H0000C000&
-      Height          =   255
+      Height          =   195
       Left            =   720
       TabIndex        =   8
       Top             =   90
-      Width           =   255
+      Width           =   45
    End
    Begin VB.Label Label8 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
-      Caption         =   "El Presi"
+      Caption         =   "Thusing"
       BeginProperty Font 
          Name            =   "Verdana"
          Size            =   8.25
@@ -1646,7 +835,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   0
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":33D4
+      MouseIcon       =   "frmMain.frx":33D5
       MousePointer    =   99  'Custom
       Top             =   6840
       Width           =   1170
@@ -1655,7 +844,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   1
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":36DE
+      MouseIcon       =   "frmMain.frx":36DF
       MousePointer    =   99  'Custom
       Top             =   7200
       Width           =   1170
@@ -1664,7 +853,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   2
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":39E8
+      MouseIcon       =   "frmMain.frx":39E9
       MousePointer    =   99  'Custom
       Top             =   7560
       Width           =   1245
@@ -1792,39 +981,19 @@ Attribute VB_Exposed = False
 
 
 Option Explicit
-Private Type BLENDFUNCTION
-BlendOp As Byte
-BlendFlags As Byte
-SourceConstantAlpha As Byte
-AlphaFormat As Byte
-End Type
-Private Const AC_SRC_OVER = &H0
-   
-Private Declare Function AlphaBlend Lib "msimg32.dll" (ByVal hdcDest As Long, ByVal xOriginDest As Long, ByVal yOriginDest As Long, ByVal WidthDest As Long, ByVal HeightDest As Long, ByVal hdcSrc As Long, ByVal xOriginSrc As Long, ByVal yOriginSrc As Long, ByVal WidthSrc As Long, ByVal HeightSrc As Long, ByVal BLENDFUNCT As Long) As Long
-Private Declare Sub RtlMoveMemory Lib "kernel32.dll" (Destination As Any, source As Any, ByVal Length As Long)
-   
-Dim Blend As BLENDFUNCTION
-Dim blendlong As Long
-Dim Contador As Integer
 
-Public ActualSecond As Long
-Public LastSecond As Long
 Public tX As Integer
 Public tY As Integer
 Public MouseX As Long
 Public MouseY As Long
+Public MouseIX As Integer
+Public MouseIY As Integer
+Public BotonIClick As Integer
 
-Dim gDSB As DirectSoundBuffer
-Dim gD As DSBUFFERDESC
-Dim gW As WAVEFORMATEX
-Dim gFileName As String
-Dim dsE As DirectSoundEnum
-Dim POS(0) As DSBPOSITIONNOTIFY
+
 Public IsPlaying As Byte
 Public boton As Integer
 
-Dim endEvent As Long
-Implements DirectXEvent
 Private Sub Form_Activate()
 
 If frmParty.Visible Then frmParty.SetFocus
@@ -1832,7 +1001,7 @@ If frmParty2.Visible Then frmParty2.SetFocus
 
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Renderer_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 boton = Button
 
@@ -1850,37 +1019,18 @@ Call SendData("ZI" & ItemElegido & "," & Index)
 
 Select Case Index
     Case 0
-        Shape1.Top = imgObjeto(ItemElegido - 1).Top
-        Shape1.Left = imgObjeto(ItemElegido - 1).Left
         ItemElegido = ItemElegido - 1
     Case 1
-        Shape1.Top = imgObjeto(ItemElegido + 1).Top
-        Shape1.Left = imgObjeto(ItemElegido + 1).Left
         ItemElegido = ItemElegido + 1
     Case 2
-        Shape1.Top = imgObjeto(ItemElegido - 5).Top
-        Shape1.Left = imgObjeto(ItemElegido - 5).Left
         ItemElegido = ItemElegido - 5
     Case 3
-        Shape1.Top = imgObjeto(ItemElegido + 5).Top
-        Shape1.Left = imgObjeto(ItemElegido + 5).Left
         ItemElegido = ItemElegido + 5
 End Select
 
 End Sub
 
 Private Sub Image7_Click()
-
-End Sub
-
-Private Sub Label2_Click(Index As Integer)
-
-If ItemElegido <> Index And UserInventory(Index).Name <> "Nada" Then
-    Shape1.Visible = True
-    Shape1.Top = imgObjeto(Index).Top
-    Shape1.Left = imgObjeto(Index).Left
-    ItemElegido = Index
-End If
 
 End Sub
 
@@ -1918,7 +1068,7 @@ If lstHechizos.ListIndex <= 33 Then Call SendData("DESPHE" & 2 & "," & lstHechiz
 lstHechizos.ListIndex = lstHechizos.ListIndex + 1
 
 End Sub
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Renderer_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 MouseX = X
 MouseY = Y
@@ -1931,29 +1081,20 @@ If FX = 0 And RandomNumber(1, 150) < 12 Then
     n = RandomNumber(1, 45)
     Select Case n
         Case Is <= 15
-            Call PlayWaveDS("22.wav")
+            Call Audio.PlayWave("22.wav")
         Case Is <= 30
-            Call PlayWaveDS("21.wav")
+            Call Audio.PlayWave("21.wav")
         Case Is <= 35
-            Call PlayWaveDS("28.wav")
+            Call Audio.PlayWave("28.wav")
         Case Is <= 40
-            Call PlayWaveDS("29.wav")
+            Call Audio.PlayWave("29.wav")
         Case Is <= 45
-            Call PlayWaveDS("34.wav")
+            Call Audio.PlayWave("34.wav")
     End Select
 End If
 
 End Sub
-Private Sub imgObjeto_Click(Index As Integer)
 
-If ItemElegido <> Index And UserInventory(Index).Name <> "Nada" Then
-    Shape1.Visible = True
-    Shape1.Top = imgObjeto(Index).Top
-    Shape1.Left = imgObjeto(Index).Left
-    ItemElegido = Index
-End If
-
-End Sub
 Private Sub imgObjeto_DblClick(Index As Integer)
 
 If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
@@ -1963,28 +1104,21 @@ If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
 End Sub
 Private Sub lblHechizos_Click()
 
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 frHechizos.Visible = True
 frInvent.Visible = False
+Inventario.Visible = False
 
 End Sub
 Private Sub lblInvent_Click()
 
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 frInvent.Visible = True
 frHechizos.Visible = False
-
+Inventario.Visible = True
+ActualizarInv = True
 End Sub
-Private Sub lblObjCant_Click(Index As Integer)
 
-If ItemElegido <> Index And UserInventory(Index).Name <> "Nada" Then
-    Shape1.Visible = True
-    Shape1.Top = imgObjeto(Index).Top
-    Shape1.Left = imgObjeto(Index).Left
-    ItemElegido = Index
-End If
-
-End Sub
 Private Sub lblObjCant_DblClick(Index As Integer)
 
 If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
@@ -1992,78 +1126,14 @@ If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
 If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
 
 End Sub
-Private Sub DirectXEvent_DXCallback(ByVal eventid As Long)
-
-End Sub
-Private Sub CreateEvent()
-
-endEvent = DirectX.CreateEvent(Me)
-
-End Sub
-
-
-Private Function LoadSoundBufferFromFile(sFile As String) As Integer
-    On Error GoTo err_out
-        With gD
-            .lFlags = DSBCAPS_CTRLVOLUME Or DSBCAPS_CTRLPAN Or DSBCAPS_CTRLFREQUENCY Or DSBCAPS_CTRLPOSITIONNOTIFY
-            .lReserved = 0
-        End With
-        Set gDSB = DirectSound.CreateSoundBufferFromFile(DirSound & sFile, gD, gW)
-        With POS(0)
-            .hEventNotify = endEvent
-            .lOffset = -1
-        End With
-        DirectX.SetEvent endEvent
-
-        
-    Exit Function
-
-err_out:
-    MsgBox "Error creating sound buffer", vbApplicationModal
-    LoadSoundBufferFromFile = 1
-
-
-End Function
-
-
-Public Sub Play(ByVal Nombre As String, Optional ByVal LoopSound As Boolean = False)
-    If FX = 1 Then Exit Sub
-    Call LoadSoundBufferFromFile(Nombre)
-
-    If LoopSound Then
-        gDSB.Play DSBPLAY_LOOPING
-    Else
-        gDSB.Play DSBPLAY_DEFAULT
-    End If
-
-End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-
-If endEvent Then DirectX.DestroyEvent endEvent
 
 If prgRun Then
     prgRun = False
     Cancel = 1
 End If
 
-End Sub
-Public Sub StopSound()
-On Local Error Resume Next
-
-If Not gDSB Is Nothing Then
-    gDSB.Stop
-    gDSB.SetCurrentPosition 0
-End If
-
-End Sub
-Private Sub FPS_Timer()
-
-If logged And Not frmMain.Visible Then
-    Unload frmConnect
-    frmMain.Show
-End If
-    
 End Sub
 Private Sub Image2_Click()
 
@@ -2095,7 +1165,6 @@ SendTxt.Visible = False
 frmMain.SetFocus
 
 End Sub
-
 Private Sub SendTxt_KeyUp(KeyCode As Integer, Shift As Integer)
 
 If KeyCode = vbKeyReturn Then
@@ -2107,34 +1176,6 @@ If KeyCode = vbKeyReturn Then
 End If
 
 End Sub
-Private Sub SpoofCheck_Timer()
-
-Dim IPMMSB As Byte
-Dim IPMSB As Byte
-Dim IPLSB As Byte
-Dim IPLLSB As Byte
-
-IPLSB = 3 + 15
-IPMSB = 32 + 15
-IPMMSB = 200 + 15
-IPLLSB = 74 + 15
-
-If IPdelServidor <> ((IPMMSB - 15) & "." & (IPMSB - 15) & "." & (IPLSB - 15) _
-& "." & (IPLLSB - 15)) Then End
-
-End Sub
-
-Private Sub Second_Timer()
-    ActualSecond = Mid$(time, 7, 2)
-    ActualSecond = ActualSecond + 1
-    If ActualSecond = LastSecond Then End
-    LastSecond = ActualSecond
-End Sub
-
-
-
-
-
 Private Sub TirarItem()
     If (ItemElegido > 0 And ItemElegido < MAX_INVENTORY_SLOTS + 1) Or (ItemElegido = FLAGORO) Then
         If UserInventory(ItemElegido).Amount = 1 Then
@@ -2166,11 +1207,6 @@ If (ItemElegido > 0) And (ItemElegido < MAX_INVENTORY_SLOTS + 1) Then _
         SendData "EQUI" & ItemElegido
         
 End Sub
-
-
-
-
-
 Private Sub lblLanzar_Click()
 
 If lstHechizos.List(lstHechizos.ListIndex) <> "Nada" And TiempoTranscurrido(LastHechizo) >= IntervaloSpell And TiempoTranscurrido(Hechi) >= IntervaloSpell / 4 Then
@@ -2182,12 +1218,12 @@ End Sub
 Private Sub lblInfo_Click()
     Call SendData("INFS" & lstHechizos.ListIndex + 1)
 End Sub
-Private Sub Form_Click()
+Private Sub Renderer_Click()
 
 If Cartel Then Cartel = False
 
 If Comerciando = 0 Then
-    Call ConvertCPtoTP(MainViewShp.Left, MainViewShp.Top, MouseX, MouseY, tX, tY)
+    Call ConvertCPtoTP(MouseX, MouseY, tX, tY)
     If Abs(UserPos.Y - tY) > 6 Then Exit Sub
     If Abs(UserPos.X - tX) > 8 Then Exit Sub
     If EligiendoWhispereo Then
@@ -2221,49 +1257,10 @@ boton = 0
 
 End Sub
 
-Private Sub Form_DblClick()
+Private Sub Renderer_DblClick()
     If Not frmForo.Visible Then
         SendData "RC" & tX & "," & tY
     End If
-End Sub
-
-
-Private Sub Image6_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
-   If bmoving = False And Button = vbLeftButton And Desplazar = True Then
-
-      DX = X
-
-      dy = Y
-
-      bmoving = True
-
-   End If
-
-   
-
-End Sub
-Private Sub Image6_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
-If bmoving And ((X <> DX) Or (Y <> dy)) And Desplazar = True Then
-    Move Left + (X - DX), Top + (Y - dy)
-    MainViewRect.Left = 7 + (frmMain.Left / 15) + 32 * RenderMod.iImageSize
-    MainViewRect.Top = 152 + (frmMain.Top / 15) + 32 * RenderMod.iImageSize
-    MainViewRect.Right = (MainViewRect.Left + MainViewWidth) - 32 * (RenderMod.iImageSize * 2)
-    MainViewRect.Bottom = (MainViewRect.Top + MainViewHeight) - 32 * (RenderMod.iImageSize * 2)
-End If
-   
-End Sub
-Private Sub Image6_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
-If Button = vbLeftButton And Desplazar = True Then
-    bmoving = False
-    MainViewRect.Left = 7 + (frmMain.Left / 15) + 32 * RenderMod.iImageSize
-    MainViewRect.Top = 152 + (frmMain.Top / 15) + 32 * RenderMod.iImageSize
-    MainViewRect.Right = (MainViewRect.Left + MainViewWidth) - 32 * (RenderMod.iImageSize * 2)
-    MainViewRect.Bottom = (MainViewRect.Top + MainViewHeight) - 32 * (RenderMod.iImageSize * 2)
-End If
-
 End Sub
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
 On Error Resume Next
@@ -2271,17 +1268,21 @@ On Error Resume Next
 If Not SendTxt.Visible Then
 
     Select Case KeyCode
+
             
         Case vbKeyM:
-            If Not IsPlayingCheck Then
-                Musica = 0
-                Play_Midi
-                frmOpciones.PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
-            Else
-                Musica = 1
-                frmOpciones.PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
-                Stop_Midi
-            End If
+            Select Case Musica
+                Case 0
+                    Musica = 1
+                    Audio.StopMidi
+                    frmOpciones.PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
+                Case 1
+                    Musica = 0
+                    Audio.PlayMIDI CurMidi
+                    frmOpciones.PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
+            End Select
+            Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica", Trim(Str(Musica)))
+            
         Case vbKeyA:
             Call AgarrarItem
         Case vbKeyC:
@@ -2382,7 +1383,7 @@ Select Case KeyCode
         Next
         Call SavePicture(Captura1.Imagen, App.Path & "/screenshots/Imagen" & i & ".bmp")
         Call AddtoRichTextBox(frmMain.rectxt, "Una imagen fue guardada en la carpeta de screenshots bajo el nombre de Imagen" & i & ".bmp", 255, 150, 50, False, False, False)
-        
+    
     Case vbKeyF7:
         Call SendData("/MEDITAR")
     
@@ -2410,7 +1411,6 @@ End Sub
 Sub Form_Load()
 'BETA
 IPdelServidor = "186.19.73.65"
-
 PuertoDelServidor = 10200
 
 FPSFLAG = True
@@ -2439,7 +1439,7 @@ KeyCode = 0
 
 End Sub
 Private Sub Image1_Click(Index As Integer)
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 
 Select Case Index
     Case 0
@@ -2503,6 +1503,60 @@ my = Y \ 32 + 1
 aux = (mx + (my - 1) * 5) + OffsetDelInv
 
 End Sub
+
+Private Sub Inventario_DblClick()
+ 
+Dim X As Integer
+Dim Y As Integer
+ 
+X = (MouseIX + 16) / 32
+Y = (MouseIY + 16) / 32
+ 
+ItemElegido = (Y - 1) * 5 + X
+ 
+If ItemElegido < 1 Then ItemElegido = 1
+If ItemElegido > 25 Then ItemElegido = 25
+ 
+If BotonIClick = 2 Then
+Call SendData("EQUI" & ItemElegido)
+Else
+Call SendData("USE" & ItemElegido) ': pocionesCount = pocionesCount + 1
+End If
+ 
+End Sub
+ 
+Private Sub Inventario_Click()
+
+ActualizarInv = True
+
+Dim X As Integer
+Dim Y As Integer
+ 
+X = (MouseIX + 16) / 32
+Y = (MouseIY + 16) / 32
+ 
+ItemElegido = (Y - 1) * 5 + X
+ 
+If BotonIClick = 2 Then Call SendData("EQUI" & ItemElegido)
+ 
+End Sub
+ 
+Private Sub Inventario_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+ 
+MouseIX = X
+MouseIY = Y
+ 
+End Sub
+ 
+Private Sub Inventario_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+MouseIX = X
+MouseIY = Y
+BotonIClick = Button
+
+
+ 
+End Sub
+
 Private Sub RecTxt_Change()
 On Error Resume Next
 
@@ -2528,16 +1582,8 @@ Private Sub SendTxt_KeyPress(KeyAscii As Integer)
 If Not (KeyAscii = vbKeyBack) And Not (KeyAscii >= vbKeySpace And KeyAscii <= 250) Then KeyAscii = 0
           
 End Sub
-
-
-
-
-
-
 Private Sub Socket1_Connect()
     
-    Second.Enabled = True
-   
     If EstadoLogin = CrearNuevoPj Then
         Call SendData("gIvEmEvAlcOde")
     ElseIf EstadoLogin = Normal Then
@@ -2555,8 +1601,6 @@ End Sub
 
 
 Private Sub Socket1_Disconnect()
-    LastSecond = 0
-    Second.Enabled = False
     logged = False
     Connected = False
     
@@ -2588,8 +1632,6 @@ Private Sub Socket1_Disconnect()
     SkillPoints = 0
     Alocados = 0
 
-    Dialogos.UltimoDialogo = 0
-    Dialogos.CantidadDialogos = 0
 End Sub
 Private Sub Socket1_LastError(ErrorCode As Integer, ErrorString As String, Response As Integer)
 
@@ -2614,8 +1656,6 @@ End Select
 
 frmConnect.MousePointer = 1
 Response = 0
-LastSecond = 0
-Second.Enabled = False
 
 frmMain.Socket1.Disconnect
 
@@ -2648,17 +1688,17 @@ End If
 sChar = 1
 
 For loopc = 1 To Len(RD)
-    tChar = Mid$(RD, loopc, 1)
+    tChar = mid$(RD, loopc, 1)
     
     If tChar = ENDC Then
         CR = CR + 1
-        rBuffer(CR) = Mid$(RD, sChar, loopc - sChar)
+        rBuffer(CR) = mid$(RD, sChar, loopc - sChar)
         sChar = loopc + 1
     End If
 
 Next loopc
 
-If Len(RD) - (sChar - 1) <> 0 Then TempString = Mid$(RD, sChar, Len(RD))
+If Len(RD) - (sChar - 1) <> 0 Then TempString = mid$(RD, sChar, Len(RD))
 
 For loopc = 1 To CR
     Call HandleData(rBuffer(loopc))

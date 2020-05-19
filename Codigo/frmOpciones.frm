@@ -162,7 +162,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "Modo ventana"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -207,7 +207,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "Has sanado"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -226,7 +226,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "Meditación"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -245,7 +245,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "No hay nada aquí"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -254,17 +254,17 @@ Begin VB.Form frmOpciones
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00008000&
-      Height          =   315
+      Height          =   435
       Left            =   2715
       TabIndex        =   15
-      Top             =   1980
+      Top             =   1920
       Width           =   1140
    End
    Begin VB.Label Label7 
       BackColor       =   &H00000000&
       Caption         =   "Abrigarse"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -283,7 +283,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "Menos cansado"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -292,17 +292,17 @@ Begin VB.Form frmOpciones
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00008000&
-      Height          =   255
+      Height          =   450
       Left            =   2715
       TabIndex        =   13
-      Top             =   2470
+      Top             =   2400
       Width           =   1095
    End
    Begin VB.Label Label5 
       BackColor       =   &H00000000&
       Caption         =   "Ocultarse"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -341,7 +341,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "FXs"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -360,7 +360,7 @@ Begin VB.Form frmOpciones
       BackColor       =   &H00000000&
       Caption         =   "Música"
       BeginProperty Font 
-         Name            =   "Arial Narrow"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -444,7 +444,7 @@ Else
     PictureFxs.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
 
-If NoRes = 1 Then
+If NoRes = True Then
     Picture1.Picture = LoadPicture(DirGraficos & "tick1.gif")
 Else
     Picture1.Picture = LoadPicture(DirGraficos & "tick2.gif")
@@ -494,7 +494,7 @@ Me.Visible = False
 End Sub
 Private Sub Label11_Click()
 
-ShellExecute Me.hwnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
+ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
 
 End Sub
 Private Sub Picture1_Click()
@@ -523,6 +523,8 @@ Select Case FX
         PictureFxs.Picture = LoadPicture(DirGraficos & "tick1.gif")
 End Select
 
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX", Trim(Str(FX)))
+
 End Sub
 Private Sub PictureMenosCansado_Click()
 
@@ -534,21 +536,23 @@ Else
     PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
 
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "MenosCansado", Str(CartelMenosCansado))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "MenosCansado", Trim(Str(CartelMenosCansado)))
 
 End Sub
 
 Private Sub PictureMusica_Click()
 
-If Not IsPlayingCheck Then
-    Musica = 0
-    Play_Midi
-    PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    Musica = 1
-    Stop_Midi
-    PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
+Select Case Musica
+    Case 0
+        Musica = 1
+        Audio.StopMidi
+        PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    Case 1
+        Musica = 0
+        Audio.PlayMIDI CurMidi
+        PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
+End Select
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica", Trim(Str(Musica)))
 
 End Sub
 
@@ -560,7 +564,7 @@ Else
     CartelNoHayNada = 0
     PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHayNada", Str(CartelNoHayNada))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHayNada", Trim(Str(CartelNoHayNada)))
 
 End Sub
 
@@ -573,7 +577,7 @@ Else
     CartelOcultarse = 0
     PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Ocultarse", Str(CartelOcultarse))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Ocultarse", Trim(Str(CartelOcultarse)))
 End Sub
 
 Private Sub PictureRecuMana_Click()
@@ -584,7 +588,7 @@ Else
     CartelRecuMana = 0
     PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana", Str(CartelRecuMana))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana", Trim(Str(CartelRecuMana)))
 
 End Sub
 
@@ -596,7 +600,7 @@ Else
     CartelSanado = 0
     PictureSanado.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado", Str(CartelSanado))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado", Trim(Str(CartelSanado)))
 
 End Sub
 
@@ -608,7 +612,7 @@ Else
     CartelVestirse = 0
     PictureVestirse.Picture = LoadPicture(DirGraficos & "tick2.gif")
 End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Vestirse", Str(CartelVestirse))
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Vestirse", Trim(Str(CartelVestirse)))
 
 End Sub
 
@@ -616,7 +620,7 @@ Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y A
 
    If bmoving = False And Button = vbLeftButton Then
 
-      DX = X
+      Dx3 = X
 
       dy = Y
 
@@ -632,9 +636,9 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-   If bmoving And ((X <> DX) Or (Y <> dy)) Then
+   If bmoving And ((X <> Dx3) Or (Y <> dy)) Then
 
-      Move Left + (X - DX), Top + (Y - dy)
+      Move left + (X - Dx3), top + (Y - dy)
 
    End If
 

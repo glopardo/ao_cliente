@@ -945,7 +945,7 @@ Option Explicit
 
 Private Sub command1_Click(Index As Integer)
 
-Call PlayWaveDS(SND_CLICK)
+Call Audio.PlayWave(SND_CLICK)
 
 Dim indice
 If Index Mod 2 = 0 Then
@@ -971,7 +971,7 @@ Else
     End If
 End If
 
-puntos.Caption = Alocados
+Puntos.Caption = Alocados
 End Sub
 
 Private Sub Form_Deactivate()
@@ -981,7 +981,7 @@ End Sub
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 If bmoving = False And Button = vbLeftButton Then
-    DX = X
+    Dx3 = X
     dy = Y
     bmoving = True
 End If
@@ -989,7 +989,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> DX) Or (Y <> dy)) Then Move Left + (X - DX), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

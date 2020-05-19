@@ -231,11 +231,11 @@ MiMensaje(1).Text = ""
     Label1.Visible = True
     Label2.Visible = True
 Else
-    Call SendData("DEMSG" & MiMensaje(0).Text & " [" & frmMain.Label8 & "]" & Chr(176) & "Fecha: " & Date & " || Hora: " & time & " || " & MiMensaje(1).Text)
+    Call SendData("DEMSG" & MiMensaje(0).Text & " [" & frmMain.Label8 & "]" & Chr(176) & "Fecha: " & Date & " || Hora: " & Time & " || " & MiMensaje(1).Text)
 
     List.AddItem MiMensaje(0).Text & " [" & UserName & "]"
     Load Text(List.ListCount)
-    Text(List.ListCount - 1).Text = "Fecha: " & Date & " || Hora: " & time & vbCrLf & "--------------------------------------------" & vbCrLf & vbCrLf & MiMensaje(1).Text
+    Text(List.ListCount - 1).Text = "Fecha: " & Date & " || Hora: " & Time & vbCrLf & "--------------------------------------------" & vbCrLf & vbCrLf & MiMensaje(1).Text
     List.Visible = True
     
     MiMensaje(0).Visible = False
@@ -288,7 +288,7 @@ End Sub
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 If bmoving = False And Button = vbLeftButton Then
-    DX = X
+    Dx3 = X
     dy = Y
     bmoving = True
 End If
@@ -296,7 +296,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> DX) Or (Y <> dy)) Then Move Left + (X - DX), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

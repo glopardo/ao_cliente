@@ -294,17 +294,17 @@ Public Sub parseCharInfo(ByVal Rdata As String)
 Select Case frmmiembros
     Case 0
         Rechazar.Visible = True
-        aceptar.Visible = True
+        Aceptar.Visible = True
         Echar.Visible = False
         desc.Visible = True
     Case 1
         Rechazar.Visible = False
-        aceptar.Visible = False
+        Aceptar.Visible = False
         Echar.Visible = True
         desc.Visible = False
     Case 2
         Rechazar.Visible = False
-        aceptar.Visible = False
+        Aceptar.Visible = False
         Echar.Visible = False
         desc.Visible = False
 End Select
@@ -323,7 +323,7 @@ Else
     fundo.Caption = "Fundo el clan: Ninguno"
 End If
 
-solicitudes.Caption = "Solicitudes para ingresar a clanes: " & ReadField(10, Rdata, 44)
+Solicitudes.Caption = "Solicitudes para ingresar a clanes: " & ReadField(10, Rdata, 44)
 solicitudesRechazadas.Caption = "Solicitudes rechazadas: " & ReadField(11, Rdata, 44)
 lider.Caption = "Veces fue lider de clan: " & ReadField(12, Rdata, 44)
 integro.Caption = "Clanes que integro: " & ReadField(13, Rdata, 44)
@@ -367,7 +367,7 @@ Private Sub Form_Load()
 Me.Picture = LoadPicture(DirGraficos & "CharInfo.gif")
 Echar.Picture = LoadPicture(DirGraficos & "echar.gif")
 desc.Picture = LoadPicture(DirGraficos & "desc.gif")
-aceptar.Picture = LoadPicture(DirGraficos & "aceptar.gif")
+Aceptar.Picture = LoadPicture(DirGraficos & "aceptar.gif")
 Rechazar.Picture = LoadPicture(DirGraficos & "rechazar.gif")
 
 End Sub
@@ -389,7 +389,7 @@ End Sub
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
 If bmoving = False And Button = vbLeftButton Then
-   DX = X
+   Dx3 = X
    dy = Y
    bmoving = True
 End If
@@ -397,7 +397,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> DX) Or (Y <> dy)) Then Move Left + (X - DX), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

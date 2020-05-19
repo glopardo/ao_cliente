@@ -1,4 +1,4 @@
-Attribute VB_Name = "Mod_Declaraciones"
+Attribute VB_Name = "modDeclaraciones"
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -36,6 +36,21 @@ Attribute VB_Name = "Mod_Declaraciones"
 
 Option Explicit
 
+
+Public Type tCabecera
+    desc As String * 255
+    CRC As Long
+    MagicWord As Long
+End Type
+Public MiCabecera As tCabecera
+
+Public CurMidi As String
+
+Public UserMaxAGU As Integer
+Public UserMinAGU As Integer
+Public UserMaxHAM As Integer
+Public UserMinHAM As Integer
+
 Public Fide As Byte
 Public Sincroniza As Single
 
@@ -55,30 +70,6 @@ Type tCasino
 End Type
 
 Public Casino As tCasino
-
-
-Type imgdes
-   ibuff As Long
-   stx As Long
-   sty As Long
-   endx As Long
-   endy As Long
-   buffwidth As Long
-   palette As Long
-   colors As Long
-   imgtype As Long
-   bmh As Long
-   hBitmap As Long
-End Type
-
-Declare Function BMPInfo Lib "VIC32.DLL" Alias "bmpinfo" (ByVal Fname As String, bdat As BITMAPINFOHEADER) As Long
-Declare Function allocimage Lib "VIC32.DLL" (image As imgdes, ByVal wid As Long, ByVal Leng As Long, ByVal BPPixel As Long) As Long
-Declare Function loadbmp Lib "VIC32.DLL" (ByVal Fname As String, desimg As imgdes) As Long
-Declare Sub freeimage Lib "VIC32.DLL" (image As imgdes)
-Declare Function convertrgbtopalex Lib "VIC32.DLL" (ByVal palcolors As Long, srcimg As imgdes, desimg As imgdes, ByVal mode As Long) As Long
-Declare Sub copyimgdes Lib "VIC32.DLL" (srcimg As imgdes, desimg As imgdes)
-Declare Function savegif Lib "VIC32.DLL" (ByVal Fname As String, srcimg As imgdes) As Long
-Declare Function savegifex Lib "VIC32.DLL" (ByVal Fname As String, srcimg As imgdes, ByVal savemode As Long, ByVal transcolor As Long) As Long
 
 Type Mensajito
     Code As String
@@ -105,17 +96,8 @@ Public Ayuda As Integer
 Public SubAyuda As Integer
 Public LastPos As Position
 
-Public RawServersList As String
-Public TaInvi As Integer
 Public IzquierdaMapa As Integer
 Public TopMapa As Integer
-
-Public Type tServerInfo
-    Ip As String
-    Puerto As Integer
-    desc As String
-    PassRecPort As Integer
-End Type
 
 Public Const FONTTYPE_TALK = ",255,255,255,0,0"
 Public Const FONTTYPE_FENIX = ",255,150,50,1,0"
@@ -131,8 +113,6 @@ Public Const FONTTYPE_LVLUP = ",255,150,25,1,0"
 Public Const FONTTYPE_NUEVA = ",255,250,55,1,0"
 Public Const FONTTYPE_MUERTO = ",255,155,55,1,0"
 
-Public ServersLst() As tServerInfo
-Public ServersRecibidos As Boolean
 Public IntervaloGolpe As Single
 Public IntervaloFlecha As Single
 Public IntervaloSpell As Single
@@ -395,8 +375,6 @@ Public Const BANDIDO = 53
 Public Const PIRATA = 55
 Public Const LADRON = 56
 
-Public HushYo As String * 8
-
 Public Enum E_MODO
     Normal = 1
     BorrarPJ = 2
@@ -409,27 +387,23 @@ End Enum
 
 Public EstadoLogin As E_MODO
 
-
-Public RequestPosTimer As Integer
 Public stxtbuffer As String
 Public SendNewChar As Boolean
 Public Connected As Boolean
 Public DownloadingMap As Boolean
 Public UserMap As Integer
 
-
 Public ENDC As String
-Public ENDL As String
-
 
 Public prgRun As Boolean
 Public finpres As Boolean
 
 Public IPdelServidor As String
-Public PuertoDelServidor As String
+Public PuertoDelServidor As Integer
 
 
 Public Declare Function GetTickCount Lib "kernel32" () As Long
+Public Declare Function timeGetTime Lib "winmm.dll" () As Long
 
 
 Public Declare Function writeprivateprofilestring Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationname As String, ByVal lpKeyname As Any, ByVal lpString As String, ByVal lpfilename As String) As Long
@@ -442,7 +416,7 @@ Private Const DDL_FLAGS As Long = DDL_ARCHIVE Or DDL_EXCLUSIVE
  
 Private Declare Function SendMessage Lib "user32" _
    Alias "SendMessageA" _
-  (ByVal hwnd As Long, _
+  (ByVal hWnd As Long, _
    ByVal wMsg As Long, _
    ByVal wParam As Long, _
    lParam As Any) As Long
@@ -452,14 +426,14 @@ Dim MyPath As String
 Public Declare Function GetKeyState Lib "user32" (ByVal nVirtKey As Long) As Integer
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Public bmoving As Boolean
-Public DX As Integer
+Public Dx3 As Integer
 Public dy As Integer
 
 
 Public Type tIndiceCabeza
     Head(1 To 4) As Integer
 End Type
-Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
 Public Type tIndiceCuerpo
     Body(1 To 4) As Integer
