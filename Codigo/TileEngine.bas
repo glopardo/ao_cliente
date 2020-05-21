@@ -785,7 +785,7 @@ If ActualizarInv = False Then Exit Sub
  
 End Sub
 
-Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, Center As Byte, Animate As Byte, ByRef Color() As Long, Optional Alpha As Boolean, Optional ByVal Shadow As Byte = 0, Optional ByVal Invert_x As Boolean = False, Optional ByVal Invert_y As Boolean = False, Optional ByVal KillAnim As Integer = 0, Optional ByVal map_x As Byte, Optional ByVal map_y As Byte)
+Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte, Animate As Byte, ByRef Color() As Long, Optional Alpha As Boolean, Optional ByVal shadow As Byte = 0, Optional ByVal Invert_x As Boolean = False, Optional ByVal Invert_y As Boolean = False, Optional ByVal KillAnim As Integer = 0, Optional ByVal map_x As Byte, Optional ByVal map_y As Byte)
 On Error Resume Next
 Dim iGrhIndex As Integer
 Dim QuitarAnimacion As Boolean
@@ -816,7 +816,7 @@ If Grh.GrhIndex = 0 Then Exit Sub
 
 iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
 
-If Center Then
+If center Then
     If GrhData(iGrhIndex).TileWidth <> 1 Then
         X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
     End If
@@ -885,15 +885,15 @@ Public Sub Draw_FilledBox(ByVal X As Integer, ByVal Y As Integer, ByVal Width As
  
     Static box_rect As RECT
     Static Outline As RECT
-    Static Rgb_List(3) As Long
+    Static rgb_list(3) As Long
     Static rgb_list2(3) As Long
     Static Vertex(3) As TLVERTEX
     Static Vertex2(3) As TLVERTEX
    
-    Rgb_List(0) = Color
-    Rgb_List(1) = Color
-    Rgb_List(2) = Color
-    Rgb_List(3) = Color
+    rgb_list(0) = Color
+    rgb_list(1) = Color
+    rgb_list(2) = Color
+    rgb_list(3) = Color
    
     rgb_list2(0) = outlinecolor
     rgb_list2(1) = outlinecolor
@@ -916,7 +916,7 @@ Public Sub Draw_FilledBox(ByVal X As Integer, ByVal Y As Integer, ByVal Width As
    
    
     Geometry_Create_Box Vertex2(), Outline, Outline, rgb_list2(), 0, 0
-    Geometry_Create_Box Vertex(), box_rect, box_rect, Rgb_List(), 0, 0
+    Geometry_Create_Box Vertex(), box_rect, box_rect, rgb_list(), 0, 0
    
    
     D3DDevice.SetTexture 0, Nothing
@@ -1141,35 +1141,37 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                         'Cuerpo
                         Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value)
                         
+                        If UserParalizado Then
+                            Call DDrawTono(TempChar.Body.Walk(TempChar.Heading), iPPx + 1, iPPy - 12, 0, 0, 0, 0, 0, 0, 0, 0)
+                        End If
+                        
                         'Cabeza
                         If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
-                        Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                            If UserParalizado Then
+                                Call DDrawTono(TempChar.Head.Head(TempChar.Heading), iPPx + 8, iPPy - 22, 0, 0, 0, 0, 0, 0, 0, 0)
+                            End If
                         End If
                         
                         'Casco
                         If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
-                        Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
                         End If
                         
                         'Arma
                         If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
-                        Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                         End If
                         
                         'Escudo
                         If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
-                        Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                         End If
-                    
-                    
-                    
+
                     End If
                         
                     If Nombres Then
-                        
                         If Not (TempChar.invisible Or TempChar.Navegando = 1) Then
-                       
-                       
                             Dim lCenter As Long
                             If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
                                 Dim sClan As String
@@ -1974,7 +1976,7 @@ RGBtoD3DColorARGB = D3DColorARGB(Alpha, Rojo, Verde, Azul)
 End Function
 
 Public Sub Device_Box_Textured_Render(ByVal GrhIndex As Long, ByVal dest_x As Integer, ByVal dest_y As Integer, ByVal src_width As Integer, _
-                                            ByVal src_height As Integer, ByRef Rgb_List() As Long, ByVal src_x As Integer, _
+                                            ByVal src_height As Integer, ByRef rgb_list() As Long, ByVal src_x As Integer, _
                                             ByVal src_y As Integer, Optional ByVal alpha_blend As Boolean, Optional ByVal angle As Single)
 
     Static src_rect As RECT
@@ -1987,10 +1989,10 @@ Public Sub Device_Box_Textured_Render(ByVal GrhIndex As Long, ByVal dest_x As In
     If GrhIndex = 0 Then Exit Sub
     Set d3dTextures.Texture = GetTexture(GrhIndex, d3dTextures.texwidth, d3dTextures.texheight)
     
-    light_value(0) = Rgb_List(0)
-    light_value(1) = Rgb_List(1)
-    light_value(2) = Rgb_List(2)
-    light_value(3) = Rgb_List(3)
+    light_value(0) = rgb_list(0)
+    light_value(1) = rgb_list(1)
+    light_value(2) = rgb_list(2)
+    light_value(3) = rgb_list(3)
     
     If (light_value(0) = 0) Then light_value(0) = base_light
     If (light_value(1) = 0) Then light_value(1) = base_light
@@ -2049,7 +2051,7 @@ Private Function Geometry_Create_TLVertex(ByVal X As Single, ByVal Y As Single, 
     Geometry_Create_TLVertex.tu = tu
     Geometry_Create_TLVertex.tv = tv
 End Function
-Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, ByRef src As RECT, ByRef Rgb_List() As Long, _
+Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, ByRef src As RECT, ByRef rgb_list() As Long, _
                                 Optional ByRef Textures_Width As Integer, Optional ByRef Textures_Height As Integer, Optional ByVal angle As Single)
 '**************************************************************
 'Author: Aaron Perkins
@@ -2099,9 +2101,9 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
    
     '0 - Bottom left vertex
     If Textures_Width Or Textures_Height Then
-        verts(2) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(0), 0, src.left / Textures_Width + 0.001, (src.bottom + 1) / Textures_Height)
+        verts(2) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, src.left / Textures_Width + 0.001, (src.bottom + 1) / Textures_Height)
     Else
-        verts(2) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(0), 0, 0, 0)
+        verts(2) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, 0, 0)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If angle = 0 Then
@@ -2115,9 +2117,9 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
    
     '1 - Top left vertex
     If Textures_Width Or Textures_Height Then
-        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(1), 0, src.left / Textures_Width + 0.001, src.top / Textures_Height + 0.001)
+        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, src.left / Textures_Width + 0.001, src.top / Textures_Height + 0.001)
     Else
-        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(1), 0, 0, 1)
+        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, 0, 1)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If angle = 0 Then
@@ -2131,9 +2133,9 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
    
     '2 - Bottom right vertex
     If Textures_Width Or Textures_Height Then
-        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(2), 0, (src.Right + 1) / Textures_Width, (src.bottom + 1) / Textures_Height)
+        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(2), 0, (src.Right + 1) / Textures_Width, (src.bottom + 1) / Textures_Height)
     Else
-        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(2), 0, 1, 0)
+        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(2), 0, 1, 0)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If angle = 0 Then
@@ -2147,9 +2149,9 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
    
     '3 - Top right vertex
     If Textures_Width Or Textures_Height Then
-        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(3), 0, (src.Right + 1) / Textures_Width, src.top / Textures_Height + 0.001)
+        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(3), 0, (src.Right + 1) / Textures_Width, src.top / Textures_Height + 0.001)
     Else
-        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, Rgb_List(3), 0, 1, 1)
+        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(3), 0, 1, 1)
     End If
  
 End Sub
@@ -2281,7 +2283,7 @@ Private Function RemoveLRU() As Boolean
     mFreeMemoryBytes = mFreeMemoryBytes + surface_desc.size
 End Function
 
-Public Sub DrawText(ByVal font As Integer, ByVal left As Long, ByVal top As Long, ByVal Text As String, ByVal Color As Long, Optional ByVal Alpha As Byte = 255, Optional ByVal Center As Boolean = False)
+Public Sub DrawText(ByVal font As Integer, ByVal left As Long, ByVal top As Long, ByVal Text As String, ByVal Color As Long, Optional ByVal Alpha As Byte = 255, Optional ByVal center As Boolean = False)
 '*********************************************************
 '****** Coded by Dunkan (emanuel.m@dunkancorp.com) *******
 '*********************************************************
@@ -2291,7 +2293,7 @@ Public Sub DrawText(ByVal font As Integer, ByVal left As Long, ByVal top As Long
         Color = D3DColorARGB(Alpha, aux.r, aux.G, aux.b)
     End If
     If Not blur Then
-        Engine_Render_Text cfonts(font), Text, left, top, Color, Center, Alpha
+        Engine_Render_Text cfonts(font), Text, left, top, Color, center, Alpha
     End If
 End Sub
 Public Function ARGBtoD3DCOLORVALUE(ByVal ARGB As Long, ByRef Color As D3DCOLORVALUE)
@@ -2304,7 +2306,7 @@ Color.b = dest(0)
 End Function
  
  
-Private Sub Engine_Render_Text(ByRef UseFont As CustomFont, ByVal Text As String, ByVal X As Long, ByVal Y As Long, ByVal Color As Long, Optional ByVal Center As Boolean = False, Optional ByVal Alpha As Byte = 255)
+Private Sub Engine_Render_Text(ByRef UseFont As CustomFont, ByVal Text As String, ByVal X As Long, ByVal Y As Long, ByVal Color As Long, Optional ByVal center As Boolean = False, Optional ByVal Alpha As Byte = 255)
 Dim TempVA(0 To 3) As TLVERTEX
 Dim tempstr() As String
 Dim count As Integer
@@ -2344,7 +2346,7 @@ Dim bucleFonts As Integer
     'Set the texture
     D3DDevice.SetTexture 0, UseFont.Texture
    
-    If Center Then
+    If center Then
         X = X - Engine_GetTextWidth(cfonts(bucleFonts), Text) * 0.5
     End If
    
@@ -2540,3 +2542,160 @@ For bucleFonts = 1 To UBound(cfonts)
     Next bucleFonts
 
 End Sub
+
+Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte, Animate As Byte, _
+    Optional ByVal KillAnim As Integer, Optional ByVal map_x As Byte = 1, Optional ByVal map_y As Byte = 1, _
+    Optional reflejoagua As Boolean, Optional Alpha As Boolean, Optional RadioBrillo As Byte = 0, Optional ColorBrillo As Long, Optional angle As Single, Optional Color As Long)
+ 
+    Dim iGrhIndex As Integer
+    Dim QuitarAnimacion As Boolean
+ 
+    If Grh.GrhIndex = 0 Then Exit Sub
+        If Animate Then
+            If Grh.Started = 1 Then
+                Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.SpeedCounter)
+                If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
+                    Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
+                   
+                    If Grh.SpeedCounter <> -1 Then
+                        If Grh.SpeedCounter > 0 Then
+                            Grh.SpeedCounter = Grh.SpeedCounter - 1
+                        Else
+                            Grh.Started = 0
+                        End If
+                    End If
+                End If
+            End If
+        End If
+        
+        iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+        If iGrhIndex = 0 Then Exit Sub
+        
+        If center Then
+            If GrhData(iGrhIndex).TileWidth <> 1 Then
+                X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
+            End If
+            
+            If GrhData(iGrhIndex).TileHeight <> 1 Then
+                Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
+            End If
+        End If
+
+        Dim C(3) As Long
+         
+        ColorBrillo = D3DColorXRGB(0, 255, 0)
+     
+        C(0) = ColorBrillo
+        C(1) = ColorBrillo
+        C(2) = ColorBrillo
+        C(3) = ColorBrillo
+            
+        Device_Box_Textured_Render_Advance iGrhIndex, _
+            X + RadioBrillo, Y, _
+            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+            C(), _
+            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+            True, angle, reflejoagua
+    
+        Device_Box_Textured_Render_Advance iGrhIndex, _
+            X - RadioBrillo, Y, _
+            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+            C(), _
+            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+            True, angle, reflejoagua
+        
+        Device_Box_Textured_Render_Advance iGrhIndex, _
+            X, Y + RadioBrillo, _
+            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+            C(), _
+            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+            True, angle, reflejoagua
+        
+        Device_Box_Textured_Render_Advance iGrhIndex, _
+            X, Y - RadioBrillo, _
+            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+            C(), _
+            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+            True, angle, reflejoagua
+        
+        Device_Box_Textured_Render_Advance iGrhIndex, _
+            X, Y, _
+            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+            C(), _
+            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+            Alpha, angle, reflejoagua
+    
+    
+ 
+End Sub
+
+Private Sub Device_Box_Textured_Render_Advance(ByVal GrhIndex As Long, ByVal dest_x As Integer, ByVal dest_y As Integer, ByVal src_width As Integer, _
+                                            ByVal src_height As Integer, ByRef rgb_list() As Long, ByVal src_x As Integer, _
+                                            ByVal src_y As Integer, Optional ByVal alpha_blend As Boolean, Optional ByVal angle As Single, _
+                                            Optional ByVal shadow As Byte = 0)
+    Static src_rect As RECT
+    Static dest_rect As RECT
+    Static temp_verts(3) As TLVERTEX
+    Static d3dTextures As D3D8Textures
+    Static light_value(0 To 3) As Long
+   
+    If GrhIndex = 0 Then Exit Sub
+    Set d3dTextures.Texture = GetTexture(GrhData(GrhIndex).FileNum, d3dTextures.texwidth, d3dTextures.texheight)
+   
+    light_value(0) = rgb_list(0)
+    light_value(1) = rgb_list(1)
+    light_value(2) = rgb_list(2)
+    light_value(3) = rgb_list(3)
+   
+    If (light_value(0) = 0) Then light_value(0) = base_light
+    If (light_value(1) = 0) Then light_value(1) = base_light
+    If (light_value(2) = 0) Then light_value(2) = base_light
+    If (light_value(3) = 0) Then light_value(3) = base_light
+       
+    'Set up the source rectangle
+    With src_rect
+        .bottom = src_y + src_height
+        .left = src_x
+        .Right = src_x + src_width
+        .top = src_y
+    End With
+               
+    'Set up the destination rectangle
+    With dest_rect
+        .bottom = dest_y + src_height
+        .left = dest_x
+        .Right = dest_x + src_width
+        .top = dest_y
+    End With
+   
+    'Set up the TempVerts(3) vertices
+    Geometry_Create_Box temp_verts(), dest_rect, src_rect, light_value(), d3dTextures.texwidth, d3dTextures.texheight, angle
+   
+    'Set Textures
+    D3DDevice.SetTexture 0, d3dTextures.Texture
+   
+    If shadow Then
+        temp_verts(1).X = temp_verts(1).X + src_width / 2
+        temp_verts(1).Y = temp_verts(1).Y - src_height / 2
+     
+        temp_verts(3).X = temp_verts(3).X + src_width
+        temp_verts(3).Y = temp_verts(3).Y - src_width
+    End If
+   
+    If alpha_blend Then
+      'Set Rendering for alphablending
+        D3DDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_ONE
+        D3DDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_ONE
+    End If
+   
+    'Draw the triangles that make up our square Textures
+    D3DDevice.DrawPrimitiveUP D3DPT_TRIANGLESTRIP, 2, temp_verts(0), Len(temp_verts(0))
+   
+    If alpha_blend Then
+        'Set Rendering for colokeying
+        D3DDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_SRCALPHA
+        D3DDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA
+    End If
+ 
+End Sub
+
