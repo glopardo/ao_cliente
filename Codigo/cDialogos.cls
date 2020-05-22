@@ -16,15 +16,15 @@ Option Base 0
  
 ''
 ' Maximum number of dialogs that can exist.
-Private Const MAX_DIALOGS  As Byte = 100
+Private Const MAX_DIALOGS As Byte = 100
  
 ''
 ' Maximum length of any dialog line without having to split it.
-Private Const MAX_LENGTH   As Byte = 18
+Private Const MAX_LENGTH As Byte = 18
  
 ''
 ' Number of milliseconds to add to the lifetime per dialog character
-Private Const MS_PER_CHAR  As Byte = 100
+Private Const MS_PER_CHAR As Byte = 100
  
 ''
 ' Number of extra milliseconds to add to the lifetime of a new dialog
@@ -45,8 +45,8 @@ Private Const MS_ADD_EXTRA As Integer = 5000
 Private Type dialog
 
     textLine()  As String
-    x           As Integer
-    y           As Integer
+    X           As Integer
+    Y           As Integer
     startTime   As Long
     lifeTime    As Long
     CharIndex   As Integer
@@ -116,26 +116,26 @@ Public Sub CreateDialog(ByRef chat As String, _
     '**************************************************************
     On Error Resume Next
 
-    Dim slot As Integer
+    Dim Slot As Integer
 
     Dim i    As Long
    
-    slot = BinarySearch(CharIndex)
+    Slot = BinarySearch(CharIndex)
    
-    If slot < 0 Then
+    If Slot < 0 Then
         If dialogCount = MAX_DIALOGS Then Exit Sub  'Out of space! Should never happen....
        
         'We need to add it. Get insertion index and move list backwards.
-        slot = Not slot
+        Slot = Not Slot
        
-        For i = dialogCount To slot + 1 Step -1
+        For i = dialogCount To Slot + 1 Step -1
             dialogs(i) = dialogs(i - 1)
         Next i
        
         dialogCount = dialogCount + 1
     End If
    
-    With dialogs(slot)
+    With dialogs(Slot)
         .CharIndex = CharIndex
         .Color = Color
         .renderable = False
@@ -175,15 +175,15 @@ Public Sub RemoveDialog(ByVal CharIndex As Integer)
     '**************************************************************
     On Error Resume Next
 
-    Dim slot As Integer
+    Dim Slot As Integer
 
     Dim i    As Long
    
-    slot = BinarySearch(CharIndex)
+    Slot = BinarySearch(CharIndex)
    
-    If slot < 0 Then Exit Sub
+    If Slot < 0 Then Exit Sub
    
-    For i = slot To MAX_DIALOGS - 2
+    For i = Slot To MAX_DIALOGS - 2
         dialogs(i) = dialogs(i + 1)
     Next i
    
@@ -224,7 +224,7 @@ Public Sub Render()
                 'Render it
                 For j = 0 To UBound(.textLine())
                     
-                    Call DrawText(1, .x, .y + offset, .textLine(j), RGBtoD3DColorARGB(255, .Color))
+                    Call DrawText(1, .X, .Y + offset, .textLine(j), RGBtoD3DColorARGB(255, .Color))
                     offset = offset + frmMain.font.size + 5
                 Next j
                
@@ -245,8 +245,8 @@ End Sub
 ' @param    y           The Y coord where to start rendering.
 ' @param    charIndex   The character whose dialog's position is being updated.
  
-Public Sub UpdateDialogPos(ByVal x As Integer, _
-                           ByVal y As Integer, _
+Public Sub UpdateDialogPos(ByVal X As Integer, _
+                           ByVal Y As Integer, _
                            ByVal CharIndex As Integer)
 
     '**************************************************************
@@ -254,15 +254,15 @@ Public Sub UpdateDialogPos(ByVal x As Integer, _
     'Last Modify Date: 07/28/07
     'Updates a dialog's position.
     '**************************************************************
-    Dim slot As Integer
+    Dim Slot As Integer
    
-    slot = BinarySearch(CharIndex)
+    Slot = BinarySearch(CharIndex)
    
-    If slot >= 0 Then
+    If Slot >= 0 Then
 
-        With dialogs(slot)
-            .x = x - (MAX_LENGTH \ 2) * 3
-            .y = y - (UBound(.textLine()) * 3)
+        With dialogs(Slot)
+            .X = X - (MAX_LENGTH \ 2) * 3
+            .Y = Y - (UBound(.textLine()) * 3)
             .renderable = True
         End With
 
