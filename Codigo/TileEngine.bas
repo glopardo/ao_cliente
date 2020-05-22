@@ -219,7 +219,7 @@ End Type
  
 Public Type Grh
     Loops        As Integer
-    grhindex     As Integer
+    GrhIndex     As Integer
     FrameCounter As Single
     SpeedCounter As Single
     Started      As Byte
@@ -602,7 +602,7 @@ Dim BloodIndex As Integer
             Exit Do
         End If
 
-    Loop While BloodList(BloodIndex).Grh.grhindex > 0
+    Loop While BloodList(BloodIndex).Grh.GrhIndex > 0
 
     'Fill in the values
     BloodList(BloodIndex).POS.X = X
@@ -619,13 +619,13 @@ Public Sub Engine_Blood_Erase(ByVal BloodIndex As Integer)
 
     'Clear the selected index
     BloodList(BloodIndex).Grh.FrameCounter = 0
-    BloodList(BloodIndex).Grh.grhindex = 0
+    BloodList(BloodIndex).Grh.GrhIndex = 0
     BloodList(BloodIndex).POS.X = 0
     BloodList(BloodIndex).POS.Y = 0
 
     'Update LastBlood
     If BloodIndex = LastBlood Then
-        Do Until BloodList(LastBlood).Grh.grhindex > 1
+        Do Until BloodList(LastBlood).Grh.GrhIndex > 1
 
             'Move down one splatter
             LastBlood = LastBlood - 1
@@ -756,13 +756,13 @@ If ActualizarInv = False Then Exit Sub
         For X = 1 To 5
         i = i + 1
        
-        If UserInventory(i).grhindex Then
+        If UserInventory(i).GrhIndex Then
            
-            InitGrh T, UserInventory(i).grhindex
+            InitGrh T, UserInventory(i).GrhIndex
            
             With UserInventory(i)
             
-                Device_Box_Textured_Render GrhData(UserInventory(i).grhindex).FileNum, X * 32 - 32, Y * 32 - 32, GrhData(UserInventory(i).grhindex).pixelWidth, GrhData(UserInventory(i).grhindex).pixelHeight, CBlanco(), 0, 0
+                Device_Box_Textured_Render GrhData(UserInventory(i).GrhIndex).FileNum, X * 32 - 32, Y * 32 - 32, GrhData(UserInventory(i).GrhIndex).pixelWidth, GrhData(UserInventory(i).GrhIndex).pixelHeight, CBlanco(), 0, 0
                 If ItemElegido = i Then Device_Box_Textured_Render 11000, X * 32 - 32, Y * 32 - 32, 32, 32, CBlanco(), 0, 0
                 
                 DrawText 2, X * 32 - 32, Y * 32 - 32 - 2, UserInventory(i).Amount, D3DColorARGB(255, 255, 255, 255)
@@ -792,9 +792,9 @@ Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte,
 
     If Animate Then
         If Grh.Started = 1 Then
-            Grh.FrameCounter = Grh.FrameCounter + ((timerElapsedTime * 0.1) * GrhData(Grh.grhindex).NumFrames / Grh.SpeedCounter)
-            If Grh.FrameCounter > GrhData(Grh.grhindex).NumFrames Then
-                Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.grhindex).NumFrames) + 1
+            Grh.FrameCounter = Grh.FrameCounter + ((timerElapsedTime * 0.1) * GrhData(Grh.GrhIndex).NumFrames / Grh.SpeedCounter)
+            If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
+                Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
                    
                 If KillAnim <> 0 Then
                     If CharList(KillAnim).FX > 0 Then
@@ -808,9 +808,9 @@ Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte,
         End If
     End If
 
-    If Grh.grhindex = 0 Then Exit Sub
+    If Grh.GrhIndex = 0 Then Exit Sub
     
-    iGrhIndex = GrhData(Grh.grhindex).Frames(Grh.FrameCounter)
+    iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
     
     If center Then
         If GrhData(iGrhIndex).TileWidth <> 1 Then
@@ -833,26 +833,26 @@ Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte,
 
 End Sub
 
-Sub DrawGrhtoHdc(hdc As Long, grhindex As Integer)
+Sub DrawGrhtoHdc(hdc As Long, GrhIndex As Integer)
 
     Dim hDCsrc As Long
  
-    If grhindex <= 0 Then Exit Sub
+    If GrhIndex <= 0 Then Exit Sub
         
         'If it's animated switch GrhIndex to first frame
-        If GrhData(grhindex).NumFrames <> 1 Then
-            grhindex = GrhData(grhindex).Frames(1)
+        If GrhData(GrhIndex).NumFrames <> 1 Then
+            GrhIndex = GrhData(GrhIndex).Frames(1)
         End If
            
         hDCsrc = CreateCompatibleDC(hdc)
         
-        Call SelectObject(hDCsrc, LoadPicture(App.Path & "\Graficos\" & GrhData(grhindex).FileNum & ".bmp"))
+        Call SelectObject(hDCsrc, LoadPicture(App.Path & "\Graficos\" & GrhData(GrhIndex).FileNum & ".bmp"))
 
         'Draw
         BitBlt hdc, 0, 0, _
-        GrhData(grhindex).pixelWidth, GrhData(grhindex).pixelHeight, _
+        GrhData(GrhIndex).pixelWidth, GrhData(GrhIndex).pixelHeight, _
         hDCsrc, _
-        GrhData(grhindex).sX, GrhData(grhindex).sY, _
+        GrhData(GrhIndex).sX, GrhData(GrhIndex).sY, _
         vbSrcCopy
 
         DeleteDC hDCsrc
@@ -861,7 +861,7 @@ End Sub
 Public Sub Dibujar_grh_Simple(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, Optional Color As Long)
 Dim C(3) As Long
  
-If Grh.grhindex = 0 Then Exit Sub
+If Grh.GrhIndex = 0 Then Exit Sub
  
 C(0) = Color
 C(1) = Color
@@ -870,9 +870,9 @@ C(3) = Color
  
 If Grh.FrameCounter = 0 Then Grh.FrameCounter = 2
  
-With GrhData(Grh.grhindex)
+With GrhData(Grh.GrhIndex)
  
-    Device_Box_Textured_Render Grh.grhindex, X, Y, .pixelWidth, .pixelHeight, C(), .sX, .sY
+    Device_Box_Textured_Render Grh.GrhIndex, X, Y, .pixelWidth, .pixelHeight, C(), .sX, .sY
  
 End With
  
@@ -1002,7 +1002,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
             'Layer 1 **********************************
             Call Draw_Grh(MapData(X, Y).Graphic(1), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 0, 1, MapData(X, Y).light_value(), , , , , , X, Y)
             
-            If MapData(X, Y).Graphic(2).grhindex <> 0 Then
+            If MapData(X, Y).Graphic(2).GrhIndex <> 0 Then
                 Call Draw_Grh(MapData(X, Y).Graphic(2), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
             End If
             '******************************************
@@ -1024,7 +1024,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
             With MapData(X, Y)
                 '******************************************
                 'Object Layer **********************************
-                If .ObjGrh.grhindex <> 0 Then
+                If .ObjGrh.GrhIndex <> 0 Then
                     Call Draw_Grh(.ObjGrh, PixelOffsetXTemp, PixelOffsetYTemp, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
                 End If
     
@@ -1115,7 +1115,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
             If Len(TempChar.Nombre) = 0 Then
                 Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                 'Cabeza
-                If TempChar.Head.Head(TempChar.Heading).grhindex > 0 Then
+                If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
                 End If
             Else
@@ -1123,52 +1123,52 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                     'Cuerpo (Barca / Galeon / Galera)
                     Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                 
-                ElseIf Not CharList(MapData(X, Y).CharIndex).invisible And TempChar.Head.Head(TempChar.Heading).grhindex > 0 Then
+                ElseIf Not CharList(MapData(X, Y).CharIndex).invisible And TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                     'Cuerpo
                     Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value)
                     
                     'Cabeza
-                    If TempChar.Head.Head(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
                     End If
                     
                     'Casco
-                    If TempChar.casco.Head(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
                     End If
                     
                     'Arma
-                    If TempChar.arma.WeaponWalk(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                     End If
                     
                     'Escudo
-                    If TempChar.escudo.ShieldWalk(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                     End If
                 
-                ElseIf CharList(MapData(X, Y).CharIndex).invisible Or PJInMyGuild(MapData(X, Y).CharIndex) Then
+                ElseIf (CharList(MapData(X, Y).CharIndex).invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
 
                     'Cuerpo
                     Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value, True)
                     
                     'Cabeza
-                    If TempChar.Head.Head(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                         Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
                     End If
                     
                     'Casco
-                    If TempChar.casco.Head(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
                         Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
                     End If
                     
                     'Arma
-                    If TempChar.arma.WeaponWalk(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
                         Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
                     End If
                     
                     'Escudo
-                    If TempChar.escudo.ShieldWalk(TempChar.Heading).grhindex > 0 Then
+                    If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
                         Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
                     End If
 
@@ -1188,7 +1188,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                             lCenter = (frmMain.textwidth(TempChar.Nombre) / 2) - 16
                             Call DrawText(1, iPPx - lCenter, iPPy + 30, TempChar.Nombre, D3DColorXRGB(RG(TempChar.Criminal, 1), RG(TempChar.Criminal, 2), RG(TempChar.Criminal, 3)))
                         End If
-                    ElseIf TempChar.invisible Or PJInMyGuild(MapData(X, Y).CharIndex) Then
+                    ElseIf (TempChar.invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
                         If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
                             lCenter = (frmMain.textwidth(left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1)) / 2) - 16
                             sClan = mid$(TempChar.Nombre, InStr(TempChar.Nombre, "<"))
@@ -1212,7 +1212,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
            End If
            '*************************************************
            'Layer 3 *****************************************
-           If .Graphic(3).grhindex <> 0 Then
+           If .Graphic(3).GrhIndex <> 0 Then
         
                Call Draw_Grh(.Graphic(3), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
            End If
@@ -1238,7 +1238,7 @@ If Not bTecho Then
         ScreenX = minXOffset - TileBufferSize
         For X = minX To maxX
                 'Layer 4 **********************************
-                If MapData(X, Y).Graphic(4).grhindex Then
+                If MapData(X, Y).Graphic(4).GrhIndex Then
                 
                 Call Draw_Grh(MapData(X, Y).Graphic(4), _
                 ScreenX * 32 + PixelOffsetX, _
@@ -2011,7 +2011,7 @@ RGBtoD3DColorARGB = D3DColorARGB(Alpha, Rojo, Verde, Azul)
   
 End Function
 
-Public Sub Device_Box_Textured_Render(ByVal grhindex As Long, ByVal dest_x As Integer, ByVal dest_y As Integer, ByVal src_width As Integer, _
+Public Sub Device_Box_Textured_Render(ByVal GrhIndex As Long, ByVal dest_x As Integer, ByVal dest_y As Integer, ByVal src_width As Integer, _
                                             ByVal src_height As Integer, ByRef rgb_list() As Long, ByVal src_x As Integer, _
                                             ByVal src_y As Integer, Optional ByVal alpha_blend As Boolean, Optional ByVal angle As Single)
 
@@ -2022,8 +2022,8 @@ Public Sub Device_Box_Textured_Render(ByVal grhindex As Long, ByVal dest_x As In
     Static light_value(0 To 3) As Long
 
     
-    If grhindex = 0 Then Exit Sub
-    Set d3dTextures.Texture = GetTexture(grhindex, d3dTextures.texwidth, d3dTextures.texheight)
+    If GrhIndex = 0 Then Exit Sub
+    Set d3dTextures.Texture = GetTexture(GrhIndex, d3dTextures.texwidth, d3dTextures.texheight)
     
     light_value(0) = rgb_list(0)
     light_value(1) = rgb_list(1)
