@@ -928,7 +928,7 @@ End Sub
 Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffsetX As Integer, ByVal PixelOffsetY As Integer)
 '**************************************************************
 'Last Modify Date: 8/14/2007
-'Last modified by: Juan Martín Sotuyo Dodero (Maraxus)
+'Last modified by: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 'Renders everything to the viewport
 '**************************************************************
     Dim Y                   As Integer  'Keeps track of where on map we are
@@ -1124,27 +1124,35 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                     Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                 
                 ElseIf Not CharList(MapData(X, Y).CharIndex).invisible And TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
+
+                    If UserParalizado Then
+                        Call DDrawTono(TempChar.Body.Walk(TempChar.Heading), iPPx + 1, iPPy - 12, 0, 0, 0, 0, 0, 0, 0, 0)
+                    End If
+
                     'Cuerpo
                     Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value)
                     
                     'Cabeza
                     If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                     Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                        If UserParalizado Then
+                            Call DDrawTono(TempChar.Body.Walk(TempChar.Heading), iPPx + 12, iPPy - 22, 0, 0, 0, 0, 0, 0, 0, 0)
+                        End If
                     End If
                     
                     'Casco
                     If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
-                    Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                      Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
                     End If
                     
                     'Arma
                     If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
-                    Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                      Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                     End If
                     
                     'Escudo
                     If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
-                    Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                      Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                     End If
                 
                 ElseIf (CharList(MapData(X, Y).CharIndex).invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
@@ -1455,7 +1463,7 @@ Set D3DDevice = D3D.CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, frmMain.Ren
     ' Index Quad
     Set vbQuadIdx = D3DDevice.CreateVertexBuffer(Len(Vector(0)) * 4, 0, D3DFVF_XYZRHW Or D3DFVF_TEX1 Or D3DFVF_DIFFUSE Or D3DFVF_SPECULAR, D3DPOOL_MANAGED)
     
-    'partículas
+    'partÃ­culas
     D3DDevice.SetRenderState D3DRS_POINTSIZE, Engine_FToDW(2)
     D3DDevice.SetTextureStageState 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE
     D3DDevice.SetRenderState D3DRS_POINTSPRITE_ENABLE, 1
@@ -1561,7 +1569,7 @@ Public Function Light_Create(ByVal map_x As Integer, ByVal map_y As Integer, Opt
 'Author: Aaron Perkins
 'Last Modify Date: 10/07/2002
 'Returns the light_index if successful, else 0
-'Edited by Juan Martín Sotuyo Dodero
+'Edited by Juan MartÃ­n Sotuyo Dodero
 '**************************************************************
     If InMapBounds(map_x, map_y) Then
         'Make sure there is no light in the given map pos
@@ -1762,7 +1770,7 @@ End Function
 
 Public Function Light_Move_By_Head(ByVal light_index As Long, ByVal Heading As Byte) As Boolean
 '**************************************************************
-'Author: Juan Martín Sotuyo Dodero
+'Author: Juan MartÃ­n Sotuyo Dodero
 'Last Modify Date: 15/05/2002
 'Returns true if successful, else false
 '**************************************************************
@@ -1889,7 +1897,7 @@ End Sub
 
 Private Sub Light_Erase(ByVal light_index As Long)
 '***************************************'
-'Author: Juan Martín Sotuyo Dodero
+'Author: Juan MartÃ­n Sotuyo Dodero
 'Last modified: 3/31/2003
 'Correctly erases a light
 '***************************************'
@@ -2091,7 +2099,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
                                 Optional ByRef Textures_Width As Integer, Optional ByRef Textures_Height As Integer, Optional ByVal angle As Single)
 '**************************************************************
 'Author: Aaron Perkins
-'Modified by Juan Martín Sotuyo Dodero
+'Modified by Juan MartÃ­n Sotuyo Dodero
 'Last Modify Date: 11/17/2002
 '
 ' * v1      * v3
@@ -2217,7 +2225,7 @@ End If
 End Function
 Private Function CrearGrafico(ByVal Archivo As Integer, ByRef texwidth As Integer, ByRef textheight As Integer) As Direct3DTexture8
 '**************************************************************
-'Author: Juan Martín Sotuyo Dodero
+'Author: Juan MartÃ­n Sotuyo Dodero
 'menduz was here
 '
 '**************************************************************
@@ -2578,3 +2586,161 @@ For bucleFonts = 1 To UBound(cfonts)
     Next bucleFonts
 
 End Sub
+
+Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte, Animate As Byte, _
+    Optional ByVal KillAnim As Integer, Optional ByVal map_x As Byte = 1, Optional ByVal map_y As Byte = 1, _
+    Optional reflejoagua As Boolean, Optional Alpha As Boolean, Optional RadioBrillo As Byte = 0, Optional ColorBrillo As Long, Optional angle As Single, Optional Color As Long)
+ 
+    Dim iGrhIndex As Integer
+    Dim QuitarAnimacion As Boolean
+ 
+    If Grh.GrhIndex = 0 Then Exit Sub
+    
+    If Animate Then
+        If Grh.Started = 1 Then
+            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.SpeedCounter)
+            If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
+                Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
+               
+                If Grh.SpeedCounter <> -1 Then
+                    If Grh.SpeedCounter > 0 Then
+                        Grh.SpeedCounter = Grh.SpeedCounter - 1
+                    Else
+                        Grh.Started = 0
+                    End If
+                End If
+            End If
+        End If
+    End If
+    
+    iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+    If iGrhIndex = 0 Then Exit Sub
+    
+    If center Then
+        If GrhData(iGrhIndex).TileWidth <> 1 Then
+            X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
+        End If
+        
+        If GrhData(iGrhIndex).TileHeight <> 1 Then
+            Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
+        End If
+    End If
+
+    Dim C(3) As Long
+     
+    ColorBrillo = D3DColorXRGB(255, 255, 255)
+ 
+    C(0) = ColorBrillo
+    C(1) = ColorBrillo
+    C(2) = ColorBrillo
+    C(3) = ColorBrillo
+        
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X + RadioBrillo, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X - RadioBrillo, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y + RadioBrillo, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y - RadioBrillo, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        Alpha, angle, reflejoagua
+    
+    
+ 
+End Sub
+
+Private Sub Device_Box_Textured_Render_Advance(ByVal GrhIndex As Long, ByVal dest_x As Integer, ByVal dest_y As Integer, ByVal src_width As Integer, _
+                                            ByVal src_height As Integer, ByRef rgb_list() As Long, ByVal src_x As Integer, _
+                                            ByVal src_y As Integer, Optional ByVal alpha_blend As Boolean, Optional ByVal angle As Single, _
+                                            Optional ByVal shadow As Byte = 0)
+    Static src_rect As RECT
+    Static dest_rect As RECT
+    Static temp_verts(3) As TLVERTEX
+    Static d3dTextures As D3D8Textures
+    Static light_value(0 To 3) As Long
+   
+    If GrhIndex = 0 Then Exit Sub
+    Set d3dTextures.Texture = GetTexture(GrhData(GrhIndex).FileNum, d3dTextures.texwidth, d3dTextures.texheight)
+   
+    light_value(0) = rgb_list(0)
+    light_value(1) = rgb_list(1)
+    light_value(2) = rgb_list(2)
+    light_value(3) = rgb_list(3)
+   
+    If (light_value(0) = 0) Then light_value(0) = base_light
+    If (light_value(1) = 0) Then light_value(1) = base_light
+    If (light_value(2) = 0) Then light_value(2) = base_light
+    If (light_value(3) = 0) Then light_value(3) = base_light
+       
+    'Set up the source rectangle
+    With src_rect
+        .bottom = src_y + src_height
+        .left = src_x
+        .Right = src_x + src_width
+        .top = src_y
+    End With
+               
+    'Set up the destination rectangle
+    With dest_rect
+        .bottom = dest_y + src_height
+        .left = dest_x
+        .Right = dest_x + src_width
+        .top = dest_y
+    End With
+   
+    'Set up the TempVerts(3) vertices
+    Geometry_Create_Box temp_verts(), dest_rect, src_rect, light_value(), d3dTextures.texwidth, d3dTextures.texheight, angle
+   
+    'Set Textures
+    D3DDevice.SetTexture 0, d3dTextures.Texture
+   
+    If shadow Then
+        temp_verts(1).X = temp_verts(1).X + src_width / 2
+        temp_verts(1).Y = temp_verts(1).Y - src_height / 2
+     
+        temp_verts(3).X = temp_verts(3).X + src_width
+        temp_verts(3).Y = temp_verts(3).Y - src_width
+    End If
+   
+    If alpha_blend Then
+      'Set Rendering for alphablending
+        D3DDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_ONE
+        D3DDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_ONE
+    End If
+   
+    'Draw the triangles that make up our square Textures
+    D3DDevice.DrawPrimitiveUP D3DPT_TRIANGLESTRIP, 2, temp_verts(0), Len(temp_verts(0))
+   
+    If alpha_blend Then
+        'Set Rendering for colokeying
+        D3DDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_SRCALPHA
+        D3DDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA
+    End If
+ 
+End Sub
+
