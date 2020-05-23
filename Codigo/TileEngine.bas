@@ -1168,13 +1168,38 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                             Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                         End If
 
+                    ElseIf (CharList(MapData(X, Y).CharIndex).invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
+
+                        'Cuerpo
+                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value, True)
+    
+                        'Cabeza
+                        If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
+                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
+                        End If
+    
+                        'Casco
+                        If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
+                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
+                        End If
+    
+                        'Arma
+                        If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
+                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
+                        End If
+    
+                        'Escudo
+                        If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
+                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
+                        End If
+
                     End If
                         
                     If Nombres Then
+                        Dim sClan As String
                         If Not (TempChar.invisible Or TempChar.Navegando = 1) Then
                             Dim lCenter As Long
                             If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
-                                Dim sClan As String
                                 lCenter = (frmMain.textwidth(left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1)) / 2) - 16
                                 sClan = mid$(TempChar.Nombre, InStr(TempChar.Nombre, "<"))
                                 Call DrawText(1, iPPx - lCenter, iPPy + 30, left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1), D3DColorXRGB(RG(TempChar.Criminal, 1), RG(TempChar.Criminal, 2), RG(TempChar.Criminal, 3)))
@@ -1184,9 +1209,18 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                                 lCenter = (frmMain.textwidth(TempChar.Nombre) / 2) - 16
                                 Call DrawText(1, iPPx - lCenter, iPPy + 30, TempChar.Nombre, D3DColorXRGB(RG(TempChar.Criminal, 1), RG(TempChar.Criminal, 2), RG(TempChar.Criminal, 3)))
                             End If
-                      
+                        ElseIf (TempChar.invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
+                            If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
+                                lCenter = (frmMain.textwidth(left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1)) / 2) - 16
+                                sClan = mid$(TempChar.Nombre, InStr(TempChar.Nombre, "<"))
+                                Call DrawText(1, iPPx - lCenter, iPPy + 30, left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1), D3DColorXRGB(255, 255, 0))
+                                lCenter = (frmMain.textwidth(sClan) / 2) - 16
+                                Call DrawText(1, iPPx - lCenter, iPPy + 45, sClan, D3DColorXRGB(255, 255, 0))
+                            Else
+                                lCenter = (frmMain.textwidth(TempChar.Nombre) / 2) - 16
+                                Call DrawText(1, iPPx - lCenter, iPPy + 30, TempChar.Nombre, D3DColorXRGB(255, 255, 0))
+                            End If
                         End If
-                       
                     End If
                 End If
     
@@ -1246,6 +1280,33 @@ LastOffsetX = ParticleOffsetX
 LastOffsetY = ParticleOffsetY
 
 End Sub
+
+Public Function PJInMyGuild(ByVal CharI As Integer) As Boolean
+    With CharList(CharI)
+        Dim tp As Integer
+        Dim tempS As String
+        Dim tempP As Integer
+        Dim MiTag As String
+        Dim MiPos As Integer
+
+        tp = InStr(.Nombre, "<")
+        If tp = 0 Then
+            PJInMyGuild = False
+            Exit Function
+        End If
+
+        tempP = InStr(.Nombre, "<")
+        MiPos = InStr(CharList(UserCharIndex).Nombre, "<")
+        tempS = mid$(.Nombre, tempP)
+        MiTag = mid$(CharList(UserCharIndex).Nombre, MiPos)
+        If tempS = MiTag Then
+            PJInMyGuild = True
+            Exit Function
+        End If
+        PJInMyGuild = False
+    End With
+End Function
+
 Public Function RenderSounds()
 
     If bLluvia(UserMap) = 1 Then
