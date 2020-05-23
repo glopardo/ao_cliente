@@ -1168,7 +1168,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                             Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
                         End If
 
-                    ElseIf (CharList(MapData(X, Y).CharIndex).invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
+                    ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(X, Y).CharIndex).Nombre)) Or PJInMyGuild(MapData(X, Y).CharIndex) Then
 
                         'Cuerpo
                         Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value, True)
@@ -1209,7 +1209,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                                 lCenter = (frmMain.textwidth(TempChar.Nombre) / 2) - 16
                                 Call DrawText(1, iPPx - lCenter, iPPy + 30, TempChar.Nombre, D3DColorXRGB(RG(TempChar.Criminal, 1), RG(TempChar.Criminal, 2), RG(TempChar.Criminal, 3)))
                             End If
-                        ElseIf (TempChar.invisible And PJInMyGuild(MapData(X, Y).CharIndex)) Or (MapData(X, Y).CharIndex = UserCharIndex) Then
+                        ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(X, Y).CharIndex).Nombre)) Or PJInMyGuild(MapData(X, Y).CharIndex) Then
                             If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
                                 lCenter = (frmMain.textwidth(left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1)) / 2) - 16
                                 sClan = mid$(TempChar.Nombre, InStr(TempChar.Nombre, "<"))
@@ -1228,13 +1228,10 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                 
                 CharList(MapData(X, Y).CharIndex) = TempChar
 
-
                 If CharList(MapData(X, Y).CharIndex).FX <> 0 Then Call Draw_Grh(FxData(TempChar.FX).FX, iPPx + FxData(TempChar.FX).OffsetX, iPPy + FxData(TempChar.FX).OffsetY, 1, 1, CBlanco(), , , , , MapData(X, Y).CharIndex)
                 
             End If
                 '*************************************************
-                
-                
                 'Layer 3 *****************************************
                 If .Graphic(3).GrhIndex <> 0 Then
 
@@ -1297,9 +1294,15 @@ Public Function PJInMyGuild(ByVal CharI As Integer) As Boolean
 
         tempP = InStr(.Nombre, "<")
         MiPos = InStr(CharList(UserCharIndex).Nombre, "<")
+        
+        If MiPos = 0 Then
+            PJInMyGuild = False
+            Exit Function
+        End If
+        
         tempS = mid$(.Nombre, tempP)
         MiTag = mid$(CharList(UserCharIndex).Nombre, MiPos)
-        If tempS = MiTag Then
+        If (tempS = MiTag) Then
             PJInMyGuild = True
             Exit Function
         End If
