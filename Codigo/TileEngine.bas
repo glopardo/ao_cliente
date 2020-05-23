@@ -2551,79 +2551,80 @@ Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte
     Dim QuitarAnimacion As Boolean
  
     If Grh.GrhIndex = 0 Then Exit Sub
-        If Animate Then
-            If Grh.Started = 1 Then
-                Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.SpeedCounter)
-                If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
-                    Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
-                   
-                    If Grh.SpeedCounter <> -1 Then
-                        If Grh.SpeedCounter > 0 Then
-                            Grh.SpeedCounter = Grh.SpeedCounter - 1
-                        Else
-                            Grh.Started = 0
-                        End If
+    
+    If Animate Then
+        If Grh.Started = 1 Then
+            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.SpeedCounter)
+            If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
+                Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
+               
+                If Grh.SpeedCounter <> -1 Then
+                    If Grh.SpeedCounter > 0 Then
+                        Grh.SpeedCounter = Grh.SpeedCounter - 1
+                    Else
+                        Grh.Started = 0
                     End If
                 End If
             End If
         End If
-        
-        iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
-        If iGrhIndex = 0 Then Exit Sub
-        
-        If center Then
-            If GrhData(iGrhIndex).TileWidth <> 1 Then
-                X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
-            End If
-            
-            If GrhData(iGrhIndex).TileHeight <> 1 Then
-                Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
-            End If
-        End If
-
-        Dim C(3) As Long
-         
-        ColorBrillo = D3DColorXRGB(0, 255, 0)
-     
-        C(0) = ColorBrillo
-        C(1) = ColorBrillo
-        C(2) = ColorBrillo
-        C(3) = ColorBrillo
-            
-        Device_Box_Textured_Render_Advance iGrhIndex, _
-            X + RadioBrillo, Y, _
-            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
-            C(), _
-            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
-            True, angle, reflejoagua
+    End If
     
-        Device_Box_Textured_Render_Advance iGrhIndex, _
-            X - RadioBrillo, Y, _
-            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
-            C(), _
-            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
-            True, angle, reflejoagua
+    iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+    If iGrhIndex = 0 Then Exit Sub
+    
+    If center Then
+        If GrhData(iGrhIndex).TileWidth <> 1 Then
+            X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
+        End If
         
-        Device_Box_Textured_Render_Advance iGrhIndex, _
-            X, Y + RadioBrillo, _
-            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
-            C(), _
-            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
-            True, angle, reflejoagua
+        If GrhData(iGrhIndex).TileHeight <> 1 Then
+            Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
+        End If
+    End If
+
+    Dim C(3) As Long
+     
+    ColorBrillo = D3DColorXRGB(255, 255, 255)
+ 
+    C(0) = ColorBrillo
+    C(1) = ColorBrillo
+    C(2) = ColorBrillo
+    C(3) = ColorBrillo
         
-        Device_Box_Textured_Render_Advance iGrhIndex, _
-            X, Y - RadioBrillo, _
-            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
-            C(), _
-            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
-            True, angle, reflejoagua
-        
-        Device_Box_Textured_Render_Advance iGrhIndex, _
-            X, Y, _
-            GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
-            C(), _
-            GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
-            Alpha, angle, reflejoagua
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X + RadioBrillo, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X - RadioBrillo, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y + RadioBrillo, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y - RadioBrillo, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        True, angle, reflejoagua
+    
+    Device_Box_Textured_Render_Advance iGrhIndex, _
+        X, Y, _
+        GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
+        C(), _
+        GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
+        Alpha, angle, reflejoagua
     
     
  
