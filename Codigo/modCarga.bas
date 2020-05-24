@@ -13,90 +13,90 @@ Public Sub Setup_Ambient()
 'Parra: ¿Recomendaciones para evitar este tipo de subs? Crear un archivo binario guardando el array completo.
 
     'Noche 87, 61, 43
-    luz_dia(0).R = 87
+    luz_dia(0).r = 87
     luz_dia(0).G = 61
     luz_dia(0).b = 43
-    luz_dia(1).R = 87
+    luz_dia(1).r = 87
     luz_dia(1).G = 61
     luz_dia(1).b = 43
-    luz_dia(2).R = 87
+    luz_dia(2).r = 87
     luz_dia(2).G = 61
     luz_dia(2).b = 43
-    luz_dia(3).R = 87
+    luz_dia(3).r = 87
     luz_dia(3).G = 61
     luz_dia(3).b = 43
     '4 am 124,117,91
-    luz_dia(4).R = 124
+    luz_dia(4).r = 124
     luz_dia(4).G = 127
     luz_dia(4).b = 91
     '5,6 am 143,137,135
-    luz_dia(5).R = 143
+    luz_dia(5).r = 143
     luz_dia(5).G = 137
     luz_dia(5).b = 135
-    luz_dia(6).R = 143
+    luz_dia(6).r = 143
     luz_dia(6).G = 137
     luz_dia(6).b = 135
     '7 am 212,205,207
-    luz_dia(7).R = 212
+    luz_dia(7).r = 212
     luz_dia(7).G = 205
     luz_dia(7).b = 207
-    luz_dia(8).R = 212
+    luz_dia(8).r = 212
     luz_dia(8).G = 205
     luz_dia(8).b = 207
-    luz_dia(9).R = 212
+    luz_dia(9).r = 212
     luz_dia(9).G = 205
     luz_dia(9).b = 207
-    luz_dia(10).R = 212
+    luz_dia(10).r = 212
     luz_dia(10).G = 205
     luz_dia(10).b = 207
-    luz_dia(11).R = 212
+    luz_dia(11).r = 212
     luz_dia(11).G = 205
     luz_dia(11).b = 207
-    luz_dia(12).R = 212
+    luz_dia(12).r = 212
     luz_dia(12).G = 205
     luz_dia(12).b = 207
     'Dia 255, 255, 255
-    luz_dia(12).R = 255
+    luz_dia(12).r = 255
     luz_dia(12).G = 255
     luz_dia(12).b = 255
-    luz_dia(13).R = 255
+    luz_dia(13).r = 255
     luz_dia(13).G = 255
     luz_dia(13).b = 255
     'Medio Dia 255, 200, 255
-    luz_dia(14).R = 255
+    luz_dia(14).r = 255
     luz_dia(14).G = 250
     luz_dia(14).b = 255
-    luz_dia(15).R = 255
+    luz_dia(15).r = 255
     luz_dia(15).G = 240
     luz_dia(15).b = 255
-    luz_dia(16).R = 255
+    luz_dia(16).r = 255
     luz_dia(16).G = 230
     luz_dia(16).b = 255
     '17/18 0, 100, 255
-    luz_dia(17).R = 230
+    luz_dia(17).r = 230
     luz_dia(17).G = 230
     luz_dia(17).b = 255
     '18/19 0, 100, 255
-    luz_dia(18).R = 230
+    luz_dia(18).r = 230
     luz_dia(18).G = 230
     luz_dia(18).b = 255
     '19/20 156, 142, 83
-    luz_dia(19).R = 156
+    luz_dia(19).r = 156
     luz_dia(19).G = 142
     luz_dia(19).b = 83
-    luz_dia(20).R = 87
+    luz_dia(20).r = 87
     luz_dia(20).G = 61
     luz_dia(20).b = 43
-    luz_dia(21).R = 87
+    luz_dia(21).r = 87
     luz_dia(21).G = 61
     luz_dia(21).b = 43
-    luz_dia(22).R = 87
+    luz_dia(22).r = 87
     luz_dia(22).G = 61
     luz_dia(22).b = 43
-    luz_dia(23).R = 87
+    luz_dia(23).r = 87
     luz_dia(23).G = 61
     luz_dia(23).b = 43
-    luz_dia(24).R = 87
+    luz_dia(24).r = 87
     luz_dia(24).G = 61
     luz_dia(24).b = 43
             
@@ -188,8 +188,8 @@ For i = 1 To NumCuerpos
     InitGrh BodyData(i).Walk(2), MisCuerpos(i).Body(2), 0
     InitGrh BodyData(i).Walk(3), MisCuerpos(i).Body(3), 0
     InitGrh BodyData(i).Walk(4), MisCuerpos(i).Body(4), 0
-    BodyData(i).HeadOffset.x = MisCuerpos(i).HeadOffsetX
-    BodyData(i).HeadOffset.y = MisCuerpos(i).HeadOffsetY
+    BodyData(i).HeadOffset.X = MisCuerpos(i).HeadOffsetX
+    BodyData(i).HeadOffset.Y = MisCuerpos(i).HeadOffsetY
 Next i
 
 Close #n
@@ -265,7 +265,7 @@ End If
 
 Grh.FrameCounter = 1
 
-If Grh.GrhIndex <> 0 Then Grh.SpeedCounter = GrhData(Grh.GrhIndex).speed
+If Grh.GrhIndex <> 0 Then Grh.SpeedCounter = GrhData(Grh.GrhIndex).Speed
 
 End Sub
 Sub LoadGrhData()
@@ -291,7 +291,7 @@ Get #1, , tempint
 Get #1, , Grh
  
 Do Until Grh <= 0
-   
+    GrhData(Grh).Active = True
     Get #1, , GrhData(Grh).NumFrames
     If GrhData(Grh).NumFrames <= 0 Then GoTo ErrorHandler
    
@@ -310,12 +310,12 @@ Do Until Grh <= 0
    
         Get #1, , a
        
-        GrhData(Grh).speed = a
+        GrhData(Grh).Speed = a
        
         ñoñal Grh
        
        
-        If GrhData(Grh).speed <= 0 Then GoTo ErrorHandler
+        If GrhData(Grh).Speed <= 0 Then GoTo ErrorHandler
        
        
         GrhData(Grh).pixelHeight = GrhData(GrhData(Grh).Frames(1)).pixelHeight
@@ -364,7 +364,16 @@ Loop
  
  
 Close #1
- 
+
+Dim count As Long
+Open IniPath & "MiniMap.dat" For Binary As #1
+    Seek #1, 1
+    For count = 1 To 15000
+        If GrhData(count).Active Then
+            Get #1, , GrhData(count).MiniMap_color
+        End If
+    Next count
+Close #1
  
 Exit Sub
  
@@ -376,7 +385,7 @@ End Sub
  
 Sub ñoñal(Grh As Integer)
  
-GrhData(Grh).speed = ((GrhData(Grh).speed * 1000) / 18)
+GrhData(Grh).Speed = ((GrhData(Grh).Speed * 1000) / 18)
  
 End Sub
 Sub CrearGrh(GrhIndex As Integer, Index As Integer)
@@ -434,8 +443,8 @@ End Sub
 Sub SwitchMapNew(Map As Integer)
 On Error Resume Next
 Dim loopc As Integer
-Dim y As Integer
-Dim x As Integer
+Dim Y As Integer
+Dim X As Integer
 Dim tempint As Integer
 Dim InfoTile As Byte
 Dim i As Integer
@@ -446,35 +455,35 @@ Seek #1, 1
 
 Get #1, , tempint
 
-For y = YMinMapSize To YMaxMapSize
-    For x = XMinMapSize To XMaxMapSize
+For Y = YMinMapSize To YMaxMapSize
+    For X = XMinMapSize To XMaxMapSize
 
         Get #1, , InfoTile
         
-        MapData(x, y).Blocked = (InfoTile And 1)
+        MapData(X, Y).Blocked = (InfoTile And 1)
         
-        Get #1, , MapData(x, y).Graphic(1).GrhIndex
+        Get #1, , MapData(X, Y).Graphic(1).GrhIndex
         
         For i = 2 To 4
             If InfoTile And (2 ^ (i - 1)) Then
-                Get #1, , MapData(x, y).Graphic(i).GrhIndex
-                Call InitGrh(MapData(x, y).Graphic(i), MapData(x, y).Graphic(i).GrhIndex)
-            Else: MapData(x, y).Graphic(i).GrhIndex = 0
+                Get #1, , MapData(X, Y).Graphic(i).GrhIndex
+                Call InitGrh(MapData(X, Y).Graphic(i), MapData(X, Y).Graphic(i).GrhIndex)
+            Else: MapData(X, Y).Graphic(i).GrhIndex = 0
             End If
         Next
         
-        MapData(x, y).Trigger = 0
+        MapData(X, Y).Trigger = 0
         
         For i = 4 To 6
-            If (InfoTile And 2 ^ i) Then MapData(x, y).Trigger = MapData(x, y).Trigger Or 2 ^ (i - 4)
+            If (InfoTile And 2 ^ i) Then MapData(X, Y).Trigger = MapData(X, Y).Trigger Or 2 ^ (i - 4)
         Next
         
-        Call InitGrh(MapData(x, y).Graphic(1), MapData(x, y).Graphic(1).GrhIndex)
+        Call InitGrh(MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex)
     
-        If MapData(x, y).CharIndex > 0 Then Call EraseChar(MapData(x, y).CharIndex)
-        MapData(x, y).ObjGrh.GrhIndex = 0
-    Next x
-Next y
+        If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
+        MapData(X, Y).ObjGrh.GrhIndex = 0
+    Next X
+Next Y
 
 Close #1
 

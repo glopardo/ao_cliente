@@ -71,8 +71,8 @@ On Error Resume Next
 Dim RetVal As Variant
 Dim perso As String
 Dim recup As Integer
-Dim X As Integer
-Dim Y As Integer
+Dim x As Integer
+Dim y As Integer
 Dim CharIndex As Integer
 Dim tempint As Integer
 Dim tempstr As String
@@ -122,6 +122,7 @@ Dim rdata4
             End If
             
             Connected = True
+            Call DibujarMiniMapa
             Unload frmConnect
             frmMain.Label8.Caption = UserName
             frmMain.Visible = True
@@ -134,9 +135,9 @@ Dim rdata4
             frmMain.Label3.Visible = False
             frmMain.Label5.Visible = False
             frmMain.Label7.Visible = False
-            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
+            bTecho = IIf(MapData(UserPos.x, UserPos.y).Trigger = 1 Or _
+            MapData(UserPos.x, UserPos.y).Trigger = 2 Or _
+            MapData(UserPos.x, UserPos.y).Trigger = 4, True, False)
             Call Dialogos.RemoveAllDialogs
             Call DoFogataFx
             Exit Sub
@@ -377,10 +378,10 @@ End Select
             Pausa = Not Pausa
             Exit Sub
         Case "LLU"
-            If Not InMapBounds(UserPos.X, UserPos.Y) Then Exit Sub
-            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
-            MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
+            If Not InMapBounds(UserPos.x, UserPos.y) Then Exit Sub
+            bTecho = IIf(MapData(UserPos.x, UserPos.y).Trigger = 1 Or _
+            MapData(UserPos.x, UserPos.y).Trigger = 2 Or _
+            MapData(UserPos.x, UserPos.y).Trigger = 4, True, False)
             If Not bRain Then
                 bRain = True
             Else
@@ -1105,8 +1106,8 @@ Sub HandleDosLetras(ByVal Rdata As String)
 Dim tempint As Integer
 Dim tempstr As String
 Dim i As Integer
-Dim X As Integer
-Dim Y As Integer
+Dim x As Integer
+Dim y As Integer
 Dim CharIndex As Integer
 Dim perso As String
 Dim recup As Integer
@@ -1121,12 +1122,12 @@ Dim var4 As Integer
 
 Select Case left$(Rdata, 2)
         Case "ET"
-            For Y = YMinMapSize To YMaxMapSize
-                For X = XMinMapSize To XMaxMapSize
-                    If MapData(X, Y).CharIndex > 0 Then Call EraseChar(MapData(X, Y).CharIndex)
-                    MapData(X, Y).ObjGrh.GrhIndex = 0
-                Next X
-            Next Y
+            For y = YMinMapSize To YMaxMapSize
+                For x = XMinMapSize To XMaxMapSize
+                    If MapData(x, y).CharIndex > 0 Then Call EraseChar(MapData(x, y).CharIndex)
+                    MapData(x, y).ObjGrh.GrhIndex = 0
+                Next x
+            Next y
             Exit Sub
         Case "°°"
             CONGELADO = True
@@ -1144,12 +1145,12 @@ Select Case left$(Rdata, 2)
             TopMapa = 18 + Val(ReadField(4, Rdata, 44)) * 18
             IzquierdaMapa = 25 + Val(ReadField(5, Rdata, 44)) * 18
             
-            frmMapa.personaje.left = IzquierdaMapa + (UserPos.X - 50) * 0.18
-            frmMapa.personaje.top = TopMapa + (UserPos.Y - 50) * 0.18
+            frmMapa.personaje.left = IzquierdaMapa + (UserPos.x - 50) * 0.18
+            frmMapa.personaje.top = TopMapa + (UserPos.y - 50) * 0.18
 
             frmMapa.personaje.Visible = (TopMapa > 18 Or IzquierdaMapa > 25)
             
-            frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.Y & "]"
+            frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.x & " - " & UserPos.y & "]"
 
             If FileExist(App.Path & "\maps\Mapa" & UserMap & ".mcl", vbNormal) Then
                 Open App.Path & "\maps\Mapa" & UserMap & ".mcl" For Binary As #1
@@ -1178,12 +1179,12 @@ Select Case left$(Rdata, 2)
             Exit Sub
         Case "PU"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            MapData(UserPos.X, UserPos.Y).CharIndex = 0
-            UserPos.X = CInt(ReadField(1, Rdata, 44))
-            UserPos.Y = CInt(ReadField(2, Rdata, 44))
-            MapData(UserPos.X, UserPos.Y).CharIndex = UserCharIndex
+            MapData(UserPos.x, UserPos.y).CharIndex = 0
+            UserPos.x = CInt(ReadField(1, Rdata, 44))
+            UserPos.y = CInt(ReadField(2, Rdata, 44))
+            MapData(UserPos.x, UserPos.y).CharIndex = UserCharIndex
             CharList(UserCharIndex).POS = UserPos
-            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or MapData(UserPos.X, UserPos.Y).Trigger = 2 Or MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
+            bTecho = IIf(MapData(UserPos.x, UserPos.y).Trigger = 1 Or MapData(UserPos.x, UserPos.y).Trigger = 2 Or MapData(UserPos.x, UserPos.y).Trigger = 4, True, False)
             Exit Sub
         Case "4&"
             FrmElegirCamino.Show
@@ -2005,15 +2006,15 @@ Select Case left$(Rdata, 2)
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             UserCharIndex = Val(Rdata)
             UserPos = CharList(UserCharIndex).POS
-            frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.Y & "]"
-            bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or MapData(UserPos.X, UserPos.Y).Trigger = 2 Or MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
+            frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.x & " - " & UserPos.y & "]"
+            bTecho = IIf(MapData(UserPos.x, UserPos.y).Trigger = 1 Or MapData(UserPos.x, UserPos.y).Trigger = 2 Or MapData(UserPos.x, UserPos.y).Trigger = 4, True, False)
             Exit Sub
         Case "CC"
             Dim clanono As String
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             CharIndex = ReadField(4, Rdata, 44)
-            X = ReadField(5, Rdata, 44)
-            Y = ReadField(6, Rdata, 44)
+            x = ReadField(5, Rdata, 44)
+            y = ReadField(6, Rdata, 44)
             CharList(CharIndex).FX = Val(ReadField(9, Rdata, 44))
             CharList(CharIndex).FxLoopTimes = Val(ReadField(10, Rdata, 44))
             CharList(CharIndex).Nombre = ReadField(12, Rdata, 44)
@@ -2025,7 +2026,7 @@ Select Case left$(Rdata, 2)
             CharList(CharIndex).Criminal = Val(ReadField(13, Rdata, 44))
             
             CharList(CharIndex).invisible = (Val(ReadField(14, Rdata, 44)) = 1)
-            Call MakeChar(CharIndex, ReadField(1, Rdata, 44), ReadField(2, Rdata, 44), ReadField(3, Rdata, 44), X, Y, Val(ReadField(7, Rdata, 44)), Val(ReadField(8, Rdata, 44)), Val(ReadField(11, Rdata, 44)))
+            Call MakeChar(CharIndex, ReadField(1, Rdata, 44), ReadField(2, Rdata, 44), ReadField(3, Rdata, 44), x, y, Val(ReadField(7, Rdata, 44)), Val(ReadField(8, Rdata, 44)), Val(ReadField(11, Rdata, 44)))
             
             Exit Sub
             
@@ -2246,13 +2247,13 @@ Select Case left$(Rdata, 2)
             Exit Sub
         Case "HO"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            X = Val(ReadField(2, Rdata, 44))
-            Y = Val(ReadField(3, Rdata, 44))
+            x = Val(ReadField(2, Rdata, 44))
+            y = Val(ReadField(3, Rdata, 44))
             
-            MapData(X, Y).ObjGrh.GrhIndex = Val(ReadField(1, Rdata, 44))
-            InitGrh MapData(X, Y).ObjGrh, MapData(X, Y).ObjGrh.GrhIndex
-            LastPos.X = X
-            LastPos.Y = Y
+            MapData(x, y).ObjGrh.GrhIndex = Val(ReadField(1, Rdata, 44))
+            InitGrh MapData(x, y).ObjGrh, MapData(x, y).ObjGrh.GrhIndex
+            LastPos.x = x
+            LastPos.y = y
             Exit Sub
         Case "P8"
             UserParalizado = False
@@ -2264,9 +2265,9 @@ Select Case left$(Rdata, 2)
             Exit Sub
         Case "BO"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            X = Val(ReadField(1, Rdata, 44))
-            Y = Val(ReadField(2, Rdata, 44))
-            MapData(X, Y).ObjGrh.GrhIndex = 0
+            x = Val(ReadField(1, Rdata, 44))
+            y = Val(ReadField(2, Rdata, 44))
+            MapData(x, y).ObjGrh.GrhIndex = 0
             Exit Sub
         Case "BQ"
             Dim b As Byte

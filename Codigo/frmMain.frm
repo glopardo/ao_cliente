@@ -64,6 +64,17 @@ Begin VB.Form frmMain
       Type            =   1
       Urgent          =   0   'False
    End
+   Begin VB.PictureBox Minimap 
+      AutoRedraw      =   -1  'True
+      Height          =   1500
+      Left            =   6960
+      ScaleHeight     =   96
+      ScaleMode       =   3  'Pixel
+      ScaleWidth      =   96
+      TabIndex        =   38
+      Top             =   720
+      Width           =   1500
+   End
    Begin VB.PictureBox Inventario 
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
@@ -79,14 +90,14 @@ Begin VB.Form frmMain
       Width           =   2400
    End
    Begin RichTextLib.RichTextBox rectxt 
-      Height          =   1058
+      Height          =   1065
       Left            =   240
       TabIndex        =   27
       TabStop         =   0   'False
-      Top             =   805
-      Width           =   7935
-      _ExtentX        =   13996
-      _ExtentY        =   1852
+      Top             =   840
+      Width           =   6615
+      _ExtentX        =   11668
+      _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
       ReadOnly        =   -1  'True
