@@ -708,9 +708,8 @@ Do While prgRun
     
 
     If frmMain.Inventario.Visible Then
-    DrawInventario
-    End If
-    
+        DrawInventario
+        End If
             lFrameLimiter = GetTickCount
             FramesPerSecCounter = FramesPerSecCounter + 1
             timerElapsedTime = GetElapsedTime()
