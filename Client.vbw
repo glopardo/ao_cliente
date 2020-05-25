@@ -1,7 +1,7 @@
 frmCantidad = 0, 0, 0, 0, C, 104, 104, 461, 424, C
 frmCargando = 0, 0, 0, 0, C, 130, 130, 487, 450, C
 frmComerciar = 0, 0, 0, 0, C, 156, 156, 513, 476, C
-frmMain = 52, 52, 1074, 807, , 78, 78, 1335, 888, C
+frmMain = 175, 53, 1197, 808, , 78, 78, 1335, 888, C
 frmSkills3 = 0, 0, 0, 0, C, 26, 26, 383, 346, C
 modCarteles = 260, 260, 1410, 920, 
 modDeclaraciones = 202, 153, 1539, 813, 
