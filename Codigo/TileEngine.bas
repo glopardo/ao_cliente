@@ -82,8 +82,8 @@ Public indexList(0 To 5) As Integer 'the 6 indices required (note that the numbe
 
 'Describes a transformable lit vertex
 Public Type TLVERTEX
-  X As Single
-  Y As Single
+  x As Single
+  y As Single
   Z As Single
   rhw As Single
   Color As Long
@@ -111,7 +111,7 @@ Public FontDesc As IFont
 
 
 Private Type light
-    active As Boolean 'Do we ignore this light?
+    Active As Boolean 'Do we ignore this light?
     id As Long
     map_x As Integer 'Coordinates
     map_y As Integer
@@ -187,34 +187,37 @@ Public Const GrhFogata = 1521
 Public Const SRCCOPY = &HCC0020
 
 Public Type Position
-    X As Integer
-    Y As Integer
+    x As Integer
+    y As Integer
 End Type
 
 Public Type Position2
-    X As Single
-    Y As Single
+    x As Single
+    y As Single
 End Type
 
 
 Public Type WorldPos
     Map As Integer
-    X As Integer
-    Y As Integer
+    x As Integer
+    y As Integer
 End Type
 
 Public Type GrhData
-    sX          As Integer
-    sY          As Integer
-    FileNum     As Integer
-    pixelWidth  As Integer
+    sX As Integer
+    sY As Integer
+    FileNum As Integer
+    pixelWidth As Integer
     pixelHeight As Integer
-    TileWidth   As Single
-    TileHeight  As Single
-   
-    NumFrames       As Integer
+    TileWidth As Single
+    TileHeight As Single
+    
+    NumFrames As Integer
     Frames(1 To 25) As Integer
-    speed           As Single
+    Speed As Integer
+    Active As Boolean
+    
+    MiniMap_color As Long
 End Type
  
 Public Type Grh
@@ -251,7 +254,7 @@ End Type
 
 Public Type Char
     ParticleIndex As Integer
-    active As Byte
+    Active As Byte
     Heading As Byte
     POS As Position
 
@@ -346,6 +349,9 @@ Public CascoAnimData() As HeadData
 Public Grh() As Grh
 Public MapData() As MapBlock
 Public CharList(1 To 10000) As Char
+ 
+Public Declare Function SetPixel Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal crColor As Long) As Long
+ 
 
 Public bRain        As Boolean
 Public bTecho       As Boolean
@@ -368,8 +374,8 @@ Private Type D3DXIMAGE_INFO_A
     ImageFileFormat As Long
 End Type
 Private Type POINTAPI
-    X As Long
-    Y As Long
+    x As Long
+    y As Long
 End Type
 Private Type CharVA
     Vertex(0 To 3) As TLVERTEX
@@ -412,10 +418,10 @@ Public LastBlood As Integer     'Last blood splatter index used
 Public BloodList() As FloatSurface
 
 'BitBlt
-Private Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
-Private Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
-Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hdc As Long) As Long
-Private Declare Function DeleteDC Lib "gdi32" (ByVal hdc As Long) As Long
+Private Declare Function SelectObject Lib "gdi32" (ByVal hDC As Long, ByVal hObject As Long) As Long
+Private Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
+Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
+Private Declare Function DeleteDC Lib "gdi32" (ByVal hDC As Long) As Long
 
 'Very percise counter 64bit system counter
 Private Declare Function QueryPerformanceFrequency Lib "kernel32" (lpFrequency As Currency) As Long
@@ -448,66 +454,66 @@ Public Function GetElapsedTime() As Single
     Call QueryPerformanceCounter(end_time)
 End Function
 
-Public Function Engine_TPtoSPX(ByVal X As Byte) As Long
+Public Function Engine_TPtoSPX(ByVal x As Byte) As Long
 '************************************************************
 'Tile Position to Screen Position
 'Takes the tile position and returns the pixel location on the screen
 'More info: http://www.vbgore.com/GameClient.TileEn ... ne_TPtoSPX" class="postlink" rel="nofollow" onClick="window.open(this.href);return false;
 '************************************************************
-    Engine_TPtoSPX = X * 32 - ScreenMinX * 32 + OffsetCounterX - 16
+    Engine_TPtoSPX = x * 32 - ScreenMinX * 32 + OffsetCounterX - 16
 End Function
  
-Public Function Engine_TPtoSPY(ByVal Y As Byte) As Long
+Public Function Engine_TPtoSPY(ByVal y As Byte) As Long
 '************************************************************
 'Tile Position to Screen Position
 'Takes the tile position and returns the pixel location on the screen
 'More info: http://www.vbgore.com/GameClient.TileEn ... ne_TPtoSPY" class="postlink" rel="nofollow" onClick="window.open(this.href);return false;
 '************************************************************
-    Engine_TPtoSPY = Y * 32 - ScreenMinY * 32 + OffsetCounterY - 16
+    Engine_TPtoSPY = y * 32 - ScreenMinY * 32 + OffsetCounterY - 16
    
 End Function
 
 
-Function Engine_PixelPosX(ByVal X As Integer) As Integer
+Function Engine_PixelPosX(ByVal x As Integer) As Integer
 '*****************************************************************
 'Converts a tile position to a screen position
 'More info: http://www.vbgore.com/GameClient.TileEn ... _PixelPosX" class="postlink" rel="nofollow" onClick="window.open(this.href);return false;
 '*****************************************************************
  
-    Engine_PixelPosX = (X - 1) * TilePixelWidth
+    Engine_PixelPosX = (x - 1) * TilePixelWidth
  
 End Function
  
-Function Engine_PixelPosY(ByVal Y As Integer) As Integer
+Function Engine_PixelPosY(ByVal y As Integer) As Integer
 '*****************************************************************
 'Converts a tile position to a screen position
 'More info: http://www.vbgore.com/GameClient.TileEn ... _PixelPosY" class="postlink" rel="nofollow" onClick="window.open(this.href);return false;
 '*****************************************************************
  
-    Engine_PixelPosY = (Y - 1) * TilePixelWidth
+    Engine_PixelPosY = (y - 1) * TilePixelWidth
 End Function
 
 
 
-Public Function Engine_SPtoTPX(ByVal X As Long) As Long
+Public Function Engine_SPtoTPX(ByVal x As Long) As Long
  
 '************************************************************
 'Screen Position to Tile Position
 'Takes the screen pixel position and returns the tile position
 '************************************************************
  
-    Engine_SPtoTPX = UserPos.X + X \ TilePixelWidth - WindowTileWidth \ 2
+    Engine_SPtoTPX = UserPos.x + x \ TilePixelWidth - WindowTileWidth \ 2
  
 End Function
  
-Public Function Engine_SPtoTPY(ByVal Y As Long) As Long
+Public Function Engine_SPtoTPY(ByVal y As Long) As Long
  
 '************************************************************
 'Screen Position to Tile Position
 'Takes the screen pixel position and returns the tile position
 '************************************************************
  
-    Engine_SPtoTPY = UserPos.Y + Y \ TilePixelHeight - WindowTileHeight \ 2
+    Engine_SPtoTPY = UserPos.y + y \ TilePixelHeight - WindowTileHeight \ 2
  
 End Function
 
@@ -584,7 +590,7 @@ Exit Function
 
 End Function
 
-Public Sub Engine_Blood_Create(ByVal X As Integer, ByVal Y As Integer)
+Public Sub Engine_Blood_Create(ByVal x As Integer, ByVal y As Integer)
 '*****************************************************************
 'Create a blood splatter
 'More info: http://www.vbgore.com/GameClient.TileEngine.Engine_Blood_Create
@@ -605,8 +611,8 @@ Dim BloodIndex As Integer
     Loop While BloodList(BloodIndex).Grh.GrhIndex > 0
 
     'Fill in the values
-    BloodList(BloodIndex).POS.X = X
-    BloodList(BloodIndex).POS.Y = Y
+    BloodList(BloodIndex).POS.x = x
+    BloodList(BloodIndex).POS.y = y
     InitGrh BloodList(BloodIndex).Grh, 21
 
 End Sub
@@ -620,8 +626,8 @@ Public Sub Engine_Blood_Erase(ByVal BloodIndex As Integer)
     'Clear the selected index
     BloodList(BloodIndex).Grh.FrameCounter = 0
     BloodList(BloodIndex).Grh.GrhIndex = 0
-    BloodList(BloodIndex).POS.X = 0
-    BloodList(BloodIndex).POS.Y = 0
+    BloodList(BloodIndex).POS.x = 0
+    BloodList(BloodIndex).POS.y = 0
 
     'Update LastBlood
     If BloodIndex = LastBlood Then
@@ -655,21 +661,21 @@ Do While prgRun
     If EngineRun Then
         If frmMain.WindowState <> 1 Then
 
-            If AddtoUserPos.X <> 0 Then
-                OffsetCounterX = OffsetCounterX - ScrollPixelsPerFrame * AddtoUserPos.X * timerTicksPerFrame
-                If Abs(OffsetCounterX) >= Abs(32 * AddtoUserPos.X) Then
+            If AddtoUserPos.x <> 0 Then
+                OffsetCounterX = OffsetCounterX - ScrollPixelsPerFrame * AddtoUserPos.x * timerTicksPerFrame
+                If Abs(OffsetCounterX) >= Abs(32 * AddtoUserPos.x) Then
                     OffsetCounterX = 0
-                    AddtoUserPos.X = 0
+                    AddtoUserPos.x = 0
                     UserMoving = False
                 End If
             End If
      
             '****** Move screen Up and Down if needed ******
-            If AddtoUserPos.Y <> 0 Then
-               OffsetCounterY = OffsetCounterY - ScrollPixelsPerFrame * AddtoUserPos.Y * timerTicksPerFrame
-                If Abs(OffsetCounterY) >= Abs(32 * AddtoUserPos.Y) Then
+            If AddtoUserPos.y <> 0 Then
+               OffsetCounterY = OffsetCounterY - ScrollPixelsPerFrame * AddtoUserPos.y * timerTicksPerFrame
+                If Abs(OffsetCounterY) >= Abs(32 * AddtoUserPos.y) Then
                     OffsetCounterY = 0
-                    AddtoUserPos.Y = 0
+                    AddtoUserPos.y = 0
                     UserMoving = False
                 End If
             End If
@@ -683,7 +689,7 @@ Do While prgRun
             If UserCiego Then
                 D3DDevice.Clear 0, ByVal 0, D3DCLEAR_TARGET, 0, 1#, 0
             Else
-                RenderScreen UserPos.X - AddtoUserPos.X, UserPos.Y - AddtoUserPos.Y, OffsetCounterX, OffsetCounterY
+                RenderScreen UserPos.x - AddtoUserPos.x, UserPos.y - AddtoUserPos.y, OffsetCounterX, OffsetCounterY
             End If
             
             If ModoTrabajo Then DrawText 1, 10, 10, "MODO TRABAJO", D3DColorXRGB(255, 0, 0)
@@ -749,11 +755,11 @@ If ActualizarInv = False Then Exit Sub
     D3DDevice.Clear 0, ByVal 0, D3DCLEAR_TARGET, 0, 0, 0
     D3DDevice.BeginScene
    
-    Dim i As Byte, X As Integer, Y As Integer
+    Dim i As Byte, x As Integer, y As Integer
     Dim T As Grh
  
-    For Y = 1 To 5
-        For X = 1 To 5
+    For y = 1 To 5
+        For x = 1 To 5
         i = i + 1
        
         If UserInventory(i).GrhIndex Then
@@ -762,21 +768,21 @@ If ActualizarInv = False Then Exit Sub
            
             With UserInventory(i)
             
-                Device_Box_Textured_Render GrhData(UserInventory(i).GrhIndex).FileNum, X * 32 - 32, Y * 32 - 32, GrhData(UserInventory(i).GrhIndex).pixelWidth, GrhData(UserInventory(i).GrhIndex).pixelHeight, CBlanco(), 0, 0
-                If ItemElegido = i Then Device_Box_Textured_Render 11000, X * 32 - 32, Y * 32 - 32, 32, 32, CBlanco(), 0, 0
+                Device_Box_Textured_Render GrhData(UserInventory(i).GrhIndex).FileNum, x * 32 - 32, y * 32 - 32, GrhData(UserInventory(i).GrhIndex).pixelWidth, GrhData(UserInventory(i).GrhIndex).pixelHeight, CBlanco(), 0, 0
+                If ItemElegido = i Then Device_Box_Textured_Render 11000, x * 32 - 32, y * 32 - 32, 32, 32, CBlanco(), 0, 0
                 
-                DrawText 2, X * 32 - 32, Y * 32 - 32 - 2, UserInventory(i).Amount, D3DColorARGB(255, 255, 255, 255)
+                DrawText 2, x * 32 - 32, y * 32 - 32 - 2, UserInventory(i).Amount, D3DColorARGB(255, 255, 255, 255)
                 
                
                 If UserInventory(i).Equipped Then _
-                DrawText 2, (X * 32) + 22 - 32, (Y * 32) + 20 - 32 - 1, "+", D3DColorARGB(255, 255, 255, 0)
+                DrawText 2, (x * 32) + 22 - 32, (y * 32) + 20 - 32 - 1, "+", D3DColorARGB(255, 255, 255, 0)
                 
                 
             End With
         End If
        
  
-    Next X, Y
+    Next x, y
  
     D3DDevice.EndScene
     D3DDevice.Present re, ByVal 0, frmMain.Inventario.hWnd, ByVal 0
@@ -785,7 +791,7 @@ If ActualizarInv = False Then Exit Sub
  
 End Sub
 
-Sub Draw_Grh(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte, Animate As Byte, ByRef Color() As Long, Optional Alpha As Boolean, Optional ByVal shadow As Byte = 0, Optional ByVal Invert_x As Boolean = False, Optional ByVal Invert_y As Boolean = False, Optional ByVal KillAnim As Integer = 0, Optional ByVal map_x As Byte, Optional ByVal map_y As Byte)
+Sub Draw_Grh(Grh As Grh, ByVal x As Integer, ByVal y As Integer, center As Byte, Animate As Byte, ByRef Color() As Long, Optional Alpha As Boolean, Optional ByVal shadow As Byte = 0, Optional ByVal Invert_x As Boolean = False, Optional ByVal Invert_y As Boolean = False, Optional ByVal KillAnim As Integer = 0, Optional ByVal map_x As Byte, Optional ByVal map_y As Byte)
 On Error Resume Next
 Dim iGrhIndex As Integer
 Dim QuitarAnimacion As Boolean
@@ -818,17 +824,17 @@ iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
 
 If center Then
     If GrhData(iGrhIndex).TileWidth <> 1 Then
-        X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
+        x = x - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
     End If
     If GrhData(iGrhIndex).TileHeight <> 1 Then
-        Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
+        y = y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
     End If
 End If
 
 If map_x Or map_y = 0 Then map_x = 1: map_y = 1
 
 Call Device_Box_Textured_Render(GrhData(iGrhIndex).FileNum, _
-        X, Y, _
+        x, y, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         Color(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
@@ -836,7 +842,7 @@ Call Device_Box_Textured_Render(GrhData(iGrhIndex).FileNum, _
 
 End Sub
 
-Sub DrawGrhtoHdc(hdc As Long, GrhIndex As Integer)
+Sub DrawGrhtoHdc(hDC As Long, GrhIndex As Integer)
 
     Dim hDCsrc As Long
  
@@ -847,12 +853,12 @@ Sub DrawGrhtoHdc(hdc As Long, GrhIndex As Integer)
             GrhIndex = GrhData(GrhIndex).Frames(1)
         End If
            
-        hDCsrc = CreateCompatibleDC(hdc)
+        hDCsrc = CreateCompatibleDC(hDC)
         
         Call SelectObject(hDCsrc, LoadPicture(App.Path & "\Graficos\" & GrhData(GrhIndex).FileNum & ".bmp"))
 
         'Draw
-        BitBlt hdc, 0, 0, _
+        BitBlt hDC, 0, 0, _
         GrhData(GrhIndex).pixelWidth, GrhData(GrhIndex).pixelHeight, _
         hDCsrc, _
         GrhData(GrhIndex).sX, GrhData(GrhIndex).sY, _
@@ -861,7 +867,7 @@ Sub DrawGrhtoHdc(hdc As Long, GrhIndex As Integer)
         DeleteDC hDCsrc
 End Sub
 
-Public Sub Dibujar_grh_Simple(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, Optional Color As Long)
+Public Sub Dibujar_grh_Simple(Grh As Grh, ByVal x As Integer, ByVal y As Integer, Optional Color As Long)
 Dim C(3) As Long
  
 If Grh.GrhIndex = 0 Then Exit Sub
@@ -875,13 +881,13 @@ If Grh.FrameCounter = 0 Then Grh.FrameCounter = 2
  
 With GrhData(Grh.GrhIndex)
  
-    Device_Box_Textured_Render Grh.GrhIndex, X, Y, .pixelWidth, .pixelHeight, C(), .sX, .sY
+    Device_Box_Textured_Render Grh.GrhIndex, x, y, .pixelWidth, .pixelHeight, C(), .sX, .sY
  
 End With
  
 End Sub
 
-Public Sub Draw_FilledBox(ByVal X As Integer, ByVal Y As Integer, ByVal Width As Integer, ByVal Height As Integer, Color As Long, outlinecolor As Long)
+Public Sub Draw_FilledBox(ByVal x As Integer, ByVal y As Integer, ByVal Width As Integer, ByVal Height As Integer, Color As Long, outlinecolor As Long)
  
     Static box_rect As RECT
     Static Outline As RECT
@@ -901,17 +907,17 @@ Public Sub Draw_FilledBox(ByVal X As Integer, ByVal Y As Integer, ByVal Width As
     rgb_list2(3) = outlinecolor
    
     With box_rect
-        .bottom = Y + Height - 1
-        .left = X + 1
-        .Right = X + Width - 1
-        .top = Y + 1
+        .bottom = y + Height - 1
+        .left = x + 1
+        .Right = x + Width - 1
+        .top = y + 1
     End With
    
     With Outline
-        .bottom = Y + Height
-        .left = X
-        .Right = X + Width
-        .top = Y
+        .bottom = y + Height
+        .left = x
+        .Right = x + Width
+        .top = y
     End With
    
    
@@ -935,8 +941,8 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
 'Last modified by: Juan Martín Sotuyo Dodero (Maraxus)
 'Renders everything to the viewport
 '**************************************************************
-    Dim Y                   As Integer     'Keeps track of where on map we are
-    Dim X                   As Integer     'Keeps track of where on map we are
+    Dim y                   As Integer     'Keeps track of where on map we are
+    Dim x                   As Integer     'Keeps track of where on map we are
     Dim ScreenX             As Integer  'Keeps track of where to place tile on screen
     Dim ScreenY             As Integer  'Keeps track of where to place tile on screen
     Dim minXOffset          As Integer
@@ -1002,43 +1008,43 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
 
     
     'Draw floor layer
-    For Y = ScreenMinY To ScreenMaxY
-        For X = ScreenMinX To ScreenMaxX
+    For y = ScreenMinY To ScreenMaxY
+        For x = ScreenMinX To ScreenMaxX
             'Layer 1 **********************************
 
-                Call Draw_Grh(MapData(X, Y).Graphic(1), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 0, 1, MapData(X, Y).light_value(), , , , , , X, Y)
+                Call Draw_Grh(MapData(x, y).Graphic(1), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 0, 1, MapData(x, y).light_value(), , , , , , x, y)
                 
-                If MapData(X, Y).Graphic(2).GrhIndex <> 0 Then
-                Call Draw_Grh(MapData(X, Y).Graphic(2), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
+                If MapData(x, y).Graphic(2).GrhIndex <> 0 Then
+                Call Draw_Grh(MapData(x, y).Graphic(2), (ScreenX - 1) * 32 + PixelOffsetX, (ScreenY - 1) * 32 + PixelOffsetY, 1, 1, MapData(x, y).light_value(), , , , , , x, y)
                 End If
             '******************************************
             ScreenX = ScreenX + 1
-        Next X
+        Next x
 
         'Reset ScreenX to original value and increment ScreenY
-        ScreenX = ScreenX - X + ScreenMinX
+        ScreenX = ScreenX - x + ScreenMinX
         ScreenY = ScreenY + 1
-    Next Y
+    Next y
     
     
     ScreenY = minYOffset - TileBufferSize
-    For Y = minY To maxY
+    For y = minY To maxY
         ScreenX = minXOffset - TileBufferSize
-        For X = minX To maxX
+        For x = minX To maxX
             PixelOffsetXTemp = ScreenX * 32 + PixelOffsetX
             PixelOffsetYTemp = ScreenY * 32 + PixelOffsetY
-            With MapData(X, Y)
+            With MapData(x, y)
                 '******************************************
 
                 'Object Layer **********************************
                 If .ObjGrh.GrhIndex <> 0 Then
 
-                    Call Draw_Grh(.ObjGrh, PixelOffsetXTemp, PixelOffsetYTemp, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
+                    Call Draw_Grh(.ObjGrh, PixelOffsetXTemp, PixelOffsetYTemp, 1, 1, MapData(x, y).light_value(), , , , , , x, y)
                 End If
 
 
                 If .CharIndex <> 0 Then
-                                    TempChar = CharList(MapData(X, Y).CharIndex)
+                                    TempChar = CharList(MapData(x, y).CharIndex)
                 PixelOffsetXTemp = PixelOffsetX
                 PixelOffsetYTemp = PixelOffsetY
                 Moved = 0
@@ -1047,7 +1053,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
         If .Moving Then
             'If needed, move left and right
             If .scrollDirectionX <> 0 Then
-                .MoveOffset.X = .MoveOffset.X + ScrollPixelsPerFrame * Sgn(.scrollDirectionX) * timerTicksPerFrame
+                .MoveOffset.x = .MoveOffset.x + ScrollPixelsPerFrame * Sgn(.scrollDirectionX) * timerTicksPerFrame
                 
                 'Start animations
 'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
@@ -1060,16 +1066,16 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                 Moved = True
                 
                 'Check if we already got there
-                If (Sgn(.scrollDirectionX) = 1 And .MoveOffset.X >= 0) Or _
-                        (Sgn(.scrollDirectionX) = -1 And .MoveOffset.X <= 0) Then
-                    .MoveOffset.X = 0
+                If (Sgn(.scrollDirectionX) = 1 And .MoveOffset.x >= 0) Or _
+                        (Sgn(.scrollDirectionX) = -1 And .MoveOffset.x <= 0) Then
+                    .MoveOffset.x = 0
                     .scrollDirectionX = 0
                 End If
             End If
             
             'If needed, move up and down
             If .scrollDirectionY <> 0 Then
-                .MoveOffset.Y = .MoveOffset.Y + ScrollPixelsPerFrame * Sgn(.scrollDirectionY) * timerTicksPerFrame
+                .MoveOffset.y = .MoveOffset.y + ScrollPixelsPerFrame * Sgn(.scrollDirectionY) * timerTicksPerFrame
                 
                 'Start animations
 'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
@@ -1082,9 +1088,9 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                 Moved = True
                 
                 'Check if we already got there
-                If (Sgn(.scrollDirectionY) = 1 And .MoveOffset.Y >= 0) Or _
-                        (Sgn(.scrollDirectionY) = -1 And .MoveOffset.Y <= 0) Then
-                    .MoveOffset.Y = 0
+                If (Sgn(.scrollDirectionY) = 1 And .MoveOffset.y >= 0) Or _
+                        (Sgn(.scrollDirectionY) = -1 And .MoveOffset.y <= 0) Then
+                    .MoveOffset.y = 0
                     .scrollDirectionY = 0
                 End If
             End If
@@ -1105,7 +1111,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                 .Moving = 0
             End If
            
-            If TempChar.haciendoataque = 0 And .MoveOffset.X = 0 And .MoveOffset.Y = 0 Then
+            If TempChar.haciendoataque = 0 And .MoveOffset.x = 0 And .MoveOffset.y = 0 Then
                 .arma.WeaponWalk(.Heading).Started = 0
                 '.arma.WeaponWalk(.Heading).FrameCounter = 1
                 .escudo.ShieldWalk(.Heading).Started = 0
@@ -1119,27 +1125,27 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
             End If
            
     End With
-    PixelOffsetXTemp = PixelOffsetXTemp + TempChar.MoveOffset.X
-    PixelOffsetYTemp = PixelOffsetYTemp + TempChar.MoveOffset.Y
+    PixelOffsetXTemp = PixelOffsetXTemp + TempChar.MoveOffset.x
+    PixelOffsetYTemp = PixelOffsetYTemp + TempChar.MoveOffset.y
     
                 iPPx = ((32 * ScreenX) - 32) + PixelOffsetXTemp + 32
                 iPPy = ((32 * ScreenY) - 32) + PixelOffsetYTemp + 32
                 
                 If Len(TempChar.Nombre) = 0 Then
-                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value())
                         'Cabeza
                         If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
-                        Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                        Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.x, iPPy + TempChar.Body.HeadOffset.y, 1, 0, MapData(x, y).light_value())
                         End If
                 Else
                     If TempChar.Navegando = 1 Then
                         'Cuerpo (Barca / Galeon / Galera)
-                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value())
                     
-                    ElseIf Not CharList(MapData(X, Y).CharIndex).invisible And TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
+                    ElseIf Not CharList(MapData(x, y).CharIndex).invisible And TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
                         
                         'Cuerpo
-                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value)
+                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value)
                         
                         If UserParalizado Then
                             Call DDrawTono(TempChar.Body.Walk(TempChar.Heading), iPPx + 1, iPPy - 12, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1147,7 +1153,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                         
                         'Cabeza
                         If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.x, iPPy + TempChar.Body.HeadOffset.y, 1, 0, MapData(x, y).light_value())
                             If UserParalizado Then
                                 Call DDrawTono(TempChar.Head.Head(TempChar.Heading), iPPx + 8, iPPy - 22, 0, 0, 0, 0, 0, 0, 0, 0)
                             End If
@@ -1155,42 +1161,42 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                         
                         'Casco
                         If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.x, iPPy + TempChar.Body.HeadOffset.y, 1, 0, MapData(x, y).light_value())
                         End If
                         
                         'Arma
                         If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value())
                         End If
                         
                         'Escudo
                         If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value())
+                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value())
                         End If
 
-                    ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(X, Y).CharIndex).Nombre)) Or PJInMyGuild(MapData(X, Y).CharIndex) Then
+                    ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(x, y).CharIndex).Nombre)) Or PJInMyGuild(MapData(x, y).CharIndex) Then
 
                         'Cuerpo
-                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value, True)
+                        Call Draw_Grh(TempChar.Body.Walk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value, True)
     
                         'Cabeza
                         If TempChar.Head.Head(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
+                            Call Draw_Grh(TempChar.Head.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.x, iPPy + TempChar.Body.HeadOffset.y, 1, 0, MapData(x, y).light_value(), True)
                         End If
     
                         'Casco
                         If TempChar.casco.Head(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.X, iPPy + TempChar.Body.HeadOffset.Y, 1, 0, MapData(X, Y).light_value(), True)
+                            Call Draw_Grh(TempChar.casco.Head(TempChar.Heading), iPPx + TempChar.Body.HeadOffset.x, iPPy + TempChar.Body.HeadOffset.y, 1, 0, MapData(x, y).light_value(), True)
                         End If
     
                         'Arma
                         If TempChar.arma.WeaponWalk(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
+                            Call Draw_Grh(TempChar.arma.WeaponWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value(), True)
                         End If
     
                         'Escudo
                         If TempChar.escudo.ShieldWalk(TempChar.Heading).GrhIndex > 0 Then
-                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(X, Y).light_value(), True)
+                            Call Draw_Grh(TempChar.escudo.ShieldWalk(TempChar.Heading), iPPx, iPPy, 1, 1, MapData(x, y).light_value(), True)
                         End If
 
                     End If
@@ -1209,7 +1215,7 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                                 lCenter = (frmMain.textwidth(TempChar.Nombre) / 2) - 16
                                 Call DrawText(1, iPPx - lCenter, iPPy + 30, TempChar.Nombre, D3DColorXRGB(RG(TempChar.Criminal, 1), RG(TempChar.Criminal, 2), RG(TempChar.Criminal, 3)))
                             End If
-                        ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(X, Y).CharIndex).Nombre)) Or PJInMyGuild(MapData(X, Y).CharIndex) Then
+                        ElseIf (TempChar.invisible And (CharList(UserCharIndex).Nombre = CharList(MapData(x, y).CharIndex).Nombre)) Or PJInMyGuild(MapData(x, y).CharIndex) Then
                             If InStr(TempChar.Nombre, "<") > 0 And InStr(TempChar.Nombre, ">") > 0 Then
                                 lCenter = (frmMain.textwidth(left$(TempChar.Nombre, InStr(TempChar.Nombre, "<") - 1)) / 2) - 16
                                 sClan = mid$(TempChar.Nombre, InStr(TempChar.Nombre, "<"))
@@ -1224,26 +1230,26 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                     End If
                 End If
     
-                Call Dialogos.UpdateDialogPos((iPPx + TempChar.Body.HeadOffset.X), (iPPy + TempChar.Body.HeadOffset.Y), MapData(X, Y).CharIndex)
+                Call Dialogos.UpdateDialogPos((iPPx + TempChar.Body.HeadOffset.x), (iPPy + TempChar.Body.HeadOffset.y), MapData(x, y).CharIndex)
                 
-                CharList(MapData(X, Y).CharIndex) = TempChar
+                CharList(MapData(x, y).CharIndex) = TempChar
 
-                If CharList(MapData(X, Y).CharIndex).FX <> 0 Then Call Draw_Grh(FxData(TempChar.FX).FX, iPPx + FxData(TempChar.FX).OffsetX, iPPy + FxData(TempChar.FX).OffsetY, 1, 1, CBlanco(), , , , , MapData(X, Y).CharIndex)
+                If CharList(MapData(x, y).CharIndex).FX <> 0 Then Call Draw_Grh(FxData(TempChar.FX).FX, iPPx + FxData(TempChar.FX).OffsetX, iPPy + FxData(TempChar.FX).OffsetY, 1, 1, CBlanco(), , , , , MapData(x, y).CharIndex)
                 
             End If
                 '*************************************************
                 'Layer 3 *****************************************
                 If .Graphic(3).GrhIndex <> 0 Then
 
-                    Call Draw_Grh(.Graphic(3), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, 1, 1, MapData(X, Y).light_value(), , , , , , X, Y)
+                    Call Draw_Grh(.Graphic(3), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, 1, 1, MapData(x, y).light_value(), , , , , , x, y)
                 End If
                 '************************************************
 
             End With
             ScreenX = ScreenX + 1
-        Next X
+        Next x
         ScreenY = ScreenY + 1
-    Next Y
+    Next y
     ScreenY = minYOffset - 5
 
      'ParticleOffsetX = (Engine_PixelPosX(ScreenMinX) - PixelOffsetX)
@@ -1256,21 +1262,21 @@ If Not bTecho Then
         'Draw blocked tiles and grid
             
     ScreenY = minYOffset - TileBufferSize
-    For Y = minY To maxY
+    For y = minY To maxY
         ScreenX = minXOffset - TileBufferSize
-        For X = minX To maxX
+        For x = minX To maxX
                 'Layer 4 **********************************
-                If MapData(X, Y).Graphic(4).GrhIndex Then
+                If MapData(x, y).Graphic(4).GrhIndex Then
                 
-                Call Draw_Grh(MapData(X, Y).Graphic(4), _
+                Call Draw_Grh(MapData(x, y).Graphic(4), _
                 ScreenX * 32 + PixelOffsetX, _
                 ScreenY * 32 + PixelOffsetY, _
-                1, 1, MapData(X, Y).light_value())
+                1, 1, MapData(x, y).light_value())
                 End If
                 ScreenX = ScreenX + 1
-            Next X
+            Next x
             ScreenY = ScreenY + 1
-        Next Y
+        Next y
 End If
 
 LastOffsetX = ParticleOffsetX
@@ -1366,8 +1372,8 @@ Function InitTileEngine(ByRef setDisplayFormhWnd As Long, setTilePixelHeight As 
 
 IniPath = App.Path & "\Init\"
 
-UserPos.X = MinXBorder
-UserPos.Y = MinYBorder
+UserPos.x = MinXBorder
+UserPos.y = MinYBorder
 
 TilePixelWidth = setTilePixelWidth
 TilePixelHeight = setTilePixelHeight
@@ -1551,8 +1557,8 @@ End Function
 
 Private Function VectorToRGBA(Vec As D3DVECTOR, fHeight As Single) As Long
 Dim r As Integer, G As Integer, b As Integer, a As Integer
-    r = 127 * Vec.X + 128
-    G = 127 * Vec.Y + 128
+    r = 127 * Vec.x + 128
+    G = 127 * Vec.y + 128
     b = 127 * Vec.Z + 128
     a = 255 * fHeight
     VectorToRGBA = D3DColorARGB(a, r, G, b)
@@ -1578,7 +1584,7 @@ Private Function Light_Check(ByVal light_index As Long) As Boolean
 '**************************************************************
     'check light_index
     If light_index > 0 And light_index <= light_last Then
-        If light_list(light_index).active Then
+        If light_list(light_index).Active Then
             Light_Check = True
         End If
     End If
@@ -1616,7 +1622,7 @@ Private Sub Light_Make(ByVal light_index As Long, ByVal map_x As Integer, ByVal 
     light_count = light_count + 1
     
     'Make active
-    light_list(light_index).active = True
+    light_list(light_index).Active = True
     
     light_list(light_index).map_x = map_x
     light_list(light_index).map_y = map_y
@@ -1634,7 +1640,7 @@ Public Sub Light_Render_All()
             
     For loop_counter = 1 To light_count
         
-        If light_list(loop_counter).active Then
+        If light_list(loop_counter).Active Then
             Light_Render loop_counter
         End If
     
@@ -1647,8 +1653,8 @@ Private Sub Light_Render(ByVal light_index As Long)
     Dim min_y As Integer
     Dim max_x As Integer
     Dim max_y As Integer
-    Dim X As Integer
-    Dim Y As Integer
+    Dim x As Integer
+    Dim y As Integer
     Dim ia As Single
     Dim i As Integer
     Dim Color As Long
@@ -1686,48 +1692,48 @@ Private Sub Light_Render(ByVal light_index As Long)
     
     'Arrange borders
     'Upper border
-    For X = min_x + 1 To max_x - 1
-        If InMapBounds(X, min_y) Then
-            MapData(X, min_y).light_value(0) = Color
-            MapData(X, min_y).light_value(2) = Color
+    For x = min_x + 1 To max_x - 1
+        If InMapBounds(x, min_y) Then
+            MapData(x, min_y).light_value(0) = Color
+            MapData(x, min_y).light_value(2) = Color
         End If
-    Next X
+    Next x
     
     'Lower border
-    For X = min_x + 1 To max_x - 1
-        If InMapBounds(X, max_y) Then
-            MapData(X, max_y).light_value(1) = Color
-            MapData(X, max_y).light_value(3) = Color
+    For x = min_x + 1 To max_x - 1
+        If InMapBounds(x, max_y) Then
+            MapData(x, max_y).light_value(1) = Color
+            MapData(x, max_y).light_value(3) = Color
         End If
-    Next X
+    Next x
     
     'Left border
-    For Y = min_y + 1 To max_y - 1
-        If InMapBounds(min_x, Y) Then
-            MapData(min_x, Y).light_value(2) = Color
-            MapData(min_x, Y).light_value(3) = Color
+    For y = min_y + 1 To max_y - 1
+        If InMapBounds(min_x, y) Then
+            MapData(min_x, y).light_value(2) = Color
+            MapData(min_x, y).light_value(3) = Color
         End If
-    Next Y
+    Next y
     
     'Right border
-    For Y = min_y + 1 To max_y - 1
-        If InMapBounds(max_x, Y) Then
-            MapData(max_x, Y).light_value(0) = Color
-            MapData(max_x, Y).light_value(1) = Color
+    For y = min_y + 1 To max_y - 1
+        If InMapBounds(max_x, y) Then
+            MapData(max_x, y).light_value(0) = Color
+            MapData(max_x, y).light_value(1) = Color
         End If
-    Next Y
+    Next y
     
     'Set the inner part of the light
-    For X = min_x + 1 To max_x - 1
-        For Y = min_y + 1 To max_y - 1
-            If InMapBounds(X, Y) Then
-                MapData(X, Y).light_value(0) = Color
-                MapData(X, Y).light_value(1) = Color
-                MapData(X, Y).light_value(2) = Color
-                MapData(X, Y).light_value(3) = Color
+    For x = min_x + 1 To max_x - 1
+        For y = min_y + 1 To max_y - 1
+            If InMapBounds(x, y) Then
+                MapData(x, y).light_value(0) = Color
+                MapData(x, y).light_value(1) = Color
+                MapData(x, y).light_value(2) = Color
+                MapData(x, y).light_value(3) = Color
             End If
-        Next Y
-    Next X
+        Next y
+    Next x
 End Sub
 Private Function Light_Next_Open() As Long
 '*****************************************************************
@@ -1739,7 +1745,7 @@ On Error GoTo ErrorHandler:
     Dim loopc As Long
     
     loopc = 1
-    Do Until light_list(loopc).active = False
+    Do Until light_list(loopc).Active = False
         If loopc = light_last Then
             Light_Next_Open = light_last + 1
             Exit Function
@@ -1903,7 +1909,7 @@ Private Sub Light_Destroy(ByVal light_index As Long)
     
     'Update array size
     If light_index = light_last Then
-        Do Until light_list(light_last).active
+        Do Until light_list(light_last).Active
             light_last = light_last - 1
             If light_last = 0 Then
                 light_count = 0
@@ -1925,8 +1931,8 @@ Private Sub Light_Erase(ByVal light_index As Long)
     Dim min_y As Integer
     Dim max_x As Integer
     Dim max_y As Integer
-    Dim X As Integer
-    Dim Y As Integer
+    Dim x As Integer
+    Dim y As Integer
 
     'Set up light borders
     min_x = light_list(light_index).map_x - light_list(light_index).range
@@ -1954,48 +1960,48 @@ Private Sub Light_Erase(ByVal light_index As Long)
     
     'Arrange borders
     'Upper border
-    For X = min_x + 1 To max_x - 1
-        If InMapBounds(X, min_y) Then
-            MapData(X, min_y).light_value(0) = 0
-            MapData(X, min_y).light_value(2) = 0
+    For x = min_x + 1 To max_x - 1
+        If InMapBounds(x, min_y) Then
+            MapData(x, min_y).light_value(0) = 0
+            MapData(x, min_y).light_value(2) = 0
         End If
-    Next X
+    Next x
     
     'Lower border
-    For X = min_x + 1 To max_x - 1
-        If InMapBounds(X, max_y) Then
-            MapData(X, max_y).light_value(1) = 0
-            MapData(X, max_y).light_value(3) = 0
+    For x = min_x + 1 To max_x - 1
+        If InMapBounds(x, max_y) Then
+            MapData(x, max_y).light_value(1) = 0
+            MapData(x, max_y).light_value(3) = 0
         End If
-    Next X
+    Next x
     
     'Left border
-    For Y = min_y + 1 To max_y - 1
-        If InMapBounds(min_x, Y) Then
-            MapData(min_x, Y).light_value(2) = 0
-            MapData(min_x, Y).light_value(3) = 0
+    For y = min_y + 1 To max_y - 1
+        If InMapBounds(min_x, y) Then
+            MapData(min_x, y).light_value(2) = 0
+            MapData(min_x, y).light_value(3) = 0
         End If
-    Next Y
+    Next y
     
     'Right border
-    For Y = min_y + 1 To max_y - 1
-        If InMapBounds(max_x, Y) Then
-            MapData(max_x, Y).light_value(0) = 0
-            MapData(max_x, Y).light_value(1) = 0
+    For y = min_y + 1 To max_y - 1
+        If InMapBounds(max_x, y) Then
+            MapData(max_x, y).light_value(0) = 0
+            MapData(max_x, y).light_value(1) = 0
         End If
-    Next Y
+    Next y
     
     'Set the inner part of the light
-    For X = min_x + 1 To max_x - 1
-        For Y = min_y + 1 To max_y - 1
-            If InMapBounds(X, Y) Then
-                MapData(X, Y).light_value(0) = 0
-                MapData(X, Y).light_value(1) = 0
-                MapData(X, Y).light_value(2) = 0
-                MapData(X, Y).light_value(3) = 0
+    For x = min_x + 1 To max_x - 1
+        For y = min_y + 1 To max_y - 1
+            If InMapBounds(x, y) Then
+                MapData(x, y).light_value(0) = 0
+                MapData(x, y).light_value(1) = 0
+                MapData(x, y).light_value(2) = 0
+                MapData(x, y).light_value(3) = 0
             End If
-        Next Y
-    Next X
+        Next y
+    Next x
 End Sub
 
 Private Function CreateColorVal(a As Integer, r As Integer, G As Integer, b As Integer) As D3DCOLORVALUE
@@ -2103,11 +2109,11 @@ Public Sub Device_Box_Textured_Render(ByVal GrhIndex As Long, ByVal dest_x As In
     End If
 End Sub
 
-Private Function Geometry_Create_TLVertex(ByVal X As Single, ByVal Y As Single, ByVal Z As Single, _
+Private Function Geometry_Create_TLVertex(ByVal x As Single, ByVal y As Single, ByVal Z As Single, _
                                             ByVal rhw As Single, ByVal Color As Long, ByVal Specular As Long, tu As Single, _
                                             ByVal tv As Single) As TLVERTEX
-    Geometry_Create_TLVertex.X = X
-    Geometry_Create_TLVertex.Y = Y
+    Geometry_Create_TLVertex.x = x
+    Geometry_Create_TLVertex.y = y
     Geometry_Create_TLVertex.Z = Z
     Geometry_Create_TLVertex.rhw = rhw
     Geometry_Create_TLVertex.Color = Color
@@ -2370,7 +2376,7 @@ Color.b = dest(0)
 End Function
  
  
-Private Sub Engine_Render_Text(ByRef UseFont As CustomFont, ByVal Text As String, ByVal X As Long, ByVal Y As Long, ByVal Color As Long, Optional ByVal center As Boolean = False, Optional ByVal Alpha As Byte = 255)
+Private Sub Engine_Render_Text(ByRef UseFont As CustomFont, ByVal Text As String, ByVal x As Long, ByVal y As Long, ByVal Color As Long, Optional ByVal center As Boolean = False, Optional ByVal Alpha As Byte = 255)
 Dim TempVA(0 To 3) As TLVERTEX
 Dim tempstr() As String
 Dim count As Integer
@@ -2411,7 +2417,7 @@ Dim bucleFonts As Integer
     D3DDevice.SetTexture 0, UseFont.Texture
    
     If center Then
-        X = X - Engine_GetTextWidth(cfonts(bucleFonts), Text) * 0.5
+        x = x - Engine_GetTextWidth(cfonts(bucleFonts), Text) * 0.5
     End If
    
     'Loop through each line if there are line breaks (vbCrLf)
@@ -2439,17 +2445,17 @@ Dim bucleFonts As Integer
                         CopyMemory TempVA(0), UseFont.HeaderInfo.CharVA(ascii(j - 1)).Vertex(0), 32 * 4
  
                         'Set up the verticies
-                        TempVA(0).X = X + count
-                        TempVA(0).Y = Y + YOffset
+                        TempVA(0).x = x + count
+                        TempVA(0).y = y + YOffset
                        
-                        TempVA(1).X = TempVA(1).X + X + count
-                        TempVA(1).Y = TempVA(0).Y
+                        TempVA(1).x = TempVA(1).x + x + count
+                        TempVA(1).y = TempVA(0).y
  
-                        TempVA(2).X = TempVA(0).X
-                        TempVA(2).Y = TempVA(2).Y + TempVA(0).Y
+                        TempVA(2).x = TempVA(0).x
+                        TempVA(2).y = TempVA(2).y + TempVA(0).y
  
-                        TempVA(3).X = TempVA(1).X
-                        TempVA(3).Y = TempVA(2).Y
+                        TempVA(3).x = TempVA(1).x
+                        TempVA(3).y = TempVA(2).y
                        
                         'Set the colors
                         TempVA(0).Color = TempColor
@@ -2520,8 +2526,8 @@ Dim TexInfo As D3DXIMAGE_INFO_A
     Set cfonts(bucleFonts).Texture = D3DX.CreateTextureFromFileEx(D3DDevice, App.Path & "\Init\Fuentes\" & bucleFonts & ".bmp", D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_POINT, D3DX_FILTER_POINT, &HFF000000, ByVal 0, ByVal 0)
    
     'Store the size of the texture
-    cfonts(bucleFonts).TextureSize.X = TexInfo.Width
-    cfonts(bucleFonts).TextureSize.Y = TexInfo.Height
+    cfonts(bucleFonts).TextureSize.x = TexInfo.Width
+    cfonts(bucleFonts).TextureSize.y = TexInfo.Height
     Next bucleFonts
    
     Exit Sub
@@ -2573,32 +2579,32 @@ For bucleFonts = 1 To UBound(cfonts)
             .Vertex(0).rhw = 1
             .Vertex(0).tu = u
             .Vertex(0).tv = v
-            .Vertex(0).X = 0
-            .Vertex(0).Y = 0
+            .Vertex(0).x = 0
+            .Vertex(0).y = 0
             .Vertex(0).Z = 0
            
             .Vertex(1).Color = D3DColorARGB(255, 0, 0, 0)
             .Vertex(1).rhw = 1
             .Vertex(1).tu = u + cfonts(bucleFonts).ColFactor
             .Vertex(1).tv = v
-            .Vertex(1).X = cfonts(bucleFonts).HeaderInfo.CellWidth
-            .Vertex(1).Y = 0
+            .Vertex(1).x = cfonts(bucleFonts).HeaderInfo.CellWidth
+            .Vertex(1).y = 0
             .Vertex(1).Z = 0
            
             .Vertex(2).Color = D3DColorARGB(255, 0, 0, 0)
             .Vertex(2).rhw = 1
             .Vertex(2).tu = u
             .Vertex(2).tv = v + cfonts(bucleFonts).RowFactor
-            .Vertex(2).X = 0
-            .Vertex(2).Y = cfonts(bucleFonts).HeaderInfo.CellHeight
+            .Vertex(2).x = 0
+            .Vertex(2).y = cfonts(bucleFonts).HeaderInfo.CellHeight
             .Vertex(2).Z = 0
            
             .Vertex(3).Color = D3DColorARGB(255, 0, 0, 0)
             .Vertex(3).rhw = 1
             .Vertex(3).tu = u + cfonts(bucleFonts).ColFactor
             .Vertex(3).tv = v + cfonts(bucleFonts).RowFactor
-            .Vertex(3).X = cfonts(bucleFonts).HeaderInfo.CellWidth
-            .Vertex(3).Y = cfonts(bucleFonts).HeaderInfo.CellHeight
+            .Vertex(3).x = cfonts(bucleFonts).HeaderInfo.CellWidth
+            .Vertex(3).y = cfonts(bucleFonts).HeaderInfo.CellHeight
             .Vertex(3).Z = 0
         End With
        
@@ -2607,7 +2613,7 @@ For bucleFonts = 1 To UBound(cfonts)
 
 End Sub
 
-Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte, Animate As Byte, _
+Sub DDrawTono(Grh As Grh, ByVal x As Integer, ByVal y As Integer, center As Byte, Animate As Byte, _
     Optional ByVal KillAnim As Integer, Optional ByVal map_x As Byte = 1, Optional ByVal map_y As Byte = 1, _
     Optional reflejoagua As Boolean, Optional Alpha As Boolean, Optional RadioBrillo As Byte = 0, Optional ColorBrillo As Long, Optional angle As Single, Optional Color As Long)
  
@@ -2638,11 +2644,11 @@ Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte
     
     If center Then
         If GrhData(iGrhIndex).TileWidth <> 1 Then
-            X = X - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
+            x = x - Int(GrhData(iGrhIndex).TileWidth * 16) + 16
         End If
         
         If GrhData(iGrhIndex).TileHeight <> 1 Then
-            Y = Y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
+            y = y - Int(GrhData(iGrhIndex).TileHeight * 32) + 32
         End If
     End If
 
@@ -2656,35 +2662,35 @@ Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte
     C(3) = ColorBrillo
         
     Device_Box_Textured_Render_Advance iGrhIndex, _
-        X + RadioBrillo, Y, _
+        x + RadioBrillo, y, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         C(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
         True, angle, reflejoagua
 
     Device_Box_Textured_Render_Advance iGrhIndex, _
-        X - RadioBrillo, Y, _
+        x - RadioBrillo, y, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         C(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
         True, angle, reflejoagua
     
     Device_Box_Textured_Render_Advance iGrhIndex, _
-        X, Y + RadioBrillo, _
+        x, y + RadioBrillo, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         C(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
         True, angle, reflejoagua
     
     Device_Box_Textured_Render_Advance iGrhIndex, _
-        X, Y - RadioBrillo, _
+        x, y - RadioBrillo, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         C(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
         True, angle, reflejoagua
     
     Device_Box_Textured_Render_Advance iGrhIndex, _
-        X, Y, _
+        x, y, _
         GrhData(iGrhIndex).pixelWidth, GrhData(iGrhIndex).pixelHeight, _
         C(), _
         GrhData(iGrhIndex).sX, GrhData(iGrhIndex).sY, _
@@ -2740,11 +2746,11 @@ Private Sub Device_Box_Textured_Render_Advance(ByVal GrhIndex As Long, ByVal des
     D3DDevice.SetTexture 0, d3dTextures.Texture
    
     If shadow Then
-        temp_verts(1).X = temp_verts(1).X + src_width / 2
-        temp_verts(1).Y = temp_verts(1).Y - src_height / 2
+        temp_verts(1).x = temp_verts(1).x + src_width / 2
+        temp_verts(1).y = temp_verts(1).y - src_height / 2
      
-        temp_verts(3).X = temp_verts(3).X + src_width
-        temp_verts(3).Y = temp_verts(3).Y - src_width
+        temp_verts(3).x = temp_verts(3).x + src_width
+        temp_verts(3).y = temp_verts(3).y - src_width
     End If
    
     If alpha_blend Then

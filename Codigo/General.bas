@@ -876,7 +876,7 @@ Select Case Index
         End If
         
         If OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex > 0 Then
-            Call DrawGrhtoHdc(frmComerciar.Picture1.hdc, OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex)
+            Call DrawGrhtoHdc(frmComerciar.Picture1.hDC, OtherInventory(frmComerciar.List1(0).ListIndex + 1).GrhIndex)
         Else
             frmComerciar.Picture1.Picture = LoadPicture()
         End If
@@ -952,7 +952,7 @@ Select Case Index
         End Select
         
         If UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex > 0 Then
-            Call DrawGrhtoHdc(frmComerciar.Picture1.hdc, UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex)
+            Call DrawGrhtoHdc(frmComerciar.Picture1.hDC, UserInventory(frmComerciar.List1(1).ListIndex + 1).GrhIndex)
         Else
             frmComerciar.Picture1.Picture = LoadPicture()
         End If
@@ -962,11 +962,11 @@ End Select
 frmComerciar.Picture1.Refresh
 
 End Sub
-Sub TelepPorMapa(X As Long, Y As Long)
+Sub TelepPorMapa(x As Long, y As Long)
 Dim Columna As Long, Fila As Long
 
-Columna = Fix((X - 25) / 18)
-Fila = Fix((Y - 18) / 18)
+Columna = Fix((x - 25) / 18)
+Fila = Fix((y - 18) / 18)
 
 Call SendData("#$" & Columna & "," & Fila)
 
@@ -1217,8 +1217,8 @@ Sub ConvertCPtoTP(ByVal viewPortX As Integer, ByVal viewPortY As Integer, ByRef 
 '******************************************
 'Converts where the mouse is in the main window to a tile position. MUST be called eveytime the mouse moves.
 '******************************************
-    tX = UserPos.X + viewPortX \ 32 - frmMain.Renderer.ScaleWidth \ 64
-    tY = UserPos.Y + viewPortY \ 32 - frmMain.Renderer.ScaleHeight \ 64
+    tX = UserPos.x + viewPortX \ 32 - frmMain.Renderer.ScaleWidth \ 64
+    tY = UserPos.y + viewPortY \ 32 - frmMain.Renderer.ScaleHeight \ 64
     Debug.Print tX; tY
 End Sub
 
@@ -1245,3 +1245,25 @@ Function FieldCount(ByRef Text As String, ByVal SepASCII As Byte) As Long
     
     FieldCount = count
 End Function
+
+Public Sub DibujarMiniMapa()
+   
+Dim map_x As Long, map_y As Long
+ 
+    For map_y = 1 To 100
+        For map_x = 1 To 100
+            If MapData(map_x, map_y).Graphic(1).GrhIndex > 0 Then
+                SetPixel frmMain.Minimap.hDC, map_x, map_y, GrhData(MapData(map_x, map_y).Graphic(1).GrhIndex).MiniMap_color
+            End If
+        Next map_x
+    Next map_y
+   
+    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.x + 1, UserPos.y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.x - 1, UserPos.y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y - 1, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y + 1, RGB(255, 0, 0)
+ 
+    frmMain.Minimap.Refresh
+ 
+End Sub

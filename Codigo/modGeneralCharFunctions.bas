@@ -4,7 +4,7 @@ Attribute VB_Name = "modGeneralCharFunctions"
                 
 Option Explicit
 
-Sub MakeChar(ByVal CharIndex As Integer, ByVal Body As Integer, ByVal Head As Integer, ByVal Heading As Byte, ByVal X As Integer, ByVal y As Integer, ByVal arma As Integer, ByVal escudo As Integer, ByVal casco As Integer)
+Sub MakeChar(ByVal CharIndex As Integer, ByVal Body As Integer, ByVal Head As Integer, ByVal Heading As Byte, ByVal x As Integer, ByVal y As Integer, ByVal arma As Integer, ByVal escudo As Integer, ByVal casco As Integer)
 On Error Resume Next
 
 
@@ -32,24 +32,24 @@ CharList(CharIndex).Heading = Heading
 
 
 CharList(CharIndex).Moving = 0
-CharList(CharIndex).MoveOffset.X = 0
+CharList(CharIndex).MoveOffset.x = 0
 CharList(CharIndex).MoveOffset.y = 0
 
 
-CharList(CharIndex).POS.X = X
+CharList(CharIndex).POS.x = x
 CharList(CharIndex).POS.y = y
 
 
-CharList(CharIndex).active = 1
+CharList(CharIndex).Active = 1
 
 
-MapData(X, y).CharIndex = CharIndex
+MapData(x, y).CharIndex = CharIndex
 
 End Sub
 
 Sub ResetCharInfo(ByVal CharIndex As Integer)
 
-CharList(CharIndex).active = 0
+CharList(CharIndex).Active = 0
 CharList(CharIndex).Criminal = 0
 CharList(CharIndex).FX = 0
 CharList(CharIndex).FxLoopTimes = 0
@@ -58,7 +58,7 @@ CharList(CharIndex).Moving = 0
 CharList(CharIndex).muerto = False
 CharList(CharIndex).Nombre = ""
 CharList(CharIndex).pie = False
-CharList(CharIndex).POS.X = 0
+CharList(CharIndex).POS.x = 0
 CharList(CharIndex).POS.y = 0
 CharList(CharIndex).UsandoArma = False
 
@@ -68,7 +68,7 @@ Dim loopc As Integer
 
 loopc = 1
 
-Do While CharList(loopc).active
+Do While CharList(loopc).Active
     loopc = loopc + 1
 Loop
 
@@ -78,18 +78,18 @@ End Function
 Sub EraseChar(ByVal CharIndex As Integer)
 On Error Resume Next
 
-CharList(CharIndex).active = 0
+CharList(CharIndex).Active = 0
 
 
 If CharIndex = LastChar Then
-    Do Until CharList(LastChar).active = 1
+    Do Until CharList(LastChar).Active = 1
         LastChar = LastChar - 1
         If LastChar = 0 Then Exit Do
     Loop
 End If
 
 
-MapData(CharList(CharIndex).POS.X, CharList(CharIndex).POS.y).CharIndex = 0
+MapData(CharList(CharIndex).POS.x, CharList(CharIndex).POS.y).CharIndex = 0
 
 Call ResetCharInfo(CharIndex)
 
@@ -109,17 +109,17 @@ End Sub
 
 Function EstaPCarea(ByVal Index2 As Integer) As Boolean
 
-Dim X As Integer, y As Integer
+Dim x As Integer, y As Integer
 
 For y = UserPos.y - MinYBorder + 1 To UserPos.y + MinYBorder - 1
-  For X = UserPos.X - MinXBorder + 1 To UserPos.X + MinXBorder - 1
+  For x = UserPos.x - MinXBorder + 1 To UserPos.x + MinXBorder - 1
             
-            If MapData(X, y).CharIndex = Index2 Then
+            If MapData(x, y).CharIndex = Index2 Then
                 EstaPCarea = True
                 Exit Function
             End If
         
-  Next X
+  Next x
 Next y
 
 EstaPCarea = False
@@ -169,6 +169,7 @@ If Cartel Then Cartel = False
 If ProxLegalPos(Direction) And Not UserMeditar And Not UserParalizado Then
     If TiempoTranscurrido(LastPaso) >= IntervaloPaso Then
         Call SendData("M" & Direction)
+        Call DibujarMiniMapa
         LastPaso = Timer
         If Not UserDescansar Then
             Call EliminarChars(Direction)
@@ -180,27 +181,27 @@ If ProxLegalPos(Direction) And Not UserMeditar And Not UserParalizado Then
 ElseIf CharList(UserCharIndex).Heading <> Direction Then Call SendData("CHEA" & Direction)
 End If
 
-frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.X & " - " & UserPos.y & "]"
+frmMain.mapa.Caption = NombreDelMapaActual & " [" & UserMap & " - " & UserPos.x & " - " & UserPos.y & "]"
 
 End Sub
 Function ProxLegalPos(Direction As Byte) As Boolean
 
 Select Case Direction
     Case NORTH
-        ProxLegalPos = LegalPos(UserPos.X, UserPos.y - 1)
+        ProxLegalPos = LegalPos(UserPos.x, UserPos.y - 1)
     Case SOUTH
-        ProxLegalPos = LegalPos(UserPos.X, UserPos.y + 1)
+        ProxLegalPos = LegalPos(UserPos.x, UserPos.y + 1)
     Case WEST
-        ProxLegalPos = LegalPos(UserPos.X - 1, UserPos.y)
+        ProxLegalPos = LegalPos(UserPos.x - 1, UserPos.y)
     Case EAST
-        ProxLegalPos = LegalPos(UserPos.X + 1, UserPos.y)
+        ProxLegalPos = LegalPos(UserPos.x + 1, UserPos.y)
 End Select
 
 End Function
 
 Sub MoveScreen(Heading As Byte)
 
-Dim X As Integer
+Dim x As Integer
 Dim y As Integer
 Dim tX As Integer
 Dim tY As Integer
@@ -211,36 +212,36 @@ Select Case Heading
         y = -1
 
     Case EAST
-        X = 1
+        x = 1
 
     Case SOUTH
         y = 1
     
     Case WEST
-        X = -1
+        x = -1
         
 End Select
 
 
-tX = UserPos.X + X
+tX = UserPos.x + x
 tY = UserPos.y + y
 
 
 If tX < MinXBorder Or tX > MaxXBorder Or tY < MinYBorder Or tY > MaxYBorder Then
     Exit Sub
 Else
-    AddtoUserPos.X = X
-    UserPos.X = tX
+    AddtoUserPos.x = x
+    UserPos.x = tX
     AddtoUserPos.y = y
     UserPos.y = tY
     UserMoving = 1
-    bTecho = IIf(MapData(UserPos.X, UserPos.y).Trigger = 1 Or MapData(UserPos.X, UserPos.y).Trigger = 2 Or MapData(UserPos.X, UserPos.y).Trigger = 4, True, False)
+    bTecho = IIf(MapData(UserPos.x, UserPos.y).Trigger = 1 Or MapData(UserPos.x, UserPos.y).Trigger = 2 Or MapData(UserPos.x, UserPos.y).Trigger = 4, True, False)
 End If
 
 End Sub
 Function HayFogata() As Boolean
 Dim j As Integer, k As Integer
-For j = UserPos.X - 8 To UserPos.X + 8
+For j = UserPos.x - 8 To UserPos.x + 8
     For k = UserPos.y - 6 To UserPos.y + 6
         If InMapBounds(j, k) Then
             If MapData(j, k).ObjGrh.GrhIndex = GrhFogata Then
@@ -255,36 +256,36 @@ Sub RefreshAllChars()
 Dim loopc As Integer
 
 For loopc = 1 To LastChar
-    If CharList(loopc).active = 1 Then
-        MapData(CharList(loopc).POS.X, CharList(loopc).POS.y).CharIndex = loopc
+    If CharList(loopc).Active = 1 Then
+        MapData(CharList(loopc).POS.x, CharList(loopc).POS.y).CharIndex = loopc
     End If
 Next loopc
 
 End Sub
-Function LegalPos(X As Integer, y As Integer) As Boolean
+Function LegalPos(x As Integer, y As Integer) As Boolean
 
-    If X < MinXBorder Or X > MaxXBorder Or y < MinYBorder Or y > MaxYBorder Then
+    If x < MinXBorder Or x > MaxXBorder Or y < MinYBorder Or y > MaxYBorder Then
         LegalPos = False
         Exit Function
     End If
 
-    If MapData(X, y).Blocked = 1 Then
+    If MapData(x, y).Blocked = 1 Then
         LegalPos = False
         Exit Function
     End If
     
-    If MapData(X, y).CharIndex > 0 Then
+    If MapData(x, y).CharIndex > 0 Then
         LegalPos = False
         Exit Function
     End If
    
     If Not UserNavegando Then
-        If HayAgua(X, y) Then
+        If HayAgua(x, y) Then
             LegalPos = False
             Exit Function
         End If
     Else
-        If Not HayAgua(X, y) Then
+        If Not HayAgua(x, y) Then
             LegalPos = False
             Exit Function
         End If
@@ -293,19 +294,19 @@ Function LegalPos(X As Integer, y As Integer) As Boolean
 LegalPos = True
 
 End Function
-Function InMapBounds(X As Integer, y As Integer) As Boolean
-    If X < XMinMapSize Or X > XMaxMapSize Or y < YMinMapSize Or y > YMaxMapSize Then
+Function InMapBounds(x As Integer, y As Integer) As Boolean
+    If x < XMinMapSize Or x > XMaxMapSize Or y < YMinMapSize Or y > YMaxMapSize Then
         InMapBounds = False
         Exit Function
     End If
 
     InMapBounds = True
 End Function
-Function HayAgua(X As Integer, y As Integer) As Boolean
+Function HayAgua(x As Integer, y As Integer) As Boolean
 
-If MapData(X, y).Graphic(1).GrhIndex >= 1505 And _
-   MapData(X, y).Graphic(1).GrhIndex <= 1520 And _
-   MapData(X, y).Graphic(2).GrhIndex = 0 Then
+If MapData(x, y).Graphic(1).GrhIndex >= 1505 And _
+   MapData(x, y).Graphic(1).GrhIndex <= 1520 And _
+   MapData(x, y).Graphic(2).GrhIndex = 0 Then
             HayAgua = True
 Else
             HayAgua = False
@@ -313,13 +314,13 @@ End If
 
 End Function
 Sub EliminarChars(Direction As Byte)
-Dim X(2) As Integer
+Dim x(2) As Integer
 Dim y(2) As Integer
 
 Select Case Direction
     Case NORTH, SOUTH
-        X(1) = UserPos.X - MinXBorder - 2
-        X(2) = UserPos.X + MinXBorder + 2
+        x(1) = UserPos.x - MinXBorder - 2
+        x(2) = UserPos.x + MinXBorder + 2
     Case EAST, WEST
         y(1) = UserPos.y - MinYBorder - 2
         y(2) = UserPos.y + MinYBorder + 2
@@ -331,26 +332,26 @@ Select Case Direction
         If y(1) < 1 Then y(1) = 1
         y(2) = y(1)
     Case EAST
-        X(1) = UserPos.X + MinXBorder + 3
-        If X(1) > 99 Then X(1) = 99
-        X(2) = X(1)
+        x(1) = UserPos.x + MinXBorder + 3
+        If x(1) > 99 Then x(1) = 99
+        x(2) = x(1)
     Case SOUTH
         y(1) = UserPos.y + MinYBorder + 3
         If y(1) > 99 Then y(1) = 99
         y(2) = y(1)
     Case WEST
-        X(1) = UserPos.X - MinXBorder - 3
-        If X(1) < 1 Then X(1) = 1
-        X(2) = X(1)
+        x(1) = UserPos.x - MinXBorder - 3
+        If x(1) < 1 Then x(1) = 1
+        x(2) = x(1)
 End Select
 
 For y(0) = y(1) To y(2)
-    For X(0) = X(1) To X(2)
-        If X(0) > 6 And X(0) < 95 And y(0) > 6 And y(0) < 95 Then
-            If MapData(X(0), y(0)).CharIndex > 0 Then
-                CharList(MapData(X(0), y(0)).CharIndex).POS.X = 0
-                CharList(MapData(X(0), y(0)).CharIndex).POS.y = 0
-                MapData(X(0), y(0)).CharIndex = 0
+    For x(0) = x(1) To x(2)
+        If x(0) > 6 And x(0) < 95 And y(0) > 6 And y(0) < 95 Then
+            If MapData(x(0), y(0)).CharIndex > 0 Then
+                CharList(MapData(x(0), y(0)).CharIndex).POS.x = 0
+                CharList(MapData(x(0), y(0)).CharIndex).POS.y = 0
+                MapData(x(0), y(0)).CharIndex = 0
             End If
         End If
     Next
@@ -362,27 +363,27 @@ Sub MoveCharByPosAndHead(CharIndex As Integer, nX As Integer, nY As Integer, nhe
  
 On Error Resume Next
  
-Dim X As Integer
+Dim x As Integer
 Dim y As Integer
 Dim addX As Integer
 Dim addY As Integer
  
  
  
-X = CharList(CharIndex).POS.X
+x = CharList(CharIndex).POS.x
 y = CharList(CharIndex).POS.y
  
-MapData(X, y).CharIndex = 0
+MapData(x, y).CharIndex = 0
  
-addX = nX - X
+addX = nX - x
 addY = nY - y
  
 MapData(nX, nY).CharIndex = CharIndex
  
-CharList(CharIndex).POS.X = nX
+CharList(CharIndex).POS.x = nX
 CharList(CharIndex).POS.y = nY
  
-CharList(CharIndex).MoveOffset.X = -1 * (TilePixelWidth * addX)
+CharList(CharIndex).MoveOffset.x = -1 * (TilePixelWidth * addX)
 CharList(CharIndex).MoveOffset.y = -1 * (TilePixelHeight * addY)
  
 CharList(CharIndex).Moving = 1
@@ -405,18 +406,18 @@ End Sub
 Sub MoveCharByPos(CharIndex As Integer, nX As Integer, nY As Integer)
 On Error Resume Next
  
-Dim X As Integer
+Dim x As Integer
 Dim y As Integer
 Dim addX As Integer
 Dim addY As Integer
 Dim nheading As Byte
  
-X = CharList(CharIndex).POS.X
+x = CharList(CharIndex).POS.x
 y = CharList(CharIndex).POS.y
  
 'MapData(X, y).CharIndex = 0
  
-addX = nX - X
+addX = nX - x
 addY = nY - y
  
 If Sgn(addX) = -1 Then nheading = WEST
@@ -447,15 +448,15 @@ End Sub
 Sub MoveCharByPosConHeading(CharIndex As Integer, nX As Integer, nY As Integer, nheading As Byte)
 On Error Resume Next
  
-If InMapBounds(CharList(CharIndex).POS.X, CharList(CharIndex).POS.y) Then MapData(CharList(CharIndex).POS.X, CharList(CharIndex).POS.y).CharIndex = 0
+If InMapBounds(CharList(CharIndex).POS.x, CharList(CharIndex).POS.y) Then MapData(CharList(CharIndex).POS.x, CharList(CharIndex).POS.y).CharIndex = 0
  
 MapData(nX, nY).CharIndex = CharIndex
  
-CharList(CharIndex).POS.X = nX
+CharList(CharIndex).POS.x = nX
 CharList(CharIndex).POS.y = nY
  
 CharList(CharIndex).Moving = 0
-CharList(CharIndex).MoveOffset.X = 0
+CharList(CharIndex).MoveOffset.x = 0
 CharList(CharIndex).MoveOffset.y = 0
  
 CharList(CharIndex).Heading = nheading
@@ -466,13 +467,13 @@ Sub MoveCharByHead(CharIndex As Integer, nheading As Byte)
  
 Dim addX As Integer
 Dim addY As Integer
-Dim X As Integer
+Dim x As Integer
 Dim y As Integer
 Dim nX As Integer
 Dim nY As Integer
  
 With CharList(CharIndex)
-X = .POS.X
+x = .POS.x
 y = .POS.y
  
  
@@ -492,15 +493,15 @@ Select Case nheading
        
 End Select
  
-nX = X + addX
+nX = x + addX
 nY = y + addY
  
 MapData(nX, nY).CharIndex = CharIndex
-.POS.X = nX
+.POS.x = nX
 .POS.y = nY
-MapData(X, y).CharIndex = 0
+MapData(x, y).CharIndex = 0
  
-.MoveOffset.X = -1 * (32 * addX)
+.MoveOffset.x = -1 * (32 * addX)
 .MoveOffset.y = -1 * (32 * addY)
  
 .Moving = 1
