@@ -208,6 +208,7 @@ If KeyCode = 27 Then
     AddtoRichTextBox frmCargando.Status, "¡¡Gracias por jugar FenixAO!!", 255, 150, 50, 1, 0, 1
     frmCargando.Refresh
     Call UnloadAllForms
+    Call Resolution.ResetResolution
 End If
 
 End Sub

@@ -962,11 +962,11 @@ End Select
 frmComerciar.Picture1.Refresh
 
 End Sub
-Sub TelepPorMapa(x As Long, y As Long)
+Sub TelepPorMapa(X As Long, Y As Long)
 Dim Columna As Long, Fila As Long
 
-Columna = Fix((x - 25) / 18)
-Fila = Fix((y - 18) / 18)
+Columna = Fix((X - 25) / 18)
+Fila = Fix((Y - 18) / 18)
 
 Call SendData("#$" & Columna & "," & Fila)
 
@@ -1002,6 +1002,12 @@ End If
 
 ChDrive App.Path
 ChDir App.Path
+
+If MsgBox("¿Jugaras En Pantalla Completa?", vbQuestion + vbYesNo, "Resolución") = vbYes Then
+    Call Resolution.SetResolution
+Else
+    NoRes = False
+End If
 
 frmCargando.Show
 frmCargando.Refresh
@@ -1151,6 +1157,7 @@ AddtoRichTextBox frmCargando.Status, "Liberando recursos...", 0, 0, 0, 0, 0, 1
 If ResOriginal <> True Then Call ResetResolution
 
 Call UnloadAllForms
+Call Resolution.ResetResolution
 Call DeInitTileEngine
 
 End
@@ -1217,8 +1224,8 @@ Sub ConvertCPtoTP(ByVal viewPortX As Integer, ByVal viewPortY As Integer, ByRef 
 '******************************************
 'Converts where the mouse is in the main window to a tile position. MUST be called eveytime the mouse moves.
 '******************************************
-    tX = UserPos.x + viewPortX \ 32 - frmMain.Renderer.ScaleWidth \ 64
-    tY = UserPos.y + viewPortY \ 32 - frmMain.Renderer.ScaleHeight \ 64
+    tX = UserPos.X + viewPortX \ 32 - frmMain.Renderer.ScaleWidth \ 64
+    tY = UserPos.Y + viewPortY \ 32 - frmMain.Renderer.ScaleHeight \ 64
     Debug.Print tX; tY
 End Sub
 
@@ -1258,11 +1265,11 @@ Dim map_x As Long, map_y As Long
         Next map_x
     Next map_y
    
-    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y, RGB(255, 0, 0)
-    SetPixel frmMain.Minimap.hDC, UserPos.x + 1, UserPos.y, RGB(255, 0, 0)
-    SetPixel frmMain.Minimap.hDC, UserPos.x - 1, UserPos.y, RGB(255, 0, 0)
-    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y - 1, RGB(255, 0, 0)
-    SetPixel frmMain.Minimap.hDC, UserPos.x, UserPos.y + 1, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.X, UserPos.Y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.X + 1, UserPos.Y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.X - 1, UserPos.Y, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.X, UserPos.Y - 1, RGB(255, 0, 0)
+    SetPixel frmMain.Minimap.hDC, UserPos.X, UserPos.Y + 1, RGB(255, 0, 0)
  
     frmMain.Minimap.Refresh
  
