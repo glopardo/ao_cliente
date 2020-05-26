@@ -1612,7 +1612,7 @@ Set D3DDevice = D3D.CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, frmMain.Ren
     
     ' Initialize particles
     Call Engine_Init_ParticleEngine
-    Call Base_Luz(255, 240, 180)
+    Call Base_Luz(225, 255, 255)
 
     ReDim cfonts(1 To Val(GetVar(App.Path & "\Init\Fuentes\Fuentes.dat", "INIT", "MaxFuentes"))) As CustomFont
     Engine_Init_FontTextures
