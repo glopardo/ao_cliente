@@ -730,6 +730,19 @@ Do While prgRun
         lFrameTimer = GetTickCount
     End If
     
+    If FPSConfig = 1 Then '18 FPS
+        While (GetTickCount - lFrameTimer) \ 65 < FramesPerSecCounter
+            Sleep 5
+        Wend
+    ElseIf FPSConfig = 2 Then '32 FPS
+        While (GetTickCount - lFrameTimer) \ 33 < FramesPerSecCounter
+            Sleep 5
+        Wend
+    ElseIf FPSConfig = 3 Then '64 FPS
+        While (GetTickCount - lFrameTimer) \ 16 < FramesPerSecCounter
+            Sleep 5
+        Wend
+    End If
     
     ' ### I N T E R V A L O S ###
     esttick = GetTickCount

@@ -989,6 +989,20 @@ CartelNoHayNada = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHay
 CartelRecuMana = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana"))
 CartelSanado = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado"))
 NoRes = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana"))
+
+'FPS
+FPSConfig = Val(GetVar(App.Path & "/init/opciones.opc", "CONFIG VIDEO", "FPS"))
+If FPSConfig = 1 Then
+    frmOpciones.FPS1.value = True
+ElseIf FPSConfig = 2 Then
+    frmOpciones.FPS2.value = True
+ElseIf FPSConfig = 3 Then
+    frmOpciones.FPS3.value = True
+ElseIf FPSConfig = 4 Then
+    frmOpciones.FPS4.value = True
+End If
+'FPS
+
 ResOriginal = NoRes
 Musica = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica"))
 FX = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX"))

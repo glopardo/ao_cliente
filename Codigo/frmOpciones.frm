@@ -3,7 +3,7 @@ Begin VB.Form frmOpciones
    Appearance      =   0  'Flat
    BackColor       =   &H80000005&
    BorderStyle     =   0  'None
-   ClientHeight    =   4410
+   ClientHeight    =   6360
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4485
@@ -21,10 +21,50 @@ Begin VB.Form frmOpciones
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4410
+   ScaleHeight     =   6360
    ScaleWidth      =   4485
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.Frame FPS 
+      Caption         =   "Frame1"
+      Height          =   2055
+      Left            =   480
+      TabIndex        =   21
+      Top             =   4080
+      Width           =   3375
+      Begin VB.OptionButton FPS4 
+         Caption         =   "FPS libres"
+         Height          =   375
+         Left            =   1680
+         TabIndex        =   25
+         Top             =   1320
+         Width           =   1455
+      End
+      Begin VB.OptionButton FPS3 
+         Caption         =   "64 FPS"
+         Height          =   495
+         Left            =   1680
+         TabIndex        =   24
+         Top             =   480
+         Width           =   1335
+      End
+      Begin VB.OptionButton FPS2 
+         Caption         =   "32 FPS"
+         Height          =   615
+         Left            =   240
+         TabIndex        =   23
+         Top             =   1200
+         Width           =   1095
+      End
+      Begin VB.OptionButton FPS1 
+         Caption         =   "18 FPS"
+         Height          =   495
+         Left            =   240
+         TabIndex        =   22
+         Top             =   480
+         Width           =   1095
+      End
+   End
    Begin VB.PictureBox Picture1 
       Appearance      =   0  'Flat
       BackColor       =   &H80000005&
@@ -380,7 +420,7 @@ Begin VB.Form frmOpciones
       Left            =   3840
       MouseIcon       =   "frmOpciones.frx":1FB6
       MousePointer    =   99  'Custom
-      Top             =   4080
+      Top             =   3720
       Width           =   615
    End
 End
@@ -646,16 +686,36 @@ Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y A
 
 End Sub
 
- 
-
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
    If Button = vbLeftButton Then
-
       bmoving = False
-
    End If
-
    
-
 End Sub
+
+'FPS
+Private Sub FPS1_Click()
+FPSConfig = 1
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "1")
+ 
+End Sub
+ 
+Private Sub FPS2_Click()
+FPSConfig = 2
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "2")
+ 
+End Sub
+ 
+Private Sub FPS3_Click()
+FPSConfig = 3
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "3")
+ 
+End Sub
+ 
+Private Sub FPS4_Click()
+FPSConfig = 4
+Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "4")
+ 
+End Sub
+'FPS
