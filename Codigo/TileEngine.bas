@@ -2767,7 +2767,7 @@ Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte
 
     Dim C(3) As Long
      
-    ColorBrillo = D3DColorXRGB(255, 255, 255)
+    ColorBrillo = D3DColorXRGB(255, 255, 0)
  
     C(0) = ColorBrillo
     C(1) = ColorBrillo
