@@ -1975,6 +1975,26 @@ Select Case left$(Rdata, 2)
             
             Call AddtoRichTextBox(frmMain.rectxt, tempstr, 240, 238, 207, 0, 0)
             Exit Sub
+        Case "|#"
+            Rdata = Right$(Rdata, Len(Rdata) - 2)
+            tempint = InStr(1, Rdata, ">")
+            tempstr = mid(Rdata, 1, tempint)
+            
+            Call AddtoRichTextBox(frmMain.rectxt, tempstr, 255, 200, 200, 1, 0, True)
+            tempstr = Right$(Rdata, Len(Rdata) - tempint)
+            
+            Call AddtoRichTextBox(frmMain.rectxt, tempstr, 255, 90, 90, 0, 0)
+            Exit Sub
+        Case "|&"
+            Rdata = Right$(Rdata, Len(Rdata) - 2)
+            tempint = InStr(1, Rdata, ">")
+            tempstr = mid(Rdata, 1, tempint)
+            
+            Call AddtoRichTextBox(frmMain.rectxt, tempstr, 165, 255, 255, 1, 0, True)
+            tempstr = Right$(Rdata, Len(Rdata) - tempint)
+            
+            Call AddtoRichTextBox(frmMain.rectxt, tempstr, 60, 255, 255, 0, 0)
+            Exit Sub
         Case "||"
             Dim iUser As Integer
             Rdata = Right$(Rdata, Len(Rdata) - 2)

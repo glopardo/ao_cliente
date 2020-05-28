@@ -36,6 +36,7 @@ Attribute VB_Name = "modDeclaraciones"
 
 Option Explicit
 
+Public FPSConfig As Byte
 
 Public Type tCabecera
     desc As String * 255

@@ -64,7 +64,7 @@ Public Desplazar As Boolean
 Public vigilar As Boolean
 
 
-Public RG(1 To 5, 1 To 3) As Byte
+Public RG(1 To 7, 1 To 3) As Byte
 
 Public bO As Integer
 Public bK As Long
@@ -1049,6 +1049,14 @@ RG(4, 3) = 0
 RG(5, 1) = 190
 RG(5, 2) = 190
 RG(5, 3) = 190
+
+RG(6, 1) = 255
+RG(6, 2) = 90
+RG(6, 3) = 90
+ 
+RG(7, 1) = 0
+RG(7, 2) = 215
+RG(7, 3) = 215
 
 ReDim Ciudades(1 To NUMCIUDADES) As String
 Ciudades(1) = "Ullathorpe"
