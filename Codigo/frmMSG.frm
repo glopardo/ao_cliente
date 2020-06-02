@@ -72,6 +72,7 @@ Begin VB.Form frmMSG
       ItemData        =   "frmMSG.frx":0000
       Left            =   2880
       List            =   "frmMSG.frx":0013
+      Style           =   2  'Dropdown List
       TabIndex        =   1
       Top             =   3720
       Width           =   2415
@@ -137,9 +138,8 @@ Unload Me
 End Sub
 
 Private Sub Form_Load()
-
-Me.Picture = LoadPicture(DirGraficos & "SGM.gif")
-
+    Me.Picture = LoadPicture(DirGraficos & "SGM.gif")
+    Me.categoria.ListIndex = 0
 End Sub
 Private Sub Image1_Click()
 Dim GMs As String
@@ -150,7 +150,7 @@ If categoria.ListIndex = -1 Then
 End If
 
 If Len(mensaje.Text) > 250 Then
-    MsgBox "La longitud del mensaje debe tener menos de 250 carácteres."
+    MsgBox "La longitud del mensaje debe tener ser menor a 300 caracteres."
     Exit Sub
 End If
 
@@ -170,7 +170,7 @@ If NoMandoElMsg = 0 Then
     mensaje.Text = ""
     GM.Text = "Cualquier GM disponible"
     categoria.List(categoria.ListIndex) = ""
-    AddtoRichTextBox frmMain.rectxt, "El mensaje fue enviado. Dentro de algunas horas recibirás la respuesta en el mail registrado. Rogamos tengas paciencia y no escribas más de un mensaje sobre el mismo tema.", 252, 151, 53, 1, 0
+    'AddtoRichTextBox frmMain.rectxt, "El mensaje fue enviado. Dentro de algunas horas recibirás la respuesta en el mail registrado. Rogamos tengas paciencia y no escribas más de un mensaje sobre el mismo tema.", 252, 151, 53, 1, 0
     Unload Me
 Else
     Call MsgBox("El mensaje es demasiado largo, por favor resumilo.")

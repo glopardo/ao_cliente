@@ -694,9 +694,15 @@ End Select
         Case "SPL"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
             For i = 1 To Val(ReadField(1, Rdata, 44))
-                frmSpawnList.lstCriaturas.AddItem ReadField(i + 1, Rdata, 44)
+                frmSpawnList.lstCriaturas.AddItem ReadField(i + 2, Rdata, 44)
             Next i
             frmSpawnList.Show
+            Exit Sub
+        Case "SPD"
+            Rdata = Right$(Rdata, Len(Rdata) - 4)
+            frmSoporte.ListaSoportes = Rdata
+            
+            frmSoporte.Show
             Exit Sub
         Case "ERR"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
@@ -868,6 +874,10 @@ End Select
             If Not frmForo.Visible Then
                   frmForo.Show
             End If
+            Exit Sub
+        Case "RESP"
+            RespuestaSoporte = Right$(Rdata, Len(Rdata) - 4)
+            frmMain.pctEnvelope.Visible = True
             Exit Sub
     End Select
     
@@ -2343,6 +2353,14 @@ Select Case left$(Rdata, 2)
                     End If
                 End If
             
+            Exit Sub
+        Case "SR"
+            frmMain.pctEnvelope.Visible = False
+            Rdata = Right$(Rdata, Len(Rdata) - 2)
+            If Rdata = "1" Then
+                'tiene soporte sin leer
+                frmMain.pctEnvelope.Visible = True
+            End If
             Exit Sub
 End Select
 

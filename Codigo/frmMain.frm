@@ -64,6 +64,18 @@ Begin VB.Form frmMain
       Type            =   1
       Urgent          =   0   'False
    End
+   Begin VB.PictureBox pctEnvelope 
+      BackColor       =   &H80000012&
+      BorderStyle     =   0  'None
+      Height          =   225
+      Left            =   11400
+      ScaleHeight     =   225
+      ScaleWidth      =   225
+      TabIndex        =   39
+      Top             =   960
+      Visible         =   0   'False
+      Width           =   225
+   End
    Begin VB.PictureBox Minimap 
       AutoRedraw      =   -1  'True
       Height          =   1500
@@ -100,7 +112,6 @@ Begin VB.Form frmMain
       _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -214,7 +225,7 @@ Begin VB.Form frmMain
       ToolTipText     =   "Chat"
       Top             =   1980
       Visible         =   0   'False
-      Width           =   7027
+      Width           =   5580
    End
    Begin VB.Frame frHechizos 
       BackColor       =   &H0000C000&
@@ -661,7 +672,7 @@ Begin VB.Form frmMain
       Height          =   135
       Left            =   9000
       TabIndex        =   11
-      Top             =   7954
+      Top             =   7920
       Width           =   1095
    End
    Begin VB.Label cantidadsta 
@@ -757,7 +768,7 @@ Begin VB.Form frmMain
    Begin VB.Label Label8 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
-      Caption         =   "Thusing"
+      Caption         =   "Gabriel"
       BeginProperty Font 
          Name            =   "Verdana"
          Size            =   8.25
@@ -892,7 +903,7 @@ Begin VB.Form frmMain
    Begin VB.Label LvlLbl 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "100 (52,32%)"
+      Caption         =   "44 (99,99%)"
       BeginProperty Font 
          Name            =   "Comic Sans MS"
          Size            =   8.25
@@ -906,8 +917,8 @@ Begin VB.Form frmMain
       Height          =   225
       Left            =   9360
       TabIndex        =   4
-      Top             =   916
-      Width           =   1050
+      Top             =   915
+      Width           =   975
    End
    Begin VB.Label exp 
       AutoSize        =   -1  'True
@@ -1013,10 +1024,16 @@ If frmParty2.Visible Then frmParty2.SetFocus
 
 End Sub
 
+Private Sub Picture1_Click()
+
+End Sub
+
+Private Sub pctEnvelope_Click()
+    frmSoporteRespuesta.Show
+End Sub
+
 Private Sub Renderer_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
-boton = Button
-
+    boton = Button
 End Sub
 
 Private Sub Image5_Click(Index As Integer)
@@ -1360,7 +1377,7 @@ If Not SendTxt.Visible Then
                 EligiendoWhispereo = False
                 MousePointer = 1
             End If
-             
+                  
         Case vbKeyU:
             If Not NoPuedeUsar Then
                 NoPuedeUsar = True
@@ -1431,6 +1448,7 @@ FPSFLAG = True
 Me.Picture = LoadPicture(DirGraficos & "Principal.gif")
 Image8.Picture = LoadPicture(DirGraficos & "Verde.gif")
 Image9.Picture = LoadPicture(DirGraficos & "Amarilla.gif")
+pctEnvelope.Picture = LoadPicture(DirGraficos & "Envelope.gif")
 
 frmMain.imgFondoInvent.Picture = LoadPicture(DirGraficos & "Centronuevoinventario.gif")
 frmMain.imgFondoHechizos.Picture = LoadPicture(DirGraficos & "Centronuevohechizos.gif")

@@ -592,22 +592,22 @@ End If
 End Function
 Public Sub ProcesaEntradaCmd(ByVal Datos As String)
 
-If Len(Datos) = 0 Then Exit Sub
-
-If UCase$(left$(Datos, 3)) = "/GM" Then
-    frmMSG.Show
-    Exit Sub
-End If
-
-Select Case left$(Datos, 1)
-    Case "\", "/"
+    If Len(Datos) = 0 Then Exit Sub
     
-    Case Else
-        Datos = ";" & left$(frmMain.modo, 1) & Datos
-
-End Select
-
-Call SendData(Datos)
+    If UCase$(left$(Datos, 8)) = "/SOPORTE" Then
+        frmMSG.Show
+        Exit Sub
+    End If
+    
+    Select Case left$(Datos, 1)
+        Case "\", "/"
+        
+        Case Else
+            Datos = ";" & left$(frmMain.modo, 1) & Datos
+    
+    End Select
+    
+    Call SendData(Datos)
 
 End Sub
 Public Sub ResetIgnorados()

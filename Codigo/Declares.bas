@@ -394,6 +394,8 @@ Public Connected As Boolean
 Public DownloadingMap As Boolean
 Public UserMap As Integer
 
+Public RespuestaSoporte As String
+
 Public ENDC As String
 
 Public prgRun As Boolean
