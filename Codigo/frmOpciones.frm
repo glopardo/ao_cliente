@@ -25,43 +25,57 @@ Begin VB.Form frmOpciones
    ScaleWidth      =   4485
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.PictureBox chkTechos 
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      ForeColor       =   &H80000008&
+      Height          =   335
+      Left            =   1560
+      MouseIcon       =   "frmOpciones.frx":0152
+      MousePointer    =   99  'Custom
+      ScaleHeight     =   300
+      ScaleWidth      =   300
+      TabIndex        =   26
+      Top             =   3840
+      Width           =   335
+   End
    Begin VB.Frame FPS 
-      Caption         =   "Frame1"
-      Height          =   2055
-      Left            =   480
+      Caption         =   "FPS"
+      Height          =   1455
+      Left            =   840
       TabIndex        =   21
-      Top             =   4080
-      Width           =   3375
+      Top             =   4320
+      Width           =   2775
       Begin VB.OptionButton FPS4 
          Caption         =   "FPS libres"
          Height          =   375
-         Left            =   1680
+         Left            =   1440
          TabIndex        =   25
-         Top             =   1320
-         Width           =   1455
+         Top             =   840
+         Width           =   1215
       End
       Begin VB.OptionButton FPS3 
          Caption         =   "64 FPS"
          Height          =   495
-         Left            =   1680
+         Left            =   1440
          TabIndex        =   24
-         Top             =   480
-         Width           =   1335
+         Top             =   240
+         Width           =   975
       End
       Begin VB.OptionButton FPS2 
          Caption         =   "32 FPS"
          Height          =   615
-         Left            =   240
+         Left            =   120
          TabIndex        =   23
-         Top             =   1200
+         Top             =   720
          Width           =   1095
       End
       Begin VB.OptionButton FPS1 
          Caption         =   "18 FPS"
          Height          =   495
-         Left            =   240
+         Left            =   120
          TabIndex        =   22
-         Top             =   480
+         Top             =   240
          Width           =   1095
       End
    End
@@ -71,7 +85,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":0152
+      MouseIcon       =   "frmOpciones.frx":045C
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -85,7 +99,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":045C
+      MouseIcon       =   "frmOpciones.frx":0766
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -99,7 +113,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":0766
+      MouseIcon       =   "frmOpciones.frx":0A70
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -113,7 +127,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":0A70
+      MouseIcon       =   "frmOpciones.frx":0D7A
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -127,7 +141,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":0D7A
+      MouseIcon       =   "frmOpciones.frx":1084
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -141,7 +155,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":1084
+      MouseIcon       =   "frmOpciones.frx":138E
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -155,7 +169,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":138E
+      MouseIcon       =   "frmOpciones.frx":1698
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -169,7 +183,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":1698
+      MouseIcon       =   "frmOpciones.frx":19A2
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -183,13 +197,32 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":19A2
+      MouseIcon       =   "frmOpciones.frx":1CAC
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
       TabIndex        =   0
       Top             =   1200
       Width           =   335
+   End
+   Begin VB.Label lblTechos 
+      BackColor       =   &H00000000&
+      Caption         =   "Ocultar techos"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00008000&
+      Height          =   255
+      Left            =   1920
+      TabIndex        =   27
+      Top             =   3840
+      Width           =   1215
    End
    Begin VB.Shape Shape3 
       BorderColor     =   &H00008000&
@@ -237,7 +270,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H00008000&
       Height          =   255
       Left            =   720
-      MouseIcon       =   "frmOpciones.frx":1CAC
+      MouseIcon       =   "frmOpciones.frx":1FB6
       MousePointer    =   99  'Custom
       TabIndex        =   18
       Top             =   3360
@@ -418,9 +451,9 @@ Begin VB.Form frmOpciones
    Begin VB.Image Image1 
       Height          =   375
       Left            =   3840
-      MouseIcon       =   "frmOpciones.frx":1FB6
+      MouseIcon       =   "frmOpciones.frx":22C0
       MousePointer    =   99  'Custom
-      Top             =   3720
+      Top             =   3840
       Width           =   615
    End
 End
@@ -467,10 +500,28 @@ Private Sub Command2_Click()
 Me.Visible = False
 End Sub
 
+Private Sub chkTechos_Click()
+    Select Case Techos
+        Case 0
+            Techos = 1
+            chkTechos.Picture = LoadPicture(DirGraficos & "tick2.gif")
+        Case 1
+            Techos = 0
+            chkTechos.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    End Select
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Techos", Trim(Str(Techos)))
+End Sub
+
 Private Sub Form_Load()
 
 
 Me.Picture = LoadPicture(DirGraficos & "OpcionesDelJuego.gif")
+
+If Techos = 0 Then
+    chkTechos.Picture = LoadPicture(DirGraficos & "tick1.gif")
+Else
+    chkTechos.Picture = LoadPicture(DirGraficos & "tick2.gif")
+End If
 
 If Musica = 0 Then
     PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")

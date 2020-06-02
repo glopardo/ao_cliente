@@ -1274,9 +1274,8 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
     'ParticleOffsetY = (Engine_PixelPosY(ScreenMinY) - PixelOffsetY)
  
 Effect_UpdateAll
-
  
-If Not bTecho Then
+If Not bTecho And Techos = 1 Then
     'Draw blocked tiles and grid
     ScreenY = minYOffset - TileBufferSize
     For Y = minY To maxY
@@ -1319,11 +1318,11 @@ Else
                 If MapData(X, Y).Graphic(4).GrhIndex Then
                 
                 If VDesvanecimiento > 0 Then
-                ControldeValorDesvanecimiento = ControldeValorDesvanecimiento + 1
-                If ControldeValorDesvanecimiento = VelocidadDesvanecimiento Then
-                VDesvanecimiento = VDesvanecimiento - 1
-                ControldeValorDesvanecimiento = 0
-                End If
+                    ControldeValorDesvanecimiento = ControldeValorDesvanecimiento + 1
+                    If ControldeValorDesvanecimiento = VelocidadDesvanecimiento Then
+                        VDesvanecimiento = VDesvanecimiento - 1
+                        ControldeValorDesvanecimiento = 0
+                    End If
                 End If
                 
                 CDesvanecimiento(0) = D3DColorXRGB(VDesvanecimiento, VDesvanecimiento, VDesvanecimiento)

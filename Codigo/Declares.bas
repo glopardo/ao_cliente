@@ -333,6 +333,7 @@ Public CityDesc() As String
 
 Public Musica As Byte
 Public FX As Byte
+Public Techos As Byte
 
 Public SkillPoints As Integer
 Public Alocados As Integer
