@@ -2,63 +2,63 @@ VERSION 5.00
 Begin VB.Form FrmIntro 
    BorderStyle     =   0  'None
    Caption         =   "Form1"
-   ClientHeight    =   6735
+   ClientHeight    =   8235
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5385
+   ClientWidth     =   6210
    LinkTopic       =   "Form1"
-   ScaleHeight     =   6735
-   ScaleWidth      =   5385
+   ScaleHeight     =   8235
+   ScaleWidth      =   6210
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.TextBox Text1 
       Height          =   285
-      Left            =   1680
+      Left            =   360
       TabIndex        =   0
       Text            =   "Text1"
       Top             =   960
       Visible         =   0   'False
       Width           =   1095
    End
-   Begin VB.Image Image3 
-      Height          =   375
-      Left            =   1200
+   Begin VB.Image Image2 
+      Height          =   615
+      Left            =   1680
       MouseIcon       =   "FrmIntro.frx":0000
       MousePointer    =   99  'Custom
-      Top             =   2640
-      Width           =   3135
+      Top             =   1200
+      Width           =   2175
    End
-   Begin VB.Image Image2 
-      Height          =   375
-      Left            =   1200
+   Begin VB.Image Image3 
+      Height          =   855
+      Left            =   1680
       MouseIcon       =   "FrmIntro.frx":030A
       MousePointer    =   99  'Custom
-      Top             =   1680
-      Width           =   3135
+      Top             =   2520
+      Width           =   2175
    End
    Begin VB.Image Image6 
-      Height          =   375
-      Left            =   1200
+      Height          =   615
+      Left            =   2520
       MouseIcon       =   "FrmIntro.frx":0614
       MousePointer    =   99  'Custom
-      Top             =   5520
-      Width           =   3135
+      Top             =   5400
+      Width           =   615
    End
    Begin VB.Image Image5 
-      Height          =   495
-      Left            =   1200
+      Height          =   615
+      Left            =   2520
       MouseIcon       =   "FrmIntro.frx":091E
       MousePointer    =   99  'Custom
       Top             =   4560
-      Width           =   3135
+      Width           =   615
    End
    Begin VB.Image Image4 
-      Height          =   375
-      Left            =   1200
+      Height          =   615
+      Left            =   2520
       MouseIcon       =   "FrmIntro.frx":0C28
       MousePointer    =   99  'Custom
-      Top             =   3600
-      Width           =   3135
+      Top             =   3720
+      Width           =   615
    End
 End
 Attribute VB_Name = "FrmIntro"
@@ -107,68 +107,47 @@ Me.Picture = LoadPicture(App.Path & "\Graficos\MenuRapido.jpg")
 
 End Sub
 Private Sub Image2_Click()
-
-Call Main
-
+    Call Main
 End Sub
 
 Private Sub Image3_Click()
-ShellExecute Me.hWnd, "open", App.Path & "/aosetup.exe", "", "", 1
+    ShellExecute Me.hWnd, "open", App.Path & "/aosetup.exe", "", "", 1
 End Sub
 
 Private Sub Image4_Click()
-ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
-
+    ShellExecute Me.hWnd, "open", "https://www.instagram.com/", "", "", 1
 End Sub
 
 Private Sub Image5_Click()
-ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar", "", "", 1
-
+    ShellExecute Me.hWnd, "open", "http://www.facebook.com", "", "", 1
 End Sub
 
 Private Sub Image6_Click()
-Unload Me
+    ShellExecute Me.hWnd, "open", "https://discord.com/", "", "", 1
 End Sub
+
+Private Sub Image7_Click()
+    Unload Me
+End Sub
+
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If bmoving = False And Button = vbLeftButton Then
-
       Dx3 = X
-
       dy = Y
-
       bmoving = True
-
    End If
-
-   
-
 End Sub
-
- 
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If bmoving And ((X <> Dx3) Or (Y <> dy)) Then
-
-      Move Left + (X - Dx3), Top + (Y - dy)
-
+      Move left + (X - Dx3), top + (Y - dy)
    End If
-
-   
-
 End Sub
-
- 
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If Button = vbLeftButton Then
-
       bmoving = False
-
    End If
-
-   
-
 End Sub
+
+

@@ -341,6 +341,14 @@ Select Case left$(sdata, 1)
 End Select
 
     Select Case left$(sdata, 3)
+        Case "DIA"
+            base_light = D3DColorXRGB(255, 255, 255)
+            Tiempo = "Día"
+            Exit Sub
+        Case "NCE"
+            base_light = D3DColorXRGB(100, 100, 100)
+            Tiempo = "Noche"
+            Exit Sub
         Case "NON"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
             frmMain.NumOnline = Rdata
@@ -448,10 +456,10 @@ End Select
 
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
             
             If UserMinHP = 0 Then
@@ -2212,10 +2220,10 @@ Select Case left$(Rdata, 2)
             UserExp = Val(ReadField(1, Rdata, 44))
             
             If UserPasarNivel <> 0 Then
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
             Else
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
         Case "5H"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -2269,10 +2277,10 @@ Select Case left$(Rdata, 2)
             UserPasarNivel = Val(ReadField(2, Rdata, 44))
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
             Exit Sub
         Case "HO"

@@ -36,6 +36,8 @@ Attribute VB_Name = "modDeclaraciones"
 
 Option Explicit
 
+Public Tiempo As String
+
 Public FPSConfig As Byte
 
 Public Type tCabecera
