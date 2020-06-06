@@ -66,6 +66,7 @@ Class=Particle; Codigo\Particle.cls
 Module=Resolution; Codigo\Resolution.bas
 Form=Codigo\frmSoporte.frm
 Form=Codigo\frmSoporteRespuesta.frm
+Form=Codigo\frmRetos.frm
 IconForm="frmMain"
 Startup="FrmIntro"
 HelpFile=""

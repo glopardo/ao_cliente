@@ -456,10 +456,10 @@ End Select
 
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
             
             If UserMinHP = 0 Then
@@ -932,6 +932,11 @@ Select Case left$(sdata, 5)
                 frmMain.Image9.Visible = True
                 frmMain.Agilidad.Visible = True
             End If
+            Exit Sub
+        Case "SHOWR"
+            Rdata = Right$(Rdata, Len(Rdata) - 5)
+            frmRetos.lblContrincante.Caption = ReadField(2, Rdata, 44)
+            frmRetos.Show
             Exit Sub
         Case "DADOS"
             Rdata = Right$(Rdata, Len(Rdata) - 5)
@@ -2220,10 +2225,10 @@ Select Case left$(Rdata, 2)
             UserExp = Val(ReadField(1, Rdata, 44))
             
             If UserPasarNivel <> 0 Then
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
             Else
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
         Case "5H"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -2277,10 +2282,10 @@ Select Case left$(Rdata, 2)
             UserPasarNivel = Val(ReadField(2, Rdata, 44))
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
             Exit Sub
         Case "HO"
@@ -2450,7 +2455,13 @@ Select Case UCase$(left$(sdData, 6))
         Rdata = Right$(sdData, Len(sdData) - 6)
         ReplaceData = "#7 " & Rdata
 End Select
-        
+
+Select Case UCase$(left$(sdData, 7))
+    Case "/RETAR "
+    Rdata = Right$(sdData, Len(sdData) - 7)
+    ReplaceData = "#@" & Rdata
+End Select
+
 Select Case UCase$(left$(sdData, 8))
     Case "/PASSWD "
         Rdata = Right$(sdData, Len(sdData) - 8)
@@ -2478,6 +2489,7 @@ Select Case UCase$(left$(sdData, 9))
             Case 2
                 ReplaceData = "#/ " & Rdata & " 0"
         End Select
+
 End Select
 
 Select Case UCase$(left$(sdData, 11))
