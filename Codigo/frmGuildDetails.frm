@@ -191,20 +191,11 @@ Case 0
 Case 1
     Dim fdesc$
     fdesc$ = Replace(txtDesc, vbCrLf, "º", , , vbBinaryCompare)
-    
-
-
-
-
-    
     Dim k As Integer
     Dim Cont As Integer
     Cont = 0
+    
     For k = 0 To txtCodex1.UBound
-
-
-
-
         If Len(txtCodex1(k).Text) > 0 Then Cont = Cont + 1
     Next
     
@@ -227,7 +218,7 @@ Case 1
         chunk = chunk & txtCodex1(k) & "|"
     Next
     
-    Call SendData(Left$(chunk, Len(chunk) - 1))
+    Call SendData(left$(chunk, Len(chunk) - 1))
     
     CreandoClan = False
     

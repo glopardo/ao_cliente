@@ -1935,6 +1935,10 @@ Select Case left$(Rdata, 2)
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             If CartelRecuMana = 1 Then AddtoRichTextBox frmMain.rectxt, "Te estás concentrando. En " & Rdata & " segundos comenzarás a meditar.", 65, 190, 156, 0, 0
             Exit Sub
+        Case "EK"
+            Rdata = Right$(Rdata, Len(Rdata) - 2)
+            If Rdata <> 0 Then AddtoRichTextBox frmMain.rectxt, "Has ganado " & Rdata & " monedas de oro.", 255, 255, 255, 0, 0
+            Exit Sub
         Case "EL"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             If Rdata <> 0 Then AddtoRichTextBox frmMain.rectxt, "Has ganado " & Rdata & " puntos de experiencia.", 255, 150, 25, 1, 0

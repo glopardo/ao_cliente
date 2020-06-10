@@ -6,6 +6,7 @@ Begin VB.Form FrmIntro
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   6210
+   Icon            =   "FrmIntro.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   8235
    ScaleWidth      =   6210
@@ -23,7 +24,7 @@ Begin VB.Form FrmIntro
    Begin VB.Image Image2 
       Height          =   615
       Left            =   1680
-      MouseIcon       =   "FrmIntro.frx":0000
+      MouseIcon       =   "FrmIntro.frx":168B4
       MousePointer    =   99  'Custom
       Top             =   1200
       Width           =   2175
@@ -31,7 +32,7 @@ Begin VB.Form FrmIntro
    Begin VB.Image Image3 
       Height          =   855
       Left            =   1680
-      MouseIcon       =   "FrmIntro.frx":030A
+      MouseIcon       =   "FrmIntro.frx":16BBE
       MousePointer    =   99  'Custom
       Top             =   2520
       Width           =   2175
@@ -39,7 +40,7 @@ Begin VB.Form FrmIntro
    Begin VB.Image Image6 
       Height          =   615
       Left            =   2520
-      MouseIcon       =   "FrmIntro.frx":0614
+      MouseIcon       =   "FrmIntro.frx":16EC8
       MousePointer    =   99  'Custom
       Top             =   5400
       Width           =   615
@@ -47,7 +48,7 @@ Begin VB.Form FrmIntro
    Begin VB.Image Image5 
       Height          =   615
       Left            =   2520
-      MouseIcon       =   "FrmIntro.frx":091E
+      MouseIcon       =   "FrmIntro.frx":171D2
       MousePointer    =   99  'Custom
       Top             =   4560
       Width           =   615
@@ -55,7 +56,7 @@ Begin VB.Form FrmIntro
    Begin VB.Image Image4 
       Height          =   615
       Left            =   2520
-      MouseIcon       =   "FrmIntro.frx":0C28
+      MouseIcon       =   "FrmIntro.frx":174DC
       MousePointer    =   99  'Custom
       Top             =   3720
       Width           =   615

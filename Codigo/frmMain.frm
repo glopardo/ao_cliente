@@ -117,7 +117,7 @@ Begin VB.Form frmMain
       DisableNoScroll =   -1  'True
       Appearance      =   0
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmMain.frx":08CA
+      TextRTF         =   $"frmMain.frx":168B4
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Verdana"
          Size            =   8.25
@@ -139,7 +139,7 @@ Begin VB.Form frmMain
          Height          =   195
          Index           =   3
          Left            =   1515
-         MouseIcon       =   "frmMain.frx":0949
+         MouseIcon       =   "frmMain.frx":16933
          MousePointer    =   99  'Custom
          Top             =   3920
          Width           =   255
@@ -148,7 +148,7 @@ Begin VB.Form frmMain
          Height          =   195
          Index           =   2
          Left            =   1515
-         MouseIcon       =   "frmMain.frx":0C53
+         MouseIcon       =   "frmMain.frx":16C3D
          MousePointer    =   99  'Custom
          Top             =   3600
          Width           =   255
@@ -157,7 +157,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   1
          Left            =   1730
-         MouseIcon       =   "frmMain.frx":0F5D
+         MouseIcon       =   "frmMain.frx":16F47
          MousePointer    =   99  'Custom
          Top             =   3700
          Width           =   200
@@ -166,7 +166,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   0
          Left            =   1380
-         MouseIcon       =   "frmMain.frx":1267
+         MouseIcon       =   "frmMain.frx":17251
          MousePointer    =   99  'Custom
          Top             =   3705
          Width           =   195
@@ -191,7 +191,7 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   480
          Left            =   1800
-         MouseIcon       =   "frmMain.frx":1571
+         MouseIcon       =   "frmMain.frx":1755B
          MousePointer    =   99  'Custom
          TabIndex        =   19
          Top             =   0
@@ -258,7 +258,7 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   390
          Left            =   405
-         MouseIcon       =   "frmMain.frx":187B
+         MouseIcon       =   "frmMain.frx":17865
          MousePointer    =   99  'Custom
          TabIndex        =   26
          Top             =   15
@@ -268,7 +268,7 @@ Begin VB.Form frmMain
          BackStyle       =   0  'Transparent
          Height          =   360
          Left            =   390
-         MouseIcon       =   "frmMain.frx":1B85
+         MouseIcon       =   "frmMain.frx":17B6F
          MousePointer    =   99  'Custom
          TabIndex        =   25
          Top             =   3840
@@ -278,7 +278,7 @@ Begin VB.Form frmMain
          BackStyle       =   0  'Transparent
          Height          =   360
          Left            =   1965
-         MouseIcon       =   "frmMain.frx":1E8F
+         MouseIcon       =   "frmMain.frx":17E79
          MousePointer    =   99  'Custom
          TabIndex        =   24
          Top             =   3840
@@ -298,7 +298,7 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   285
          Left            =   2760
-         MouseIcon       =   "frmMain.frx":2199
+         MouseIcon       =   "frmMain.frx":18183
          MousePointer    =   99  'Custom
          TabIndex        =   23
          Top             =   780
@@ -318,7 +318,7 @@ Begin VB.Form frmMain
          EndProperty
          Height          =   285
          Left            =   2415
-         MouseIcon       =   "frmMain.frx":24A3
+         MouseIcon       =   "frmMain.frx":1848D
          MousePointer    =   99  'Custom
          TabIndex        =   22
          Top             =   780
@@ -355,7 +355,7 @@ Begin VB.Form frmMain
       Height          =   420
       Index           =   3
       Left            =   8640
-      MouseIcon       =   "frmMain.frx":27AD
+      MouseIcon       =   "frmMain.frx":18797
       MousePointer    =   99  'Custom
       Top             =   8520
       Width           =   3285
@@ -363,7 +363,7 @@ Begin VB.Form frmMain
    Begin VB.Image Party 
       Height          =   300
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":2AB7
+      MouseIcon       =   "frmMain.frx":18AA1
       MousePointer    =   99  'Custom
       Top             =   7860
       Width           =   1170
@@ -735,7 +735,7 @@ Begin VB.Form frmMain
    Begin VB.Image Image2 
       Height          =   405
       Left            =   8760
-      MouseIcon       =   "frmMain.frx":2DC1
+      MouseIcon       =   "frmMain.frx":18DAB
       MousePointer    =   99  'Custom
       Top             =   0
       Width           =   1815
@@ -750,7 +750,7 @@ Begin VB.Form frmMain
    Begin VB.Image Image3 
       Height          =   405
       Left            =   10680
-      MouseIcon       =   "frmMain.frx":30CB
+      MouseIcon       =   "frmMain.frx":190B5
       MousePointer    =   99  'Custom
       Top             =   0
       Width           =   1335
@@ -858,7 +858,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   0
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":33D5
+      MouseIcon       =   "frmMain.frx":193BF
       MousePointer    =   99  'Custom
       Top             =   6840
       Width           =   1170
@@ -867,7 +867,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   1
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":36DF
+      MouseIcon       =   "frmMain.frx":196C9
       MousePointer    =   99  'Custom
       Top             =   7200
       Width           =   1170
@@ -876,7 +876,7 @@ Begin VB.Form frmMain
       Height          =   300
       Index           =   2
       Left            =   10485
-      MouseIcon       =   "frmMain.frx":39E9
+      MouseIcon       =   "frmMain.frx":199D3
       MousePointer    =   99  'Custom
       Top             =   7560
       Width           =   1245
