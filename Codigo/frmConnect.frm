@@ -196,7 +196,7 @@ Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
 If KeyCode = 27 Then
     frmCargando.Show
     frmCargando.Refresh
-    AddtoRichTextBox frmCargando.Status, "Cerrando FenixAO.", 255, 150, 50, 1, 0, 1
+    AddtoRichTextBox frmCargando.Status, "Cerrando RivendelAO.", 255, 150, 50, 1, 0, 1
     
     frmConnect.MousePointer = 1
     frmMain.MousePointer = 1
@@ -205,7 +205,7 @@ If KeyCode = 27 Then
     AddtoRichTextBox frmCargando.Status, "Liberando recursos..."
     frmCargando.Refresh
     AddtoRichTextBox frmCargando.Status, "Hecho", 255, 150, 50, 1, 0, 1
-    AddtoRichTextBox frmCargando.Status, "¡¡Gracias por jugar FenixAO!!", 255, 150, 50, 1, 0, 1
+    AddtoRichTextBox frmCargando.Status, "¡¡Gracias por jugar RivendelAO!!", 255, 150, 50, 1, 0, 1
     frmCargando.Refresh
     Call UnloadAllForms
     Call Resolution.ResetResolution
@@ -308,7 +308,7 @@ End Select
 End Sub
 Private Sub Image2_Click()
 
-MsgBox "Created By Fenix AO Team." & vbCrLf & "Copyright © 2004. Todos los derechos reservados." & vbCrLf & vbCrLf & "Web: http://www.fenixao.com.ar" & vbCrLf & vbCrLf & "¡Gracias por Jugar nuestro Argentum Online!" & vbCrLf & "Staff Fenix AO.", vbInformation, "Proyecto Fenix"
+MsgBox "Created By RivendelAO AO Team." & vbCrLf & "Copyright © 2020. Todos los derechos reservados." & vbCrLf & vbCrLf & "Web: http://www.fenixao.com.ar" & vbCrLf & vbCrLf & "¡Gracias por Jugar nuestro Argentum Online!" & vbCrLf & "Staff Rivendel AO.", vbInformation, "Proyecto RivendelAO"
 
 End Sub
 Private Sub imgGetPass_Click()

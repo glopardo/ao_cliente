@@ -74,7 +74,7 @@ Static ticks As Long
 ticks = ticks + 1
 
 If ticks = 1 Then
-    Me.Picture = LoadPicture(App.Path & "\Graficos\fenix.jpg")
+    Me.Picture = LoadPicture(App.Path & "\Graficos\rivendel.jpg")
 ElseIf ticks < 13 Then
     Me.Picture = LoadPicture(App.Path & "\Graficos\intro.jpg")
 Else

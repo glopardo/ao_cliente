@@ -189,7 +189,7 @@ Select Case MiClase
         Label1.Caption = "Minero"
         Label2.Caption = "Herrero"
         
-        Label4.Caption = "El minero, como bien dice su nombre, mina oro, plata y hierro en las tierras del Fénix. Podrán encontrar importantes minas en el continente aunque la más importante será alcanzable solo mediante navegación."
+        Label4.Caption = "El minero, como bien dice su nombre, mina oro, plata y hierro en las tierras de Rivendel. Podrán encontrar importantes minas en el continente aunque la más importante será alcanzable solo mediante navegación."
         Label5.Caption = "El herrero tiene una vida tan dura como la del minero. Forja poderosas armas, grandes escudos y fuertes armaduras para sobrevivir o, en ciertos casos, utilizarlas para beneficio personal. Lo hay en distintos tipos y con distintas características, ¡solo te resta elegir!"
         
         Label3.Caption = "Es momento de elegir qué rama de los minerales seguirás. Si quieres extraerlos, deberías pensar en ser minero. Si prefieres fabricar lingotes o armas, puedes elegir ser un herrero."
@@ -226,7 +226,7 @@ Select Case MiClase
         Label2.Caption = "Clérigo"
         
         Label4.Caption = "Prefieren predicar la palabra de Dios mediante la espada. Aman a sus dioses y dedican su entera vida a ellos. Hay paladines realmente adinerados y otros mucho más humildes. Por lo general, llevan su rol a extremos, pudiendo ser muy benévolos o realmente malvados."
-        Label5.Caption = "Pasa gran parte de su vida dentro del templo, orando por las almas de las personas vivas y muertas del mundo. Así como los paladines, pueden ser buenos o malos dependiendo de la deidad a la que sigan. Son considerados las personas más cultas de las Tierras del Fénix."
+        Label5.Caption = "Pasa gran parte de su vida dentro del templo, orando por las almas de las personas vivas y muertas del mundo. Así como los paladines, pueden ser buenos o malos dependiendo de la deidad a la que sigan. Son considerados las personas más cultas de las Tierras de Rivendel."
 
     Case NATURALISTA
         Label1.Caption = "Bardo"
@@ -256,9 +256,9 @@ Select Case MiClase
         Label2.Caption = "Ladrón"
         
         Label4.Caption = "De consistencia fuerte, son llamados los guerreros del mar. Tienen características realmente similares a dicha clase, aunque en el agua son casi invencibles. Saben moverse en un barco como en su propia casa."
-        Label5.Caption = "Algunos viven una vida de lujuria mientras que otros simplemente subsisten con lo que logran hurtar. Son los personajes más vagos de las Tierras del Fénix aunque tienen una particular habilidad para aparecer de la nada, robar y seguir su camino sin ser vistos."
+        Label5.Caption = "Algunos viven una vida de lujuria mientras que otros simplemente subsisten con lo que logran hurtar. Son los personajes más vagos de las Tierras de Rivendel aunque tienen una particular habilidad para aparecer de la nada, robar y seguir su camino sin ser vistos."
         
-        Label3.Caption = "Puedes dedicarte al hurto o preferir navegar los mares de las Tierras de Fénix como un pirata."
+        Label3.Caption = "Puedes dedicarte al hurto o preferir navegar los mares de las Tierras de Rivendel como un pirata."
         
     Case CABALLERO
         Label1.Caption = "Guerrero"
@@ -295,7 +295,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move left + (X - Dx3), top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

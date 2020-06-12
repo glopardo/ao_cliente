@@ -112,6 +112,7 @@ Begin VB.Form frmMain
       _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -1537,22 +1538,22 @@ End Sub
 
 Private Sub Inventario_DblClick()
  
-Dim X As Integer
-Dim Y As Integer
- 
-X = (MouseIX + 16) / 32
-Y = (MouseIY + 16) / 32
- 
-ItemElegido = (Y - 1) * 5 + X
- 
-If ItemElegido < 1 Then ItemElegido = 1
-If ItemElegido > 25 Then ItemElegido = 25
- 
-If BotonIClick = 2 Then
-Call SendData("EQUI" & ItemElegido)
-Else
-Call SendData("USE" & ItemElegido) ': pocionesCount = pocionesCount + 1
-End If
+    Dim X As Integer
+    Dim Y As Integer
+     
+    X = (MouseIX + 16) / 32
+    Y = (MouseIY + 16) / 32
+     
+    ItemElegido = (Y - 1) * 5 + X
+     
+    If ItemElegido < 1 Then ItemElegido = 1
+    If ItemElegido > 25 Then ItemElegido = 25
+     
+    If BotonIClick = 2 Then
+    '    Call SendData("EQUI" & ItemElegido)
+    Else
+        Call SendData("USE" & ItemElegido) ': pocionesCount = pocionesCount + 1
+    End If
  
 End Sub
  
@@ -1568,7 +1569,7 @@ Y = (MouseIY + 16) / 32
  
 ItemElegido = (Y - 1) * 5 + X
  
-If BotonIClick = 2 Then Call SendData("EQUI" & ItemElegido)
+'If BotonIClick = 2 Then Call SendData("EQUI" & ItemElegido)
  
 End Sub
  

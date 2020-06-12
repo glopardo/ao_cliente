@@ -978,7 +978,7 @@ Sub Main()
 
 FrmIntro.Hide
 
-AddtoRichTextBox frmCargando.Status, "Cargando FenixAO...", 255, 150, 50, 1, , False
+AddtoRichTextBox frmCargando.Status, "Cargando RivendelAO...", 255, 150, 50, 1, , False
 
 Call WriteClientVer
 
@@ -1010,7 +1010,7 @@ FX = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX"))
 If ResOriginal <> True Then Call SetResolution
 
 If App.PrevInstance Then
-    Call MsgBox("¡FénixAO ya esta corriendo! No es posible correr otra instancia del juego. Haga click en Aceptar para salir.", vbApplicationModal + vbInformation + vbOKOnly, "Error al ejecutar")
+    Call MsgBox("¡RivendelAO ya esta corriendo! No es posible correr otra instancia del juego. Haga click en Aceptar para salir.", vbApplicationModal + vbInformation + vbOKOnly, "Error al ejecutar")
     End
 End If
 
@@ -1152,7 +1152,7 @@ Unload frmCargando
 
 Call Audio.PlayMIDI(MIdi_Inicio & ".mid")
 
-frmPres.Picture = LoadPicture(App.Path & "\Graficos\fenix.jpg")
+frmPres.Picture = LoadPicture(App.Path & "\Graficos\rivendel.jpg")
 frmPres.WindowState = vbMaximized
 frmPres.Show
 

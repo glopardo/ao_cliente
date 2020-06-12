@@ -803,7 +803,7 @@ End Select
                         Case 0
                             frmEstadisticas.Label4(2).Caption = "No perteneció a facciones"
                         Case 1
-                            frmEstadisticas.Label4(2).Caption = "Fue de la Alianza del Fénix"
+                            frmEstadisticas.Label4(2).Caption = "Fue de la Alianza de Rivendel"
                         Case 2
                             frmEstadisticas.Label4(2).Caption = "Fue del Ejército de Lord Thek"
                     End Select

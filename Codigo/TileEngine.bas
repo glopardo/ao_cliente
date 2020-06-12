@@ -724,7 +724,7 @@ Do While prgRun
 
     If GetTickCount - lFrameTimer > 1000 Then
         FramesPerSec = FramesPerSecCounter
-        If FPSFLAG Then frmMain.Caption = "Fenix AO" & " V " & App.Major & "." & App.Minor & "." & App.Revision
+        If FPSFLAG Then frmMain.Caption = "Rivendel AO" & " V " & App.Major & "." & App.Minor & "." & App.Revision
         frmMain.fpstext.Caption = FramesPerSec
         FramesPerSecCounter = 0
         lFrameTimer = GetTickCount

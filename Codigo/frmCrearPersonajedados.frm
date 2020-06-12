@@ -1465,19 +1465,19 @@ If SkillPoints > 0 Then
     Exit Function
 End If
 
-Dim I As Integer
-For I = 1 To NUMATRIBUTOS
-    If UserAtributos(I) = 0 Then
+Dim i As Integer
+For i = 1 To NUMATRIBUTOS
+    If UserAtributos(i) = 0 Then
         MsgBox "Los atributos del personaje son invalidos."
         Exit Function
     End If
-Next I
+Next i
 
 CheckData = True
 
 End Function
 Private Sub boton_Click(Index As Integer)
-Dim I As Integer
+Dim i As Integer
 Dim k As Object
         
 Call Audio.PlayWave(SND_CLICK)
@@ -1487,11 +1487,11 @@ Select Case Index
         LlegoConfirmacion = False
         Confirmacion = 0
 
-        I = 1
+        i = 1
         
         For Each k In Skill
-            UserSkills(I) = k.Caption
-            I = I + 1
+            UserSkills(i) = k.Caption
+            i = i + 1
         Next
         
         UserName = txtNombre.Text
@@ -1516,26 +1516,26 @@ Select Case Index
             UserEmail = txtCorreo.Text
             
             If Not CheckMailString(UserEmail) Then
-                MsgBox "Direccion de mail inválida.", vbExclamation, "Fenix AO"
+                MsgBox "Direccion de mail inválida.", vbExclamation, "Rivendel AO"
                 txtCorreo.SetFocus
                 Exit Sub
             End If
     
             If UserEmail <> txtCorreo2.Text Then
-                MsgBox "Las direcciones de mail no coinciden.", vbExclamation, "Fenix AO"
+                MsgBox "Las direcciones de mail no coinciden.", vbExclamation, "Rivendel AO"
                 txtCorreo2.Text = ""
                 txtCorreo2.SetFocus
                 Exit Sub
             End If
             
             If Len(Trim(txtPasswd)) = 0 Then
-                MsgBox "Tenés que ingresar una contraseña.", vbExclamation, "Fenix AO"
+                MsgBox "Tenés que ingresar una contraseña.", vbExclamation, "Rivendel AO"
                 txtPasswd.SetFocus
                 Exit Sub
             End If
             
             If Len(Trim(txtPasswd)) < 6 Then
-                MsgBox "El password debe tener al menos 6 caracteres.", vbExclamation, "Fenix AO"
+                MsgBox "El password debe tener al menos 6 caracteres.", vbExclamation, "Rivendel AO"
                 txtPasswd = ""
                 txtPasswdCheck = ""
                 txtPasswd.SetFocus
@@ -1543,7 +1543,7 @@ Select Case Index
             End If
             
             If Trim(txtPasswd) <> Trim(txtPasswdCheck) Then
-                MsgBox "Las contraseñas no coinciden.", vbInformation, "Fenix AO"
+                MsgBox "Las contraseñas no coinciden.", vbInformation, "Rivendel AO"
                 txtPasswd = ""
                 txtPasswdCheck = ""
                 txtPasswd.SetFocus

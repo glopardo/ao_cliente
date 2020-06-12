@@ -334,7 +334,7 @@ Select Case Val(ReadField(14, Rdata, 44))
         faccion.Caption = "Faccion: Neutral"
     Case 1
         faccion.ForeColor = vbBlue
-        faccion.Caption = "Faccion: Alianza del Fenix"
+        faccion.Caption = "Faccion: Alianza de Rivendel"
     Case 2
         faccion.ForeColor = vbRed
         faccion.Caption = "Faccion: Ejército de Lord Thek"
@@ -397,7 +397,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move Left + (X - Dx3), Top + (Y - dy)
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Move left + (X - Dx3), top + (Y - dy)
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
