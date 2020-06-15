@@ -112,7 +112,6 @@ Begin VB.Form frmMain
       _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -1127,35 +1126,28 @@ End Sub
 
 Private Sub imgObjeto_DblClick(Index As Integer)
 
-If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
-
-If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
+    If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
+    If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
     
 End Sub
 Private Sub lblHechizos_Click()
-
-Call Audio.PlayWave(SND_CLICK)
-frHechizos.Visible = True
-frInvent.Visible = False
-Inventario.Visible = False
-
+    Call Audio.PlayWave(SND_CLICK)
+    frHechizos.Visible = True
+    frInvent.Visible = False
+    Inventario.Visible = False
 End Sub
 Private Sub lblInvent_Click()
-
-Call Audio.PlayWave(SND_CLICK)
-frInvent.Visible = True
-frHechizos.Visible = False
-Inventario.Visible = True
-Inventario.Refresh
-ActualizarInv = True
+    Call Audio.PlayWave(SND_CLICK)
+    frInvent.Visible = True
+    frHechizos.Visible = False
+    Inventario.Visible = True
+    Inventario.Refresh
+    ActualizarInv = True
 End Sub
 
 Private Sub lblObjCant_DblClick(Index As Integer)
-
-If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
-
-If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
-
+    If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
+    If ItemElegido = Index Then Call SendData("USE" & ItemElegido)
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
@@ -1574,48 +1566,39 @@ ItemElegido = (Y - 1) * 5 + X
 End Sub
  
 Private Sub Inventario_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
- 
-MouseIX = X
-MouseIY = Y
- 
+    MouseIX = X
+    MouseIY = Y
 End Sub
  
 Private Sub Inventario_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-MouseIX = X
-MouseIY = Y
-BotonIClick = Button
-
-
- 
+    MouseIX = X
+    MouseIY = Y
+    BotonIClick = Button
 End Sub
 
 Private Sub RecTxt_Change()
-On Error Resume Next
-
-If SendTxt.Visible Then
-    SendTxt.SetFocus
-ElseIf (Not frmComerciar.Visible) And _
-    (Not frmSkills3.Visible) And _
-    (Not frmMSG.Visible) And _
-    (Not frmForo.Visible) And _
-    (Not frmEstadisticas.Visible) And _
-    (Not frmCantidad.Visible) Then
-      ' Picture1.SetFocus
-End If
-
+    On Error Resume Next
+    
+    If SendTxt.Visible Then
+        SendTxt.SetFocus
+    ElseIf (Not frmComerciar.Visible) And _
+        (Not frmSkills3.Visible) And _
+        (Not frmMSG.Visible) And _
+        (Not frmForo.Visible) And _
+        (Not frmEstadisticas.Visible) And _
+        (Not frmCantidad.Visible) Then
+          ' Picture1.SetFocus
+    End If
 End Sub
 Private Sub SendTxt_Change()
-
-stxtbuffer = SendTxt.Text
-    
+    stxtbuffer = SendTxt.Text
 End Sub
 
 Private Sub SendTxt_KeyPress(KeyAscii As Integer)
-If Not (KeyAscii = vbKeyBack) And Not (KeyAscii >= vbKeySpace And KeyAscii <= 250) Then KeyAscii = 0
-          
+    If Not (KeyAscii = vbKeyBack) And Not (KeyAscii >= vbKeySpace And KeyAscii <= 250) Then KeyAscii = 0
 End Sub
+
 Private Sub Socket1_Connect()
-    
     If EstadoLogin = CrearNuevoPj Then
         Call SendData("gIvEmEvAlcOde")
     ElseIf EstadoLogin = Normal Then
@@ -1630,7 +1613,6 @@ Private Sub Socket1_Connect()
             Call SendData("gIvEmEvAlcOde")
     End If
 End Sub
-
 
 Private Sub Socket1_Disconnect()
     logged = False

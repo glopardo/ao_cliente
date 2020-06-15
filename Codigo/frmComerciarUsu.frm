@@ -262,19 +262,19 @@ Picture1.SetFocus
 
 End Sub
 Private Sub list1_Click()
-    Call DrawGrhtoHdc(Picture1.hdc, UserInventory(List1.ListIndex + 1).GrhIndex)
+    Call DrawGrhtoHdc(Picture1.hDC, UserInventory(List1.ListIndex + 1).GrhIndex)
 End Sub
 Private Sub List2_Click()
 
-If List2.ListIndex >= 0 Then
-    Call DrawGrhtoHdc(Picture1.hdc, OtroInventario(List2.ListIndex + 1).GrhIndex)
-    Label3.Caption = List2.ItemData(List2.ListIndex)
-    cmdAceptar.Enabled = True
-    cmdRechazar.Enabled = True
-Else
-    cmdAceptar.Enabled = False
-    cmdRechazar.Enabled = False
-End If
+    If List2.ListIndex >= 0 Then
+        Call DrawGrhtoHdc(Picture1.hDC, OtroInventario(List2.ListIndex + 1).GrhIndex)
+        Label3.Caption = List2.ItemData(List2.ListIndex)
+        cmdAceptar.Enabled = True
+        cmdRechazar.Enabled = True
+    Else
+        cmdAceptar.Enabled = False
+        cmdRechazar.Enabled = False
+    End If
 
 End Sub
 Private Sub optQue_Click(Index As Integer)
@@ -316,7 +316,7 @@ End If
 End Sub
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Call Move(Left + (X - Dx3), Top + (Y - dy))
+If bmoving And ((X <> Dx3) Or (Y <> dy)) Then Call Move(left + (X - Dx3), top + (Y - dy))
 
 End Sub
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

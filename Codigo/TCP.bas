@@ -76,7 +76,7 @@ Dim Y As Integer
 Dim CharIndex As Integer
 Dim tempint As Integer
 Dim tempstr As String
-Dim Slot As Integer
+Dim slot As Integer
 Dim MapNumber As String
 Dim i As Integer, k As Integer
 Dim cad$, Index As Integer, m As Integer
@@ -496,57 +496,57 @@ End Select
             Exit Sub
         Case "CSO"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
-            Slot = ReadField(1, Rdata, 44)
-            UserInventory(Slot).Amount = ReadField(4, Rdata, 44)
-            Call ActualizarInventario(Slot)
+            slot = ReadField(1, Rdata, 44)
+            UserInventory(slot).Amount = ReadField(4, Rdata, 44)
+            Call ActualizarInventario(slot)
             Exit Sub
         
         
         Case "CSI"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
-            Slot = ReadField(1, Rdata, 44)
-            UserInventory(Slot).Name = ReadField(2, Rdata, 44)
-            UserInventory(Slot).Amount = ReadField(3, Rdata, 44)
-            UserInventory(Slot).Equipped = ReadField(4, Rdata, 44)
-            UserInventory(Slot).GrhIndex = Val(ReadField(5, Rdata, 44))
-            UserInventory(Slot).ObjType = Val(ReadField(6, Rdata, 44))
-            UserInventory(Slot).Valor = Val(ReadField(7, Rdata, 44))
-            Select Case UserInventory(Slot).ObjType
+            slot = ReadField(1, Rdata, 44)
+            UserInventory(slot).Name = ReadField(2, Rdata, 44)
+            UserInventory(slot).Amount = ReadField(3, Rdata, 44)
+            UserInventory(slot).Equipped = ReadField(4, Rdata, 44)
+            UserInventory(slot).GrhIndex = Val(ReadField(5, Rdata, 44))
+            UserInventory(slot).ObjType = Val(ReadField(6, Rdata, 44))
+            UserInventory(slot).Valor = Val(ReadField(7, Rdata, 44))
+            Select Case UserInventory(slot).ObjType
                 Case 2
-                    UserInventory(Slot).MaxHit = Val(ReadField(8, Rdata, 44))
-                    UserInventory(Slot).MinHit = Val(ReadField(9, Rdata, 44))
+                    UserInventory(slot).MaxHit = Val(ReadField(8, Rdata, 44))
+                    UserInventory(slot).MinHit = Val(ReadField(9, Rdata, 44))
                 Case 3
-                    UserInventory(Slot).SubTipo = Val(ReadField(8, Rdata, 44))
-                    UserInventory(Slot).MaxDef = Val(ReadField(9, Rdata, 44))
-                    UserInventory(Slot).MinDef = Val(ReadField(10, Rdata, 44))
+                    UserInventory(slot).SubTipo = Val(ReadField(8, Rdata, 44))
+                    UserInventory(slot).MaxDef = Val(ReadField(9, Rdata, 44))
+                    UserInventory(slot).MinDef = Val(ReadField(10, Rdata, 44))
                 Case 11
-                    UserInventory(Slot).TipoPocion = Val(ReadField(8, Rdata, 44))
-                    UserInventory(Slot).MaxModificador = Val(ReadField(9, Rdata, 44))
-                    UserInventory(Slot).MinModificador = Val(ReadField(10, Rdata, 44))
+                    UserInventory(slot).TipoPocion = Val(ReadField(8, Rdata, 44))
+                    UserInventory(slot).MaxModificador = Val(ReadField(9, Rdata, 44))
+                    UserInventory(slot).MinModificador = Val(ReadField(10, Rdata, 44))
             End Select
 
-            If UserInventory(Slot).Equipped = 1 Then
-                If UserInventory(Slot).ObjType = 2 Then
-                    frmMain.arma.Caption = UserInventory(Slot).MinHit & " / " & UserInventory(Slot).MaxHit
-                ElseIf UserInventory(Slot).ObjType = 3 Then
-                    Select Case UserInventory(Slot).SubTipo
+            If UserInventory(slot).Equipped = 1 Then
+                If UserInventory(slot).ObjType = 2 Then
+                    frmMain.arma.Caption = UserInventory(slot).MinHit & " / " & UserInventory(slot).MaxHit
+                ElseIf UserInventory(slot).ObjType = 3 Then
+                    Select Case UserInventory(slot).SubTipo
                         Case 0
-                            If UserInventory(Slot).MaxDef > 0 Then
-                                frmMain.armadura.Caption = UserInventory(Slot).MinDef & " / " & UserInventory(Slot).MaxDef
+                            If UserInventory(slot).MaxDef > 0 Then
+                                frmMain.armadura.Caption = UserInventory(slot).MinDef & " / " & UserInventory(slot).MaxDef
                             Else
                                 frmMain.armadura.Caption = "N/A"
                             End If
                             
                         Case 1
-                            If UserInventory(Slot).MaxDef > 0 Then
-                                frmMain.casco.Caption = UserInventory(Slot).MinDef & " / " & UserInventory(Slot).MaxDef
+                            If UserInventory(slot).MaxDef > 0 Then
+                                frmMain.casco.Caption = UserInventory(slot).MinDef & " / " & UserInventory(slot).MaxDef
                             Else
                                 frmMain.casco.Caption = "N/A"
                             End If
                             
                         Case 2
-                            If UserInventory(Slot).MaxDef > 0 Then
-                                frmMain.escudo.Caption = UserInventory(Slot).MinDef & " / " & UserInventory(Slot).MaxDef
+                            If UserInventory(slot).MaxDef > 0 Then
+                                frmMain.escudo.Caption = UserInventory(slot).MinDef & " / " & UserInventory(slot).MaxDef
                             Else
                                 frmMain.escudo.Caption = "N/A"
                             End If
@@ -556,27 +556,27 @@ End Select
             End If
         
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             
             Exit Sub
         Case "SHS"
             Rdata = Right$(Rdata, Len(Rdata) - 3)
-            Slot = ReadField(1, Rdata, 44)
-            UserHechizos(Slot) = ReadField(2, Rdata, 44)
-            If Slot > frmMain.lstHechizos.ListCount Then
+            slot = ReadField(1, Rdata, 44)
+            UserHechizos(slot) = ReadField(2, Rdata, 44)
+            If slot > frmMain.lstHechizos.ListCount Then
                 frmMain.lstHechizos.AddItem ReadField(3, Rdata, 44)
             Else
-                frmMain.lstHechizos.List(Slot - 1) = ReadField(3, Rdata, 44)
+                frmMain.lstHechizos.List(slot - 1) = ReadField(3, Rdata, 44)
             End If
             Exit Sub
         Case "ATR"
@@ -735,47 +735,47 @@ End Select
             Exit Sub
         Case "OTIC"
             Rdata = Right$(Rdata, Len(Rdata) - 4)
-            Slot = ReadField(1, Rdata, 44)
-            OtherInventory(Slot).Amount = ReadField(2, Rdata, 44)
-            Call ActualizarOtherInventory(Slot)
+            slot = ReadField(1, Rdata, 44)
+            OtherInventory(slot).Amount = ReadField(2, Rdata, 44)
+            Call ActualizarOtherInventory(slot)
             Exit Sub
         Case "OTII"
             Rdata = Right$(Rdata, Len(Rdata) - 4)
-            Slot = ReadField(1, Rdata, 44)
-            OtherInventory(Slot).Name = ReadField(2, Rdata, 44)
-            OtherInventory(Slot).Amount = ReadField(3, Rdata, 44)
-            OtherInventory(Slot).Valor = ReadField(4, Rdata, 44)
-            OtherInventory(Slot).GrhIndex = ReadField(5, Rdata, 44)
-            OtherInventory(Slot).OBJIndex = ReadField(6, Rdata, 44)
-            OtherInventory(Slot).ObjType = ReadField(7, Rdata, 44)
-            OtherInventory(Slot).MaxHit = ReadField(8, Rdata, 44)
-            OtherInventory(Slot).MinHit = ReadField(9, Rdata, 44)
-            OtherInventory(Slot).MaxDef = ReadField(10, Rdata, 44)
-            OtherInventory(Slot).MinDef = ReadField(11, Rdata, 44)
-            OtherInventory(Slot).TipoPocion = ReadField(12, Rdata, 44)
-            OtherInventory(Slot).MaxModificador = ReadField(13, Rdata, 44)
-            OtherInventory(Slot).MinModificador = ReadField(14, Rdata, 44)
-            OtherInventory(Slot).PuedeUsar = Val(ReadField(15, Rdata, 44))
-            Call ActualizarOtherInventory(Slot)
+            slot = ReadField(1, Rdata, 44)
+            OtherInventory(slot).Name = ReadField(2, Rdata, 44)
+            OtherInventory(slot).Amount = ReadField(3, Rdata, 44)
+            OtherInventory(slot).Valor = ReadField(4, Rdata, 44)
+            OtherInventory(slot).GrhIndex = ReadField(5, Rdata, 44)
+            OtherInventory(slot).OBJIndex = ReadField(6, Rdata, 44)
+            OtherInventory(slot).ObjType = ReadField(7, Rdata, 44)
+            OtherInventory(slot).MaxHit = ReadField(8, Rdata, 44)
+            OtherInventory(slot).MinHit = ReadField(9, Rdata, 44)
+            OtherInventory(slot).MaxDef = ReadField(10, Rdata, 44)
+            OtherInventory(slot).MinDef = ReadField(11, Rdata, 44)
+            OtherInventory(slot).TipoPocion = ReadField(12, Rdata, 44)
+            OtherInventory(slot).MaxModificador = ReadField(13, Rdata, 44)
+            OtherInventory(slot).MinModificador = ReadField(14, Rdata, 44)
+            OtherInventory(slot).PuedeUsar = Val(ReadField(15, Rdata, 44))
+            Call ActualizarOtherInventory(slot)
             Exit Sub
         Case "OTIV"
             Rdata = Right$(Rdata, Len(Rdata) - 4)
-            Slot = ReadField(1, Rdata, 44)
-            OtherInventory(Slot).Name = "Nada"
-            OtherInventory(Slot).Amount = 0
-            OtherInventory(Slot).Valor = 0
-            OtherInventory(Slot).GrhIndex = 0
-            OtherInventory(Slot).OBJIndex = 0
-            OtherInventory(Slot).ObjType = 0
-            OtherInventory(Slot).MaxHit = 0
-            OtherInventory(Slot).MinHit = 0
-            OtherInventory(Slot).MaxDef = 0
-            OtherInventory(Slot).MinDef = 0
-            OtherInventory(Slot).TipoPocion = 0
-            OtherInventory(Slot).MaxModificador = 0
-            OtherInventory(Slot).MinModificador = 0
-            OtherInventory(Slot).PuedeUsar = 0
-            Call ActualizarOtherInventory(Slot)
+            slot = ReadField(1, Rdata, 44)
+            OtherInventory(slot).Name = "Nada"
+            OtherInventory(slot).Amount = 0
+            OtherInventory(slot).Valor = 0
+            OtherInventory(slot).GrhIndex = 0
+            OtherInventory(slot).OBJIndex = 0
+            OtherInventory(slot).ObjType = 0
+            OtherInventory(slot).MaxHit = 0
+            OtherInventory(slot).MinHit = 0
+            OtherInventory(slot).MaxDef = 0
+            OtherInventory(slot).MinDef = 0
+            OtherInventory(slot).TipoPocion = 0
+            OtherInventory(slot).MaxModificador = 0
+            OtherInventory(slot).MinModificador = 0
+            OtherInventory(slot).PuedeUsar = 0
+            Call ActualizarOtherInventory(slot)
             Exit Sub
         Case "EHYS"
             Rdata = Right$(Rdata, Len(Rdata) - 4)
@@ -1014,6 +1014,24 @@ Select Case left$(sdata, 5)
             Next i
             frmEntrenador.Show
             Exit Sub
+        Case "LSTCAN"
+            Dim Items(99, 4)
+            Dim j As Integer
+            Rdata = Right$(Rdata, Len(Rdata) - 6)
+            frmCanjeo.PuntosCanje = ReadField(2, Rdata, 44)
+            For i = 0 To Val(ReadField(1, Rdata, 44)) - 1
+                For j = 0 To 4
+                    Items(i, j) = ReadField(j + 1, ReadField(i + 3, Rdata, 44), 124)
+                Next j
+            Next i
+            
+            For i = 0 To UBound(Items, 2) - 2
+                frmCanjeo.lstItems.AddItem Items(i, 0)
+                frmCanjeo.lstDesc.AddItem Items(i, 1) & "|" & Items(i, 2) & "|" & Items(i, 3) & "|" & Items(i, 4)
+            Next
+
+            frmCanjeo.Show
+            Exit Sub
     End Select
     
     Select Case left$(sdata, 7)
@@ -1134,7 +1152,7 @@ Dim Y As Integer
 Dim CharIndex As Integer
 Dim perso As String
 Dim recup As Integer
-Dim Slot As Integer
+Dim slot As Integer
 Dim loopc As Integer
 Dim Text1 As String
 Dim Text2 As String
@@ -1234,22 +1252,22 @@ Select Case left$(Rdata, 2)
 
         Case "2H"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
-            Call ActualizarInventario(Slot)
+            slot = ReadField(1, Rdata, 44)
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
+            Call ActualizarInventario(slot)
             tempstr = ""
             
             bInvMod = True
@@ -1310,85 +1328,85 @@ Select Case left$(Rdata, 2)
             Exit Sub
         Case "4I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - ReadField(2, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
+            UserInventory(slot).Amount = UserInventory(slot).Amount - ReadField(2, Rdata, 44)
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
         Case "6J"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
             UserMinAGU = ReadField(2, Rdata, 44)
             frmMain.AGUAsp.Width = (((UserMinAGU / 100) / (UserMaxAGU / 100)) * 94)
             frmMain.cantidadagua.Caption = UserMinAGU & "/" & UserMaxAGU
 
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
+            UserInventory(slot).Amount = UserInventory(slot).Amount - 1
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
         Case "6I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
                 UserMinAGU = ReadField(2, Rdata, 44)
                         frmMain.AGUAsp.Width = (((UserMinAGU / 100) / (UserMaxAGU / 100)) * 94)
             frmMain.cantidadagua.Caption = UserMinAGU & "/" & UserMaxAGU
 
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
 
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "7I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
             
             UserMinMAN = ReadField(2, Rdata, 44)
                         If UserMaxMAN > 0 Then
@@ -1398,26 +1416,26 @@ Select Case left$(Rdata, 2)
                 frmMain.MANShp.Width = 0
                frmMain.cantidadmana.Caption = ""
             End If
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
+            UserInventory(slot).Amount = UserInventory(slot).Amount - 1
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
         Case "8I"
         Rdata = Right$(Rdata, Len(Rdata) - 2)
-        Slot = ReadField(1, Rdata, 44)
+        slot = ReadField(1, Rdata, 44)
             UserMinMAN = ReadField(2, Rdata, 44)
                         If UserMaxMAN > 0 Then
                 frmMain.MANShp.Width = (((UserMinMAN + 1 / 100) / (UserMaxMAN + 1 / 100)) * 94)
@@ -1426,135 +1444,135 @@ Select Case left$(Rdata, 2)
                 frmMain.MANShp.Width = 0
                frmMain.cantidadmana.Caption = ""
             End If
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
 
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "9I"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
             
             UserMinHP = ReadField(2, Rdata, 44)
             frmMain.Hpshp.Width = (((UserMinHP / 100) / (UserMaxHP / 100)) * 94)
             frmMain.cantidadhp.Caption = PonerPuntos(UserMinHP) & "/" & PonerPuntos(UserMaxHP)
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
+            UserInventory(slot).Amount = UserInventory(slot).Amount - 1
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
         Case "2J"
         Rdata = Right$(Rdata, Len(Rdata) - 2)
-        Slot = ReadField(1, Rdata, 44)
+        slot = ReadField(1, Rdata, 44)
             UserMinHP = ReadField(2, Rdata, 44)
             frmMain.Hpshp.Width = (((UserMinHP / 100) / (UserMaxHP / 100)) * 94)
             frmMain.cantidadhp.Caption = PonerPuntos(UserMinHP) & "/" & PonerPuntos(UserMaxHP)
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
 
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
             Exit Sub
         Case "3J"
-            Slot = Right$(Rdata, Len(Rdata) - 2)
+            slot = Right$(Rdata, Len(Rdata) - 2)
 
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
+            UserInventory(slot).Amount = UserInventory(slot).Amount - 1
             If FX = 0 Then
                  Call Audio.PlayWave("46.wav")
             End If
                         tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
         Case "4J"
-        Slot = Right$(Rdata, Len(Rdata) - 2)
+        slot = Right$(Rdata, Len(Rdata) - 2)
             
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
 
             tempstr = ""
 
@@ -1562,16 +1580,16 @@ Select Case left$(Rdata, 2)
                  Call Audio.PlayWave("46.wav")
             End If
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
 
         Case "8J"
@@ -1652,62 +1670,62 @@ Select Case left$(Rdata, 2)
             Exit Sub
         Case "6K"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
-            Slot = ReadField(1, Rdata, 44)
+            slot = ReadField(1, Rdata, 44)
             UserMinHAM = ReadField(2, Rdata, 44)
             frmMain.COMIDAsp.Width = (((UserMinHAM / 100) / (UserMaxHAM / 100)) * 94)
             frmMain.cantidadhambre.Caption = UserMinHAM & "/" & UserMaxHAM
 
-            UserInventory(Slot).Amount = UserInventory(Slot).Amount - 1
+            UserInventory(slot).Amount = UserInventory(slot).Amount - 1
             If FX = 0 Then
                  Call Audio.PlayWave("7.wav")
             End If
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             Exit Sub
         Case "7K"
         Rdata = Right$(Rdata, Len(Rdata) - 2)
-        Slot = ReadField(1, Rdata, 44)
+        slot = ReadField(1, Rdata, 44)
             UserMinHAM = ReadField(2, Rdata, 44)
             frmMain.COMIDAsp.Width = (((UserMinHAM / 100) / (UserMaxHAM / 100)) * 94)
             frmMain.cantidadhambre.Caption = UserMinHAM & "/" & UserMaxHAM
 
-            UserInventory(Slot).OBJIndex = 0
-            UserInventory(Slot).Name = "Nada"
-            UserInventory(Slot).Amount = 0
-            UserInventory(Slot).Equipped = 0
-            UserInventory(Slot).GrhIndex = 0
-            UserInventory(Slot).ObjType = 0
-            UserInventory(Slot).MaxHit = 0
-            UserInventory(Slot).MinHit = 0
-            UserInventory(Slot).MaxDef = 0
-            UserInventory(Slot).MinDef = 0
-            UserInventory(Slot).TipoPocion = 0
-            UserInventory(Slot).MaxModificador = 0
-            UserInventory(Slot).MinModificador = 0
-            UserInventory(Slot).Valor = 0
+            UserInventory(slot).OBJIndex = 0
+            UserInventory(slot).Name = "Nada"
+            UserInventory(slot).Amount = 0
+            UserInventory(slot).Equipped = 0
+            UserInventory(slot).GrhIndex = 0
+            UserInventory(slot).ObjType = 0
+            UserInventory(slot).MaxHit = 0
+            UserInventory(slot).MinHit = 0
+            UserInventory(slot).MaxDef = 0
+            UserInventory(slot).MinDef = 0
+            UserInventory(slot).TipoPocion = 0
+            UserInventory(slot).MaxModificador = 0
+            UserInventory(slot).MinModificador = 0
+            UserInventory(slot).Valor = 0
 
             tempstr = ""
-            If UserInventory(Slot).Equipped = 1 Then
+            If UserInventory(slot).Equipped = 1 Then
                 tempstr = tempstr & "(Eqp)"
             End If
             
-            If UserInventory(Slot).Amount > 0 Then
-                tempstr = tempstr & "(" & UserInventory(Slot).Amount & ") " & UserInventory(Slot).Name
+            If UserInventory(slot).Amount > 0 Then
+                tempstr = tempstr & "(" & UserInventory(slot).Amount & ") " & UserInventory(slot).Name
             Else
-                tempstr = tempstr & UserInventory(Slot).Name
+                tempstr = tempstr & UserInventory(slot).Name
             End If
             
-            ActualizarInventario (Slot)
+            ActualizarInventario (slot)
             If FX = 0 Then
                  Call Audio.PlayWave("7.wav")
             End If
@@ -2120,10 +2138,10 @@ Select Case left$(Rdata, 2)
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             CharIndex = Val(ReadField(1, Rdata, 44))
             CharList(CharIndex).muerto = Val(ReadField(3, Rdata, 44)) = 500
-            Slot = Val(ReadField(2, Rdata, 44))
-            CharList(CharIndex).Body = BodyData(Slot)
+            slot = Val(ReadField(2, Rdata, 44))
+            CharList(CharIndex).Body = BodyData(slot)
             CharList(CharIndex).Head = HeadData(Val(ReadField(3, Rdata, 44)))
-            If Slot > 83 And Slot < 88 Then
+            If slot > 83 And slot < 88 Then
                 CharList(CharIndex).Navegando = 1
             Else
                 CharList(CharIndex).Navegando = 0
@@ -2148,9 +2166,9 @@ Select Case left$(Rdata, 2)
         Case "3C"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
             CharIndex = Val(ReadField(1, Rdata, 44))
-            Slot = Val(ReadField(2, Rdata, 44))
-            CharList(CharIndex).Body = BodyData(Slot)
-            If Slot > 83 And Slot < 88 Then
+            slot = Val(ReadField(2, Rdata, 44))
+            CharList(CharIndex).Body = BodyData(slot)
+            If slot > 83 And slot < 88 Then
                 CharList(CharIndex).Navegando = 1
             Else
                 CharList(CharIndex).Navegando = 0
