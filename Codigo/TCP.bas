@@ -1032,6 +1032,10 @@ Select Case left$(sdata, 5)
 
             frmCanjeo.Show
             Exit Sub
+        Case "ABRBAN"
+            frmBanco.Show
+            Exit Sub
+            
     End Select
     
     Select Case left$(sdata, 7)
