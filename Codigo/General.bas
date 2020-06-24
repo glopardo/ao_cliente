@@ -153,8 +153,8 @@ Recompensas(PESCADOR, 1, 2).Descripcion = "Al pescar en barca hay 10% de probabi
 Recompensas(MAGO, 1, 1).Name = "Pociones de Espíritu"
 Recompensas(MAGO, 1, 1).Descripcion = "1.000 pociones azules que no caen al morir."
 
-Recompensas(MAGO, 1, 2).Name = "Pociones de Vida"
-Recompensas(MAGO, 1, 2).Descripcion = "1.000 pociones rojas que no caen al morir."
+Recompensas(MAGO, 1, 2).Name = "Petrificar"
+Recompensas(MAGO, 1, 2).Descripcion = "Otorga un hechizo que paraliza sólo a los NPC hostiles."
 
 Recompensas(MAGO, 2, 1).Name = "Vitalidad"
 Recompensas(MAGO, 2, 1).Descripcion = "Aumenta la vida en 10 puntos."
