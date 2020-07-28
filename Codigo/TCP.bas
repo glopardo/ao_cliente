@@ -1,4 +1,5 @@
 Attribute VB_Name = "modTCP"
+
 'FénixAO 1.0
 '
 'Based on Argentum Online 0.99z
@@ -456,10 +457,10 @@ End Select
 
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
             
             If UserMinHP = 0 Then
@@ -722,6 +723,16 @@ End Select
     End Select
     
     Select Case left$(sdata, 4)
+        Case "PNLT"
+            Dim jugadores(1 To 16) As String
+            Rdata = Right$(Rdata, Len(Rdata) - 4)
+            
+            For i = 1 To 16
+                frmTorneo.lstParticipantes.AddItem ReadField(i, Rdata, 124)
+            Next i
+            
+            frmTorneo.Show
+            Exit Sub
         Case "CEGU"
             UserCiego = True
             Exit Sub
@@ -1050,6 +1061,17 @@ Select Case left$(sdata, 5)
             frmBanco.Show
             Exit Sub
             
+        Case "FINDT"
+            Dim ganadorTorneo, perdedorTorneo As String
+            Rdata = Right$(Rdata, Len(Rdata) - 7)
+            ganadorTorneo = ReadField(1, Rdata, 124)
+            perdedorTorneo = ReadField(2, Rdata, 124)
+            
+            frmTorneo.lstDueleando.RemoveItem (0)
+            frmTorneo.lstDueleando.RemoveItem (0)
+            
+            frmTorneo.lstSiguienteRonda.AddItem (ganadorTorneo)
+            Exit Sub
     End Select
     
     Select Case left$(sdata, 7)
@@ -2265,10 +2287,10 @@ Select Case left$(Rdata, 2)
             UserExp = Val(ReadField(1, Rdata, 44))
             
             If UserPasarNivel <> 0 Then
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
             Else
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
         Case "5H"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -2322,10 +2344,10 @@ Select Case left$(Rdata, 2)
             UserPasarNivel = Val(ReadField(2, Rdata, 44))
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.exp.Caption = ""
+                frmMain.Exp.Caption = ""
             End If
             Exit Sub
         Case "HO"

@@ -1433,7 +1433,8 @@ End Select
 End Sub
 Sub Form_Load()
 'BETA
-IPdelServidor = "186.19.73.65"
+'IPdelServidor = "181.16.83.218"
+IPdelServidor = "localhost"
 PuertoDelServidor = 10200
 
 FPSFLAG = True
