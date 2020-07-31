@@ -209,63 +209,46 @@ Call SendData("COMUSUOK")
 End Sub
 
 Private Sub cmdOfrecer_Click()
-
-If optQue(0).value = True Then
-    If List1.ListIndex < 0 Then Exit Sub
-    If List1.ItemData(List1.ListIndex) <= 0 Then Exit Sub
+    If optQue(0).value = True Then
+        If List1.ListIndex < 0 Then Exit Sub
+        If List1.ItemData(List1.ListIndex) <= 0 Then Exit Sub
+    ElseIf optQue(1).value = True Then
+    End If
     
-
-
-ElseIf optQue(1).value = True Then
-
-
-
-End If
-
-If optQue(0).value = True Then
-    Call SendData("OFRECER" & List1.ListIndex + 1 & "," & Trim(Val(txtCant.Text)))
-ElseIf optQue(1).value = True Then
-    Call SendData("OFRECER" & FLAGORO & "," & Trim(Val(txtCant.Text)))
-Else
-    Exit Sub
-End If
-
-lblEstadoResp.Visible = True
-
+    If optQue(0).value = True Then
+        Call SendData("OFRECER" & List1.ListIndex + 1 & "," & Trim(Val(txtCant.Text)))
+    ElseIf optQue(1).value = True Then
+        Call SendData("OFRECER" & FLAGORO & "," & Trim(Val(txtCant.Text)))
+    Else
+        Exit Sub
+    End If
+    
+    lblEstadoResp.Visible = True
 End Sub
-
 Private Sub cmdRechazar_Click()
-Call SendData("COMUSUNO")
+    Call SendData("COMUSUNO")
 End Sub
 
 Private Sub Command2_Click()
-Call SendData("FINCOMUSU")
-
+    Call SendData("FINCOMUSU")
 End Sub
 
 Private Sub Form_Deactivate()
-
-Me.SetFocus
-Picture1.SetFocus
-
+    Me.SetFocus
+    Picture1.SetFocus
 End Sub
 Private Sub Form_Load()
-
-lblEstadoResp.Visible = False
-Me.Picture = LoadPicture(DirGraficos & "ComerciarUsu.gif")
-
+    lblEstadoResp.Visible = False
+    Me.Picture = LoadPicture(DirGraficos & "ComerciarUsu.gif")
 End Sub
 Private Sub Form_LostFocus()
-
-Me.SetFocus
-Picture1.SetFocus
-
+    Me.SetFocus
+    Picture1.SetFocus
 End Sub
 Private Sub list1_Click()
     Call DrawGrhtoHdc(Picture1.hDC, UserInventory(List1.ListIndex + 1).GrhIndex)
 End Sub
 Private Sub List2_Click()
-
     If List2.ListIndex >= 0 Then
         Call DrawGrhtoHdc(Picture1.hDC, OtroInventario(List2.ListIndex + 1).GrhIndex)
         Label3.Caption = List2.ItemData(List2.ListIndex)
@@ -275,7 +258,6 @@ Private Sub List2_Click()
         cmdAceptar.Enabled = False
         cmdRechazar.Enabled = False
     End If
-
 End Sub
 Private Sub optQue_Click(Index As Integer)
 
