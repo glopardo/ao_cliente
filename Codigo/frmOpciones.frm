@@ -3,7 +3,7 @@ Begin VB.Form frmOpciones
    Appearance      =   0  'Flat
    BackColor       =   &H80000005&
    BorderStyle     =   0  'None
-   ClientHeight    =   6360
+   ClientHeight    =   6780
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4485
@@ -21,17 +21,27 @@ Begin VB.Form frmOpciones
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   6360
+   ScaleHeight     =   6780
    ScaleWidth      =   4485
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.ComboBox cmbPortalMapa 
+      Height          =   315
+      ItemData        =   "frmOpciones.frx":0152
+      Left            =   1800
+      List            =   "frmOpciones.frx":015F
+      Style           =   2  'Dropdown List
+      TabIndex        =   28
+      Top             =   6120
+      Width           =   2175
+   End
    Begin VB.PictureBox chkTechos 
       Appearance      =   0  'Flat
       BackColor       =   &H80000005&
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   1560
-      MouseIcon       =   "frmOpciones.frx":0152
+      MouseIcon       =   "frmOpciones.frx":018D
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -85,7 +95,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":045C
+      MouseIcon       =   "frmOpciones.frx":0497
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -99,7 +109,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":0766
+      MouseIcon       =   "frmOpciones.frx":07A1
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -113,7 +123,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":0A70
+      MouseIcon       =   "frmOpciones.frx":0AAB
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -127,7 +137,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":0D7A
+      MouseIcon       =   "frmOpciones.frx":0DB5
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -141,7 +151,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":1084
+      MouseIcon       =   "frmOpciones.frx":10BF
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -155,7 +165,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":138E
+      MouseIcon       =   "frmOpciones.frx":13C9
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -169,7 +179,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":1698
+      MouseIcon       =   "frmOpciones.frx":16D3
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -183,7 +193,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   2350
-      MouseIcon       =   "frmOpciones.frx":19A2
+      MouseIcon       =   "frmOpciones.frx":19DD
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
@@ -197,13 +207,32 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H80000008&
       Height          =   335
       Left            =   840
-      MouseIcon       =   "frmOpciones.frx":1CAC
+      MouseIcon       =   "frmOpciones.frx":1CE7
       MousePointer    =   99  'Custom
       ScaleHeight     =   300
       ScaleWidth      =   300
       TabIndex        =   0
       Top             =   1200
       Width           =   335
+   End
+   Begin VB.Label lblPortalMapa 
+      BackColor       =   &H00000000&
+      Caption         =   "Mapa portal:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00008000&
+      Height          =   255
+      Left            =   480
+      TabIndex        =   29
+      Top             =   6120
+      Width           =   1215
    End
    Begin VB.Label lblTechos 
       BackColor       =   &H00000000&
@@ -270,7 +299,7 @@ Begin VB.Form frmOpciones
       ForeColor       =   &H00008000&
       Height          =   255
       Left            =   720
-      MouseIcon       =   "frmOpciones.frx":1FB6
+      MouseIcon       =   "frmOpciones.frx":1FF1
       MousePointer    =   99  'Custom
       TabIndex        =   18
       Top             =   3360
@@ -451,7 +480,7 @@ Begin VB.Form frmOpciones
    Begin VB.Image Image1 
       Height          =   375
       Left            =   3840
-      MouseIcon       =   "frmOpciones.frx":22C0
+      MouseIcon       =   "frmOpciones.frx":22FB
       MousePointer    =   99  'Custom
       Top             =   3840
       Width           =   615
@@ -497,7 +526,7 @@ Attribute VB_Exposed = False
 'elpresi@fenixao.com.ar
 'www.fenixao.com.ar
 Private Sub Command2_Click()
-Me.Visible = False
+    Me.Visible = False
 End Sub
 
 Private Sub chkTechos_Click()
@@ -512,261 +541,225 @@ Private Sub chkTechos_Click()
     Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Techos", Trim(Str(Techos)))
 End Sub
 
+Private Sub cmbPortalMapa_Click()
+    PortalMapa = cmbPortalMapa.ListIndex
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "PortalMapa", Trim(cmbPortalMapa.ListIndex))
+End Sub
+
 Private Sub Form_Load()
-
-
-Me.Picture = LoadPicture(DirGraficos & "OpcionesDelJuego.gif")
-
-If Techos = 0 Then
-    chkTechos.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    chkTechos.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If Musica = 0 Then
-    PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If FX = 0 Then
-    PictureFxs.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureFxs.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If NoRes = True Then
-    Picture1.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    Picture1.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelOcultarse = 1 Then
-    PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelMenosCansado = 1 Then
-    PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelVestirse = 1 Then
-    PictureVestirse.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureVestirse.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelNoHayNada = 1 Then
-    PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelRecuMana = 1 Then
-    PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-If CartelSanado = 1 Then
-    PictureSanado.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    PictureSanado.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
+    Me.Picture = LoadPicture(DirGraficos & "OpcionesDelJuego.gif")
+    
+    If Techos = 0 Then
+        chkTechos.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        chkTechos.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If Musica = 0 Then
+        PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If FX = 0 Then
+        PictureFxs.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureFxs.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If NoRes = True Then
+        Picture1.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        Picture1.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelOcultarse = 1 Then
+        PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelMenosCansado = 1 Then
+        PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelVestirse = 1 Then
+        PictureVestirse.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureVestirse.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelNoHayNada = 1 Then
+        PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelRecuMana = 1 Then
+        PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    If CartelSanado = 1 Then
+        PictureSanado.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        PictureSanado.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    cmbPortalMapa.ListIndex = PortalMapa
+        
 End Sub
 Private Sub Image1_Click()
-
-Me.Visible = False
-
+    Me.Visible = False
 End Sub
 Private Sub Label11_Click()
-
-ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
-
+    ShellExecute Me.hWnd, "open", "http://www.fenixao.com.ar/public_html/Html/manual/", "", "", 1
 End Sub
 Private Sub Picture1_Click()
-
-If NoRes = 0 Then
-    NoRes = 1
-    Picture1.Picture = LoadPicture(DirGraficos & "tick1.gif")
-    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana", 1)
-Else
-    NoRes = 0
-    Picture1.Picture = LoadPicture(DirGraficos & "tick2.gif")
-    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana", 0)
-End If
-
-MsgBox "Este cambio hará efecto recién la próxima vez que ejecutes el juego."
-
+    If NoRes = 0 Then
+        NoRes = 1
+        Picture1.Picture = LoadPicture(DirGraficos & "tick1.gif")
+        Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana", 1)
+    Else
+        NoRes = 0
+        Picture1.Picture = LoadPicture(DirGraficos & "tick2.gif")
+        Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana", 0)
+    End If
+    
+    MsgBox "Este cambio hará efecto recién la próxima vez que ejecutes el juego."
 End Sub
 Private Sub PictureFxs_Click()
-
-Select Case FX
-    Case 0
-        FX = 1
-        PictureFxs.Picture = LoadPicture(DirGraficos & "tick2.gif")
-    Case 1
-        FX = 0
-        PictureFxs.Picture = LoadPicture(DirGraficos & "tick1.gif")
-End Select
-
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX", Trim(Str(FX)))
-
+    Select Case FX
+        Case 0
+            FX = 1
+            PictureFxs.Picture = LoadPicture(DirGraficos & "tick2.gif")
+        Case 1
+            FX = 0
+            PictureFxs.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    End Select
+    
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "FX", Trim(Str(FX)))
 End Sub
 Private Sub PictureMenosCansado_Click()
-
-If CartelMenosCansado = 0 Then
-    CartelMenosCansado = 1
-    PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelMenosCansado = 0
-    PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "MenosCansado", Trim(Str(CartelMenosCansado)))
-
+    If CartelMenosCansado = 0 Then
+        CartelMenosCansado = 1
+        PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelMenosCansado = 0
+        PictureMenosCansado.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "MenosCansado", Trim(Str(CartelMenosCansado)))
 End Sub
 
 Private Sub PictureMusica_Click()
-
-Select Case Musica
-    Case 0
-        Musica = 1
-        Audio.StopMidi
-        PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
-    Case 1
-        Musica = 0
-        Audio.PlayMIDI CurMidi
-        PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
-End Select
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica", Trim(Str(Musica)))
-
+    Select Case Musica
+        Case 0
+            Musica = 1
+            Audio.StopMidi
+            PictureMusica.Picture = LoadPicture(DirGraficos & "tick2.gif")
+        Case 1
+            Musica = 0
+            Audio.PlayMIDI CurMidi
+            PictureMusica.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    End Select
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG", "Musica", Trim(Str(Musica)))
 End Sub
 
 Private Sub PictureNoHayNada_Click()
-If CartelNoHayNada = 0 Then
-    CartelNoHayNada = 1
-    PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelNoHayNada = 0
-    PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHayNada", Trim(Str(CartelNoHayNada)))
-
+    If CartelNoHayNada = 0 Then
+        CartelNoHayNada = 1
+        PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelNoHayNada = 0
+        PictureNoHayNada.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHayNada", Trim(Str(CartelNoHayNada)))
 End Sub
 
 Private Sub PictureOcultarse_Click()
-
-If CartelOcultarse = 0 Then
-    CartelOcultarse = 1
-    PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelOcultarse = 0
-    PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Ocultarse", Trim(Str(CartelOcultarse)))
+    If CartelOcultarse = 0 Then
+        CartelOcultarse = 1
+        PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelOcultarse = 0
+        PictureOcultarse.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Ocultarse", Trim(Str(CartelOcultarse)))
 End Sub
 
 Private Sub PictureRecuMana_Click()
-If CartelRecuMana = 0 Then
-    CartelRecuMana = 1
-    PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelRecuMana = 0
-    PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana", Trim(Str(CartelRecuMana)))
-
+    If CartelRecuMana = 0 Then
+        CartelRecuMana = 1
+        PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelRecuMana = 0
+        PictureRecuMana.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana", Trim(Str(CartelRecuMana)))
 End Sub
 
 Private Sub PictureSanado_Click()
-If CartelSanado = 0 Then
-    CartelSanado = 1
-    PictureSanado.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelSanado = 0
-    PictureSanado.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado", Trim(Str(CartelSanado)))
-
+    If CartelSanado = 0 Then
+        CartelSanado = 1
+        PictureSanado.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelSanado = 0
+        PictureSanado.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado", Trim(Str(CartelSanado)))
 End Sub
 
 Private Sub PictureVestirse_Click()
-If CartelVestirse = 0 Then
-    CartelVestirse = 1
-    PictureVestirse.Picture = LoadPicture(DirGraficos & "tick1.gif")
-Else
-    CartelVestirse = 0
-    PictureVestirse.Picture = LoadPicture(DirGraficos & "tick2.gif")
-End If
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Vestirse", Trim(Str(CartelVestirse)))
-
+    If CartelVestirse = 0 Then
+        CartelVestirse = 1
+        PictureVestirse.Picture = LoadPicture(DirGraficos & "tick1.gif")
+    Else
+        CartelVestirse = 0
+        PictureVestirse.Picture = LoadPicture(DirGraficos & "tick2.gif")
+    End If
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Vestirse", Trim(Str(CartelVestirse)))
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If bmoving = False And Button = vbLeftButton Then
-
       Dx3 = X
-
       dy = Y
-
       bmoving = True
-
    End If
-
-   
-
 End Sub
 
- 
-
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If bmoving And ((X <> Dx3) Or (Y <> dy)) Then
-
       Move left + (X - Dx3), top + (Y - dy)
-
    End If
-
-   
-
 End Sub
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
    If Button = vbLeftButton Then
       bmoving = False
    End If
-   
 End Sub
-
 'FPS
 Private Sub FPS1_Click()
-FPSConfig = 1
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "1")
- 
+    FPSConfig = 1
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "1")
 End Sub
  
 Private Sub FPS2_Click()
-FPSConfig = 2
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "2")
- 
+    FPSConfig = 2
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "2")
 End Sub
  
 Private Sub FPS3_Click()
-FPSConfig = 3
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "3")
- 
+    FPSConfig = 3
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "3")
 End Sub
  
 Private Sub FPS4_Click()
-FPSConfig = 4
-Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "4")
- 
+    FPSConfig = 4
+    Call WriteVar(App.Path & "/Init/Opciones.opc", "CONFIG VIDEO", "FPS", "4")
 End Sub
-'FPS

@@ -315,9 +315,7 @@ Public UserParalizado As Boolean
 Public CONGELADO As Boolean
 Public UserNavegando As Boolean
 
-
 Public Comerciando As Byte
-
 
 Public UserHogar As Byte
 Public UserSexo As Integer
@@ -336,6 +334,7 @@ Public CityDesc() As String
 Public Musica As Byte
 Public FX As Byte
 Public Techos As Byte
+Public PortalMapa As Byte
 
 Public SkillPoints As Integer
 Public Alocados As Integer

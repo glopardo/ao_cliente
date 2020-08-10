@@ -112,6 +112,7 @@ Begin VB.Form frmMain
       _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -1233,7 +1234,7 @@ End Sub
 Private Sub lblLanzar_Click()
 
 If lstHechizos.List(lstHechizos.ListIndex) <> "Nada" And TiempoTranscurrido(LastHechizo) >= IntervaloSpell And TiempoTranscurrido(Hechi) >= IntervaloSpell / 4 Then
-    Call SendData("LH" & lstHechizos.ListIndex + 1)
+    Call SendData("LH" & lstHechizos.ListIndex + 1 & "," & PortalMapa)
     Call SendData("UK" & Magia)
 End If
 

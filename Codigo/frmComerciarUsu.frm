@@ -205,7 +205,7 @@ Attribute VB_Exposed = False
 
 
 Private Sub cmdAceptar_Click()
-Call SendData("COMUSUOK")
+    Call SendData("COMUSUOK")
 End Sub
 
 Private Sub cmdOfrecer_Click()

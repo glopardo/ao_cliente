@@ -989,6 +989,7 @@ CartelNoHayNada = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "NoHay
 CartelRecuMana = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "RecuMana"))
 CartelSanado = Val(GetVar(App.Path & "/Init/Opciones.opc", "CARTELES", "Sanado"))
 NoRes = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "ModoVentana"))
+PortalMapa = Val(GetVar(App.Path & "/Init/Opciones.opc", "CONFIG", "PortalMapa"))
 
 'FPS
 FPSConfig = Val(GetVar(App.Path & "/init/opciones.opc", "CONFIG VIDEO", "FPS"))
