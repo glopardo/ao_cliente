@@ -219,7 +219,7 @@ Public Type GrhData
     TileHeight As Single
     
     NumFrames As Integer
-    Frames(1 To 25) As Integer
+    frames(1 To 25) As Integer
     Speed As Integer
     Active As Boolean
     
@@ -838,7 +838,7 @@ End If
 If Grh.GrhIndex = 0 Then Exit Sub
 
 
-iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+iGrhIndex = GrhData(Grh.GrhIndex).frames(Grh.FrameCounter)
 
 If center Then
     If GrhData(iGrhIndex).TileWidth <> 1 Then
@@ -868,7 +868,7 @@ Sub DrawGrhtoHdc(hDC As Long, GrhIndex As Integer)
         
         'If it's animated switch GrhIndex to first frame
         If GrhData(GrhIndex).NumFrames <> 1 Then
-            GrhIndex = GrhData(GrhIndex).Frames(1)
+            GrhIndex = GrhData(GrhIndex).frames(1)
         End If
            
         hDCsrc = CreateCompatibleDC(hDC)
@@ -1067,82 +1067,99 @@ Sub RenderScreen(ByVal TileX As Integer, ByVal TileY As Integer, ByVal PixelOffs
                 PixelOffsetYTemp = PixelOffsetY
                 Moved = 0
 
-            With TempChar
-        If .Moving Then
-            'If needed, move left and right
-            If .scrollDirectionX <> 0 Then
-                .MoveOffset.X = .MoveOffset.X + ScrollPixelsPerFrame * Sgn(.scrollDirectionX) * timerTicksPerFrame
-                
-                'Start animations
-'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
-                If .Body.Walk(.Heading).SpeedCounter > 0 Then _
-                    .Body.Walk(.Heading).Started = 1
-                .arma.WeaponWalk(.Heading).Started = 1
-                .escudo.ShieldWalk(.Heading).Started = 1
-                
-                'Char moved
-                Moved = True
-                
-                'Check if we already got there
-                If (Sgn(.scrollDirectionX) = 1 And .MoveOffset.X >= 0) Or _
-                        (Sgn(.scrollDirectionX) = -1 And .MoveOffset.X <= 0) Then
-                    .MoveOffset.X = 0
-                    .scrollDirectionX = 0
+        With TempChar
+           If .Moving Then
+               'If needed, move left and right
+               If .scrollDirectionX <> 0 Then
+                   .MoveOffset.X = .MoveOffset.X + ScrollPixelsPerFrame * Sgn(.scrollDirectionX) * timerTicksPerFrame
+                   
+                   'Start animations
+                   'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
+                   If .Body.Walk(.Heading).SpeedCounter > 0 Then _
+                       .Body.Walk(.Heading).Started = 1
+                   .arma.WeaponWalk(.Heading).Started = 1
+                   .escudo.ShieldWalk(.Heading).Started = 1
+                   
+                   'Char moved
+                   Moved = True
+                   
+                   'Check if we already got there
+                   If (Sgn(.scrollDirectionX) = 1 And .MoveOffset.X >= 0) Or _
+                           (Sgn(.scrollDirectionX) = -1 And .MoveOffset.X <= 0) Then
+                       .MoveOffset.X = 0
+                       .scrollDirectionX = 0
+                   End If
+               End If
+               
+               'If needed, move up and down
+               If .scrollDirectionY <> 0 Then
+                   .MoveOffset.Y = .MoveOffset.Y + ScrollPixelsPerFrame * Sgn(.scrollDirectionY) * timerTicksPerFrame
+                   
+                   'Start animations
+                   'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
+                   If .Body.Walk(.Heading).SpeedCounter > 0 Then _
+                       .Body.Walk(.Heading).Started = 1
+                   .arma.WeaponWalk(.Heading).Started = 1
+                   .escudo.ShieldWalk(.Heading).Started = 1
+                   
+                   'Char moved
+                   Moved = True
+                   
+                   'Check if we already got there
+                   If (Sgn(.scrollDirectionY) = 1 And .MoveOffset.Y >= 0) Or _
+                           (Sgn(.scrollDirectionY) = -1 And .MoveOffset.Y <= 0) Then
+                       .MoveOffset.Y = 0
+                       .scrollDirectionY = 0
+                   End If
+               End If
+           End If
+    
+               If .Heading = 0 Then .Heading = 3
+    
+               If Moved = 0 Then
+                   .Body.Walk(.Heading).Started = 0
+                   .Body.Walk(.Heading).FrameCounter = 1
+                  
+                   .arma.WeaponWalk(.Heading).Started = 0
+                   .arma.WeaponWalk(.Heading).FrameCounter = 1
+                  
+                   .escudo.ShieldWalk(.Heading).Started = 0
+                   .escudo.ShieldWalk(.Heading).FrameCounter = 1
+                  
+                   .Moving = 0
+               End If
+              
+               If TempChar.haciendoataque = 0 And .MoveOffset.X = 0 And .MoveOffset.Y = 0 Then
+                   .arma.WeaponWalk(.Heading).Started = 0
+                   '.arma.WeaponWalk(.Heading).FrameCounter = 1
+                   .escudo.ShieldWalk(.Heading).Started = 0
+                  
+                   End If
+                  
+                If TempChar.haciendoataque = 1 Then
+                    Dim frames As Single
+                    If FramesPerSec <= 18 Then
+                        frames = 18
+                    ElseIf FramesPerSec <= 32 Then
+                        frames = 32
+                    ElseIf FramesPerSec <= 64 Then
+                        frames = 64
+                    Else
+                        frames = FramesPerSec
+                    End If
+                    
+                    .arma.WeaponWalk(.Heading).Started = 1
+                    .arma.WeaponWalk(.Heading).Loops = 1
+                    .arma.WeaponWalk(.Heading).SpeedCounter = frames
+                    .arma.WeaponWalk(.Heading).FrameCounter = frames
+                    
+                    .escudo.ShieldWalk(.Heading).Started = 1
+                    .escudo.ShieldWalk(.Heading).Loops = 1
+                    .escudo.ShieldWalk(.Heading).SpeedCounter = frames
+                    .escudo.ShieldWalk(.Heading).FrameCounter = frames
+                    .haciendoataque = 0
                 End If
-            End If
-            
-            'If needed, move up and down
-            If .scrollDirectionY <> 0 Then
-                .MoveOffset.Y = .MoveOffset.Y + ScrollPixelsPerFrame * Sgn(.scrollDirectionY) * timerTicksPerFrame
-                
-                'Start animations
-'TODO : Este parche es para evita los uncornos exploten al moverse!! REVER!!!
-                If .Body.Walk(.Heading).SpeedCounter > 0 Then _
-                    .Body.Walk(.Heading).Started = 1
-                .arma.WeaponWalk(.Heading).Started = 1
-                .escudo.ShieldWalk(.Heading).Started = 1
-                
-                'Char moved
-                Moved = True
-                
-                'Check if we already got there
-                If (Sgn(.scrollDirectionY) = 1 And .MoveOffset.Y >= 0) Or _
-                        (Sgn(.scrollDirectionY) = -1 And .MoveOffset.Y <= 0) Then
-                    .MoveOffset.Y = 0
-                    .scrollDirectionY = 0
-                End If
-            End If
-        End If
- 
-            If .Heading = 0 Then .Heading = 3
- 
-            If Moved = 0 Then
-                .Body.Walk(.Heading).Started = 0
-                .Body.Walk(.Heading).FrameCounter = 1
-               
-                .arma.WeaponWalk(.Heading).Started = 0
-                .arma.WeaponWalk(.Heading).FrameCounter = 1
-               
-                .escudo.ShieldWalk(.Heading).Started = 0
-                .escudo.ShieldWalk(.Heading).FrameCounter = 1
-               
-                .Moving = 0
-            End If
-           
-            If TempChar.haciendoataque = 0 And .MoveOffset.X = 0 And .MoveOffset.Y = 0 Then
-                .arma.WeaponWalk(.Heading).Started = 0
-                '.arma.WeaponWalk(.Heading).FrameCounter = 1
-                .escudo.ShieldWalk(.Heading).Started = 0
-               
-                End If
-               
-            If TempChar.haciendoataque = 1 Then
-                .arma.WeaponWalk(.Heading).Started = 1
-                .escudo.ShieldWalk(.Heading).Started = 1
-                .haciendoataque = 0
-            End If
-           
-    End With
+       End With
     PixelOffsetXTemp = PixelOffsetXTemp + TempChar.MoveOffset.X
     PixelOffsetYTemp = PixelOffsetYTemp + TempChar.MoveOffset.Y
     
@@ -1383,7 +1400,7 @@ End If
 If Grh.GrhIndex = 0 Then Exit Sub
  
  
-iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+iGrhIndex = GrhData(Grh.GrhIndex).frames(Grh.FrameCounter)
  
 If center Then
     If GrhData(iGrhIndex).TileWidth <> 1 Then
@@ -2764,7 +2781,7 @@ Sub DDrawTono(Grh As Grh, ByVal X As Integer, ByVal Y As Integer, center As Byte
         End If
     End If
     
-    iGrhIndex = GrhData(Grh.GrhIndex).Frames(Grh.FrameCounter)
+    iGrhIndex = GrhData(Grh.GrhIndex).frames(Grh.FrameCounter)
     If iGrhIndex = 0 Then Exit Sub
     
     If center Then

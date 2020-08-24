@@ -112,7 +112,6 @@ Begin VB.Form frmMain
       _ExtentY        =   1879
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -1371,6 +1370,14 @@ If Not SendTxt.Visible Then
                 EligiendoWhispereo = False
                 MousePointer = 1
             End If
+            
+        'Comentar para clientes comunes
+        Case vbKey7:
+            frmMain.modo = "7 GM"
+            If EligiendoWhispereo Then
+                EligiendoWhispereo = False
+                MousePointer = 1
+            End If
                   
         Case vbKeyU:
             If Not NoPuedeUsar Then
@@ -1434,7 +1441,7 @@ End Select
 End Sub
 Sub Form_Load()
 'BETA
-'IPdelServidor = "181.16.83.218"
+'IPdelServidor = "45.235.98.30"
 IPdelServidor = "localhost"
 PuertoDelServidor = 10200
 

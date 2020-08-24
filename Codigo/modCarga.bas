@@ -300,8 +300,8 @@ Do Until Grh <= 0
        
         For Frame = 1 To GrhData(Grh).NumFrames
        
-            Get #1, , GrhData(Grh).Frames(Frame)
-            If GrhData(Grh).Frames(Frame) <= 0 Or GrhData(Grh).Frames(Frame) > 32000 Then
+            Get #1, , GrhData(Grh).frames(Frame)
+            If GrhData(Grh).frames(Frame) <= 0 Or GrhData(Grh).frames(Frame) > 32000 Then
                 GoTo ErrorHandler
             End If
        
@@ -318,16 +318,16 @@ Do Until Grh <= 0
         If GrhData(Grh).Speed <= 0 Then GoTo ErrorHandler
        
        
-        GrhData(Grh).pixelHeight = GrhData(GrhData(Grh).Frames(1)).pixelHeight
+        GrhData(Grh).pixelHeight = GrhData(GrhData(Grh).frames(1)).pixelHeight
         If GrhData(Grh).pixelHeight <= 0 Then GoTo ErrorHandler
        
-        GrhData(Grh).pixelWidth = GrhData(GrhData(Grh).Frames(1)).pixelWidth
+        GrhData(Grh).pixelWidth = GrhData(GrhData(Grh).frames(1)).pixelWidth
         If GrhData(Grh).pixelWidth <= 0 Then GoTo ErrorHandler
        
-        GrhData(Grh).TileWidth = GrhData(GrhData(Grh).Frames(1)).TileWidth
+        GrhData(Grh).TileWidth = GrhData(GrhData(Grh).frames(1)).TileWidth
         If GrhData(Grh).TileWidth <= 0 Then GoTo ErrorHandler
        
-        GrhData(Grh).TileHeight = GrhData(GrhData(Grh).Frames(1)).TileHeight
+        GrhData(Grh).TileHeight = GrhData(GrhData(Grh).frames(1)).TileHeight
         If GrhData(Grh).TileHeight <= 0 Then GoTo ErrorHandler
    
     Else
@@ -352,7 +352,7 @@ Do Until Grh <= 0
         GrhData(Grh).TileWidth = GrhData(Grh).pixelWidth / TilePixelHeight
         GrhData(Grh).TileHeight = GrhData(Grh).pixelHeight / TilePixelWidth
        
-        GrhData(Grh).Frames(1) = Grh
+        GrhData(Grh).frames(1) = Grh
            
     End If
    
@@ -389,56 +389,53 @@ GrhData(Grh).Speed = ((GrhData(Grh).Speed * 1000) / 18)
  
 End Sub
 Sub CrearGrh(GrhIndex As Integer, Index As Integer)
-ReDim Preserve Grh(1 To Index) As Grh
-Grh(Index).FrameCounter = 1
-Grh(Index).GrhIndex = GrhIndex
-'Grh(Index).SpeedCounter = GrhData(GrhIndex).Speed
-Grh(Index).Started = 1
+    ReDim Preserve Grh(1 To Index) As Grh
+    Grh(Index).FrameCounter = 1
+    Grh(Index).GrhIndex = GrhIndex
+    'Grh(Index).SpeedCounter = GrhData(GrhIndex).Speed
+    Grh(Index).Started = 1
 End Sub
 Sub CargarAnimsExtra()
-Call CrearGrh(6580, 1)
-Call CrearGrh(534, 2)
+    Call CrearGrh(6580, 1)
+    Call CrearGrh(534, 2)
 End Sub
 Sub CargarAnimArmas()
-
-On Error Resume Next
-
-Dim loopc As Integer
-Dim arch As String
-arch = App.Path & "\init\" & "armas.dat"
-DoEvents
-
-NumWeaponAnims = Val(GetVar(arch, "INIT", "NumArmas"))
-
-ReDim WeaponAnimData(1 To NumWeaponAnims) As WeaponAnimData
-
-For loopc = 1 To NumWeaponAnims
-    InitGrh WeaponAnimData(loopc).WeaponWalk(1), Val(GetVar(arch, "ARMA" & loopc, "Dir1")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(2), Val(GetVar(arch, "ARMA" & loopc, "Dir2")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(3), Val(GetVar(arch, "ARMA" & loopc, "Dir3")), 0
-    InitGrh WeaponAnimData(loopc).WeaponWalk(4), Val(GetVar(arch, "ARMA" & loopc, "Dir4")), 0
-Next loopc
-
+    On Error Resume Next
+    
+    Dim loopc As Integer
+    Dim arch As String
+    arch = App.Path & "\init\" & "armas.dat"
+    DoEvents
+    
+    NumWeaponAnims = Val(GetVar(arch, "INIT", "NumArmas"))
+    
+    ReDim WeaponAnimData(1 To NumWeaponAnims) As WeaponAnimData
+    
+    For loopc = 1 To NumWeaponAnims
+        InitGrh WeaponAnimData(loopc).WeaponWalk(1), Val(GetVar(arch, "ARMA" & loopc, "Dir1")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(2), Val(GetVar(arch, "ARMA" & loopc, "Dir2")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(3), Val(GetVar(arch, "ARMA" & loopc, "Dir3")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(4), Val(GetVar(arch, "ARMA" & loopc, "Dir4")), 0
+    Next loopc
 End Sub
 Sub CargarAnimEscudos()
-On Error Resume Next
-
-Dim loopc As Integer
-Dim arch As String
-arch = App.Path & "\init\" & "escudos.dat"
-DoEvents
-
-NumEscudosAnims = Val(GetVar(arch, "INIT", "NumEscudos"))
-
-ReDim ShieldAnimData(1 To NumEscudosAnims) As ShieldAnimData
-
-For loopc = 1 To NumEscudosAnims
-    InitGrh ShieldAnimData(loopc).ShieldWalk(1), Val(GetVar(arch, "ESC" & loopc, "Dir1")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(2), Val(GetVar(arch, "ESC" & loopc, "Dir2")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(3), Val(GetVar(arch, "ESC" & loopc, "Dir3")), 0
-    InitGrh ShieldAnimData(loopc).ShieldWalk(4), Val(GetVar(arch, "ESC" & loopc, "Dir4")), 0
-Next loopc
-
+    On Error Resume Next
+    
+    Dim loopc As Integer
+    Dim arch As String
+    arch = App.Path & "\init\" & "escudos.dat"
+    DoEvents
+    
+    NumEscudosAnims = Val(GetVar(arch, "INIT", "NumEscudos"))
+    
+    ReDim ShieldAnimData(1 To NumEscudosAnims) As ShieldAnimData
+    
+    For loopc = 1 To NumEscudosAnims
+        InitGrh ShieldAnimData(loopc).ShieldWalk(1), Val(GetVar(arch, "ESC" & loopc, "Dir1")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(2), Val(GetVar(arch, "ESC" & loopc, "Dir2")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(3), Val(GetVar(arch, "ESC" & loopc, "Dir3")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(4), Val(GetVar(arch, "ESC" & loopc, "Dir4")), 0
+    Next loopc
 End Sub
 Sub SwitchMapNew(Map As Integer)
 On Error Resume Next

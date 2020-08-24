@@ -294,9 +294,6 @@ Dim rdata4
 Select Case left$(sdata, 1)
         Case "-"
         Rdata = Right$(sdata, Len(sdata) - 1)
-
-        
-        
             If FX = 0 Then
                  Call Audio.PlayWave("2.wav")
             End If
@@ -457,10 +454,10 @@ End Select
 
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
             
             If UserMinHP = 0 Then
@@ -2287,10 +2284,10 @@ Select Case left$(Rdata, 2)
             UserExp = Val(ReadField(1, Rdata, 44))
             
             If UserPasarNivel <> 0 Then
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
             Else
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
         Case "5H"
             Rdata = Right$(Rdata, Len(Rdata) - 2)
@@ -2344,10 +2341,10 @@ Select Case left$(Rdata, 2)
             UserPasarNivel = Val(ReadField(2, Rdata, 44))
             If UserPasarNivel > 0 Then
                 frmMain.LvlLbl.Caption = UserLvl & " (" & Round(UserExp / UserPasarNivel * 100, 2) & "%)"
-                frmMain.Exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
+                frmMain.exp.Caption = "Exp: " & PonerPuntos(UserExp) & "/" & PonerPuntos(UserPasarNivel)
             Else
                 frmMain.LvlLbl.Caption = UserLvl
-                frmMain.Exp.Caption = ""
+                frmMain.exp.Caption = ""
             End If
             Exit Sub
         Case "HO"
